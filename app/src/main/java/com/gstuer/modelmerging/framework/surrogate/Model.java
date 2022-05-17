@@ -1,4 +1,4 @@
-package com.gstuer.modelmerging.framework.creation;
+package com.gstuer.modelmerging.framework.surrogate;
 
 import java.util.List;
 
