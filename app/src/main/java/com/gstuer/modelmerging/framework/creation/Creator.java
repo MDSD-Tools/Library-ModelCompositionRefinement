@@ -1,6 +1,6 @@
-package com.gstuer.modelmerging.creation;
+package com.gstuer.modelmerging.framework.creation;
 
-import com.gstuer.modelmerging.discovery.Discoverer;
+import com.gstuer.modelmerging.framework.discovery.Discoverer;
 
 import java.util.Objects;
 import java.util.Optional;

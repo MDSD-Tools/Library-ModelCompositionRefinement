@@ -1,4 +1,4 @@
-package com.gstuer.modelmerging.discovery;
+package com.gstuer.modelmerging.framework.discovery;
 
 import java.util.Objects;
 import java.util.Set;
