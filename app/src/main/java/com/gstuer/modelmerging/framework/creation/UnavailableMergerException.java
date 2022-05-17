@@ -1,9 +1,9 @@
 package com.gstuer.modelmerging.framework.creation;
 
-public class UnsupportedDiscovererException extends IllegalArgumentException {
+public class UnavailableMergerException extends IllegalArgumentException {
     private static final long serialVersionUID = 7358182453030322135L;
 
-    public UnsupportedDiscovererException(String message) {
+    public UnavailableMergerException(String message) {
         super(message);
     }
 }
