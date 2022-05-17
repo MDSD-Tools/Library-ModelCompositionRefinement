@@ -2,6 +2,7 @@ package com.gstuer.modelmerging.framework.creation;
 
 import com.gstuer.modelmerging.framework.discovery.Discoverer;
 import com.gstuer.modelmerging.framework.surrogate.Model;
+import com.gstuer.modelmerging.framework.surrogate.Replaceable;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -9,7 +10,7 @@ import java.util.Optional;
 public abstract class Creator<M extends Model> {
     private static final String UNSUPPORTED_DISCOVERER = "No merger available for discoverer of type %s.";
 
-    private M model;
+    private final M model;
 
     protected Creator(M model) {
         this.model = Objects.requireNonNull(model);
@@ -22,14 +23,14 @@ public abstract class Creator<M extends Model> {
         return this.model;
     }
 
-    protected abstract <T> Optional<Merger<M, T>> getMergerForDiscoveryType(Class<T> discoveryType);
+    protected abstract <T extends Replaceable> Optional<Merger<M, T>> getMergerForDiscoveryType(Class<T> discoveryType);
 
-    private <K> void mergeDiscoverer(Discoverer<K> discoverer) {
+    private <K extends Replaceable> void mergeDiscoverer(Discoverer<K> discoverer) {
         Optional<Merger<M, K>> optionalMerger = getMergerForDiscoveryType(discoverer.getDiscoveryType());
         if (optionalMerger.isPresent()) {
             Merger<M, K> merger = optionalMerger.get();
             for (K discovery : discoverer.getDiscoveries()) {
-                this.model = merger.merge(this.model, discovery);
+                merger.merge(discovery);
             }
         } else {
             throw new UnsupportedDiscovererException(String.format(UNSUPPORTED_DISCOVERER, discoverer.getClass()));
