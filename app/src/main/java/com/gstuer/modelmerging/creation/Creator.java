@@ -31,7 +31,7 @@ public abstract class Creator<M extends Model> {
                 this.model = merger.merge(this.model, discovery);
             }
         } else {
-            throw new UnsupportedDiscovererException(UNSUPPORTED_DISCOVERER.formatted(discoverer.getClass()));
+            throw new UnsupportedDiscovererException(String.format(UNSUPPORTED_DISCOVERER, discoverer.getClass()));
         }
     }
 }
