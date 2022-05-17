@@ -1,9 +1,11 @@
 package com.gstuer.modelmerging.framework.discovery;
 
+import com.gstuer.modelmerging.framework.surrogate.Replaceable;
+
 import java.util.Objects;
 import java.util.Set;
 
-public abstract class Discoverer<T> {
+public abstract class Discoverer<T extends Replaceable> {
     private final Set<T> discoveries;
     private final Class<T> discoveryType;
 
