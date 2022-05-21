@@ -38,6 +38,10 @@ public abstract class Merger<M extends Model, T extends Replaceable> {
         return Set.copyOf(implications);
     }
 
+    protected void addImplication(Replaceable replaceable) {
+        this.implications.add(replaceable);
+    }
+
     public Class<T> getProcessableType() {
         return processableType;
     }
