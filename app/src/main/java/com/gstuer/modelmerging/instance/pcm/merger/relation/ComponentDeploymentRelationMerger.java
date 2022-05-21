@@ -11,6 +11,10 @@ public class ComponentDeploymentRelationMerger extends Merger<PcmSurrogate, Comp
 
     @Override
     protected void refine(ComponentDeploymentRelation discovery) {
-        // TODO Add refinement steps
+        // Add trivial implications for source and destination elements
+        addImplication(discovery.getSource());
+        addImplication(discovery.getDestination());
+
+        // TODO Add missing refinement steps -> Especially replace placeholders
     }
 }
