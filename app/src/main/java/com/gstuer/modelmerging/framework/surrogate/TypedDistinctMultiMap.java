@@ -24,4 +24,13 @@ public class TypedDistinctMultiMap {
         Set<Object> objects = this.data.getOrDefault(key, new HashSet<>());
         return objects.stream().map(key::cast).collect(Collectors.toList());
     }
+
+    public boolean containsKey(Class<?> key) {
+        return this.data.containsKey(key);
+    }
+
+    public <T> boolean containsElement(T element) {
+        Set<Object> elements = this.data.getOrDefault(element.getClass(), new HashSet<>());
+        return elements.contains(element);
+    }
 }
