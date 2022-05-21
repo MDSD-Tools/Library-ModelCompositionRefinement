@@ -47,7 +47,7 @@ public abstract class Orchestrator<M extends Model> {
     public <T extends Replaceable> void processDiscovery(T discovery) {
         Merger<M, T> merger = getMergerForDiscovery(discovery)
                 .orElseThrow(() -> new UnavailableMergerException(discovery.getClass()));
-        merger.merge(discovery);
+        merger.process(discovery);
         for (Replaceable implicitDiscovery : merger.getImplications()) {
             processDiscovery(implicitDiscovery);
         }

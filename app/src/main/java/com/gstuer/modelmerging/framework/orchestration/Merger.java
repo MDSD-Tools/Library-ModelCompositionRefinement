@@ -18,7 +18,17 @@ public abstract class Merger<M extends Model, T extends Replaceable> {
         this.processableType = Objects.requireNonNull(processableType);
     }
 
-    public abstract void merge(T discovery);
+    public void process(T discovery) {
+        this.implications.clear();
+        merge(discovery);
+        refine(discovery);
+    }
+
+    protected void merge(T discovery) {
+        this.model.add(discovery);
+    }
+
+    protected abstract void refine(T discovery);
 
     public M getModel() {
         return model;
