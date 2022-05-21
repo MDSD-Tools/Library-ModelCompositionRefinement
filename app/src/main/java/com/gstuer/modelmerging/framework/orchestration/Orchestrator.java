@@ -23,14 +23,6 @@ public abstract class Orchestrator<M extends Model> {
         }
     }
 
-    protected <T extends Replaceable> Optional<Merger<M, T>> getMergerForDiscoveryType(Class<T> discoveryType) {
-        return Optional.ofNullable((Merger<M, T>) mergerMap.get(discoveryType));
-    }
-
-    protected <T extends Replaceable> Optional<Merger<M, T>> getMergerForDiscovery(T discovery) {
-        return Optional.ofNullable((Merger<M, T>) mergerMap.get(discovery.getClass()));
-    }
-
     public M getModel() {
         return model;
     }
@@ -52,5 +44,9 @@ public abstract class Orchestrator<M extends Model> {
         for (Replaceable implicitDiscovery : merger.getImplications()) {
             processDiscovery(implicitDiscovery);
         }
+    }
+
+    protected <T extends Replaceable> Optional<Merger<M, T>> getMergerForDiscovery(T discovery) {
+        return Optional.ofNullable((Merger<M, T>) mergerMap.get(discovery.getClass()));
     }
 }
