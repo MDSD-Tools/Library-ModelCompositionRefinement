@@ -38,11 +38,16 @@ public abstract class Orchestrator<M extends Model> {
     }
 
     public <T extends Replaceable> void processDiscovery(T discovery) {
+        // Get appropriate merger for discovery or throw exception if unavailable
         Merger<M, T> merger = getMergerForDiscovery(discovery)
                 .orElseThrow(() -> new UnavailableMergerException(discovery.getClass()));
-        merger.process(discovery);
-        for (Replaceable implicitDiscovery : merger.getImplications()) {
-            processDiscovery(implicitDiscovery);
+
+        // Check whether discovery already exists in model to avoid infinite recursion
+        if (!this.model.contains(discovery)) {
+            merger.process(discovery);
+            for (Replaceable implicitDiscovery : merger.getImplications()) {
+                processDiscovery(implicitDiscovery);
+            }
         }
     }
 
