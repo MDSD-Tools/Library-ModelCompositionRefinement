@@ -3,6 +3,7 @@ package com.gstuer.modelmerging.framework.orchestration;
 import com.gstuer.modelmerging.framework.creation.Merger;
 import com.gstuer.modelmerging.framework.surrogate.Model;
 import com.gstuer.modelmerging.framework.surrogate.Replaceable;
+import com.gstuer.modelmerging.framework.transformation.Transformer;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,5 +28,9 @@ public abstract class Orchestrator<M extends Model> {
 
     public M getModel() {
         return model;
+    }
+
+    public <N> N getModel(Transformer<M, N> transformer) {
+        return transformer.transform(this.model);
     }
 }
