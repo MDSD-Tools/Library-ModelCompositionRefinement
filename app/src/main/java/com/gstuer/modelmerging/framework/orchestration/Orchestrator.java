@@ -1,7 +1,5 @@
 package com.gstuer.modelmerging.framework.orchestration;
 
-import com.gstuer.modelmerging.framework.creation.Merger;
-import com.gstuer.modelmerging.framework.creation.UnavailableMergerException;
 import com.gstuer.modelmerging.framework.discovery.Discoverer;
 import com.gstuer.modelmerging.framework.surrogate.Model;
 import com.gstuer.modelmerging.framework.surrogate.Replaceable;

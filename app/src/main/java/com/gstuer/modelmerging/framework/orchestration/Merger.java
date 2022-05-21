@@ -1,4 +1,4 @@
-package com.gstuer.modelmerging.framework.creation;
+package com.gstuer.modelmerging.framework.orchestration;
 
 import com.gstuer.modelmerging.framework.surrogate.Model;
 import com.gstuer.modelmerging.framework.surrogate.Replaceable;

@@ -1,4 +1,4 @@
-package com.gstuer.modelmerging.framework.creation;
+package com.gstuer.modelmerging.framework.orchestration;
 
 public class UnavailableMergerException extends IllegalArgumentException {
     private static final long serialVersionUID = 7358182453030322135L;
