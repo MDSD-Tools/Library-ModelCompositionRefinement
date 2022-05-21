@@ -2,10 +2,10 @@ package com.gstuer.modelmerging.framework.surrogate;
 
 import java.util.Objects;
 
-public class Element<T> extends Replaceable {
+public abstract class Element<T> extends Replaceable {
     private final T value;
 
-    public Element(T value, boolean isPlaceholder) {
+    protected Element(T value, boolean isPlaceholder) {
         super(isPlaceholder);
         this.value = Objects.requireNonNull(value);
     }

@@ -2,7 +2,7 @@ package com.gstuer.modelmerging.framework.surrogate;
 
 import java.util.Objects;
 
-public class Relation<T extends Replaceable, S extends Replaceable> extends Replaceable {
+public abstract class Relation<T extends Replaceable, S extends Replaceable> extends Replaceable {
     private final T source;
     private final S destination;
 
