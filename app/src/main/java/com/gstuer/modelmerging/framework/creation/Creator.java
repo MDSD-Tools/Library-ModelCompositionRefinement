@@ -7,6 +7,7 @@ import com.gstuer.modelmerging.framework.surrogate.Replaceable;
 import java.util.Objects;
 import java.util.Optional;
 
+@Deprecated
 public abstract class Creator<M extends Model> {
     private static final String UNSUPPORTED_DISCOVERER = "No merger available for discoverer of type %s.";
 

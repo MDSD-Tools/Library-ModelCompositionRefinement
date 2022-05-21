@@ -1,6 +1,8 @@
 package com.gstuer.modelmerging.framework.orchestration;
 
 import com.gstuer.modelmerging.framework.creation.Merger;
+import com.gstuer.modelmerging.framework.creation.UnavailableMergerException;
+import com.gstuer.modelmerging.framework.discovery.Discoverer;
 import com.gstuer.modelmerging.framework.surrogate.Model;
 import com.gstuer.modelmerging.framework.surrogate.Replaceable;
 import com.gstuer.modelmerging.framework.transformation.Transformer;
@@ -26,11 +28,30 @@ public abstract class Orchestrator<M extends Model> {
         return Optional.ofNullable((Merger<M, T>) mergerMap.get(discoveryType));
     }
 
+    protected <T extends Replaceable> Optional<Merger<M, T>> getMergerForDiscovery(T discovery) {
+        return Optional.ofNullable((Merger<M, T>) mergerMap.get(discovery.getClass()));
+    }
+
     public M getModel() {
         return model;
     }
 
     public <N> N getModel(Transformer<M, N> transformer) {
         return transformer.transform(this.model);
+    }
+
+    public <T extends Replaceable> void processDiscoverer(Discoverer<T> discoverer) {
+        for (T discovery : discoverer.getDiscoveries()) {
+            processDiscovery(discovery);
+        }
+    }
+
+    public <T extends Replaceable> void processDiscovery(T discovery) {
+        Merger<M, T> merger = getMergerForDiscovery(discovery)
+                .orElseThrow(() -> new UnavailableMergerException(discovery.getClass()));
+        merger.merge(discovery);
+        for (Replaceable implicitDiscovery : merger.getImplications()) {
+            processDiscovery(implicitDiscovery);
+        }
     }
 }
