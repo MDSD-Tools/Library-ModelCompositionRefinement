@@ -12,12 +12,12 @@ import java.util.Optional;
 
 public abstract class Orchestrator<M extends Model> {
     private final M model;
-    private final Map<Class<?>, Merger<?, ?>> mergerMap;
+    private final Map<Class<?>, Merger<M, ?>> mergerMap;
 
-    protected Orchestrator(M model, Merger<?, ?>... mergers) {
+    protected Orchestrator(M model, Merger<M, ?>... mergers) {
         this.model = Objects.requireNonNull(model);
         this.mergerMap = new HashMap<>();
-        for (Merger<?, ?> merger : mergers) {
+        for (Merger<M, ?> merger : mergers) {
             mergerMap.put(merger.getProcessableType(), merger);
         }
     }
