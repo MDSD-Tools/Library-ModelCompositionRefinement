@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="tools.mdsd.mmm.feature"
+      label="Multidimensional Model Merging Feature"
+      version="1.0.0.qualifier"
+      provider-name="mdsd.tools">
+
+   <requires>
+      <import plugin="tools.mdsd.mmm.framework"/>
+      <import plugin="tools.mdsd.mmm.instance"/>
+   </requires>
+
+   <plugin
+         id="tools.mdsd.mmm.framework"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
+
+   <plugin
+         id="tools.mdsd.mmm.instance"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
+
+</feature>

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature id="tools.mdsd.mmm.feature"/>
+   <category-def name="tools.mdsd.mmm.category" label="Multidimensional Model Merging"/>
+</site>
