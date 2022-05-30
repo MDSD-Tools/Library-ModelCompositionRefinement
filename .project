@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>Multidimensional-Model-Merging</name>
+	<name>MoCoRe</name>
 	<comment></comment>
-	<projects></projects>
+	<projects>
+	</projects>
 	<buildSpec>
 		<buildCommand>
 			<name>org.eclipse.m2e.core.maven2Builder</name>
-			<arguments></arguments>
+			<arguments>
+			</arguments>
 		</buildCommand>
 	</buildSpec>
 	<natures>

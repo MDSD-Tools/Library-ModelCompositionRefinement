@@ -1,9 +1,9 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: tools.mdsd.mmm.instance
-Bundle-SymbolicName: tools.mdsd.mmm.instance;singleton:=true
+Bundle-Name: tools.mdsd.mocore.instance
+Bundle-SymbolicName: tools.mdsd.mocore.instance;singleton:=true
 Bundle-Version: 1.0.0.qualifier
-Automatic-Module-Name: tools.mdsd.mmm.instance
+Automatic-Module-Name: tools.mdsd.mocore.instance
 Bundle-Vendor: mdsd.tools
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Bundle-ActivationPolicy: lazy
@@ -13,4 +13,4 @@ Export-Package: com.gstuer.modelmerging.instance.pcm.merger.element,
  com.gstuer.modelmerging.instance.pcm.surrogate,
  com.gstuer.modelmerging.instance.pcm.surrogate.element,
  com.gstuer.modelmerging.instance.pcm.surrogate.relation
-Require-Bundle: tools.mdsd.mmm.framework
+Require-Bundle: tools.mdsd.mocore.framework

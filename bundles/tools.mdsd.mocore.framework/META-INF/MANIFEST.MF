@@ -1,9 +1,9 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: tools.mdsd.mmm.framework
-Bundle-SymbolicName: tools.mdsd.mmm.framework;singleton:=true
+Bundle-Name: tools.mdsd.mocore.framework
+Bundle-SymbolicName: tools.mdsd.mocore.framework;singleton:=true
 Bundle-Version: 1.0.0.qualifier
-Automatic-Module-Name: tools.mdsd.mmm.framework
+Automatic-Module-Name: tools.mdsd.mocore.framework
 Bundle-Vendor: mdsd.tools
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Bundle-ActivationPolicy: lazy

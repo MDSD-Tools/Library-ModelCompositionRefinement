@@ -9,14 +9,14 @@
 		<version>0.6.0</version>
 	</parent>
 
-	<groupId>tools.mdsd.mmm</groupId>
+	<groupId>tools.mdsd.mocore</groupId>
 	<artifactId>parent</artifactId>
 	<version>5.1.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 
 	<properties>
-		<org.palladiosimulator.maven.tychotprefresh.tplocation.2>${project.basedir}/releng/tools.mdsd.mmm.targetplatform/tools.mdsd.mmm.targetplatform.target</org.palladiosimulator.maven.tychotprefresh.tplocation.2>
+		<org.palladiosimulator.maven.tychotprefresh.tplocation.2>${project.basedir}/releng/tools.mdsd.mocore.targetplatform/tools.mdsd.mocore.targetplatform.target</org.palladiosimulator.maven.tychotprefresh.tplocation.2>
 	</properties>
 
 	<modules>
