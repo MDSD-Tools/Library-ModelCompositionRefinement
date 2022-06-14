@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature id="tools.mdsd.mocore.feature"/>
+   <category-def name="tools.mdsd.mocore.category" label="MoCoRe"/>
+</site>

@@ -171,3 +171,50 @@ app/src/main/resources/*.jks
 app/src/test/resources/*.jks
 app/src/main/resources/*.p12
 app/src/test/resources/*.p12
+
+# Miscellaneous
+.polyglot.build.properties
+*.log
+*.META-INF_MANIFEST.MF
+*.polyglot.*
+*.rej
+*.takari_issue_192
+*.tycho
+*~
+heapdump.*
+Snap.*
+
+# Eclipse
+.loadpath
+.metadata
+.recommenders
+.settings/
+.worksheet
+*.bak
+*.class
+*.swp
+*.tmp
+*~.nib
+bin/
+javacore.*
+local.properties
+src-gen/
+tmp/
+
+# Maven
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
+buildNumber.properties
+dependency-reduced-pom.xml
+pom.xml.next
+pom.xml.releaseBackup
+pom.xml.tag
+pom.xml.versionsBackup
+release.properties
+releng/*/workspace/*
+target/
+
+# Xtend
+*._trace
+*.xtendbin
+xtend-gen/

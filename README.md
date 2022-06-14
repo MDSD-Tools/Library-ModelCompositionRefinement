@@ -1,2 +1,2 @@
-# multidimensional-model-merging-tool
+# MoCoRe - Model-driven Composition & Refinement
 

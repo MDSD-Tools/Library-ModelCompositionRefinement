@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="tools.mdsd.mocore.feature"
+      label="MoCoRe Feature"
+      version="1.0.0.qualifier"
+      provider-name="mdsd.tools">
+
+   <requires>
+      <import plugin="tools.mdsd.mocore.framework"/>
+      <import plugin="tools.mdsd.mocore.instance"/>
+   </requires>
+
+   <plugin
+         id="tools.mdsd.mocore.framework"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
+
+   <plugin
+         id="tools.mdsd.mocore.instance"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
+
+</feature>
