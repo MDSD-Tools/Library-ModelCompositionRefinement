@@ -10,10 +10,8 @@ public abstract class Replaceable {
     public boolean isPlaceholder() {
         return isPlaceholder;
     }
-    
+
     public abstract boolean canReplace(Replaceable replaceable);
-    
-    public <T extends Replaceable> Replaceable replace(T original, T replacement) {
-        throw new UnsupportedOperationException();
-    }
+
+    public abstract <T extends Replaceable> Replaceable replace(T original, T replacement);
 }
