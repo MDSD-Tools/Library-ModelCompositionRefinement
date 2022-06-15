@@ -22,9 +22,9 @@ public abstract class Relation<T extends Replaceable, S extends Replaceable> ext
 
     @Override
     public boolean canReplace(Replaceable replaceable) {
-        return this.source.equals(replaceable) || this.destination.equals(replaceable);
+        return this.source.canReplace(replaceable) || this.destination.canReplace(replaceable);
     }
-    
+
     @Override
     public boolean equals(Object object) {
         if (this == object) return true;
