@@ -2,13 +2,14 @@ package com.gstuer.modelmerging.framework.surrogate;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class TypedDistinctMultiMap<S extends Object> {
+public class TypedDistinctMultiMap<S extends Object> implements Iterable<S> {
     private final Map<Class<?>, Set<S>> data;
 
     public TypedDistinctMultiMap() {
@@ -40,5 +41,11 @@ public class TypedDistinctMultiMap<S extends Object> {
     public boolean containsElement(S element) {
         Set<S> elements = this.data.getOrDefault(element.getClass(), new HashSet<>());
         return elements.contains(element);
+    }
+
+    @Override
+    public Iterator<S> iterator() {
+        Set<S> values = this.data.values().stream().flatMap(Set::stream).collect(Collectors.toUnmodifiableSet());
+        return values.iterator();
     }
 }
