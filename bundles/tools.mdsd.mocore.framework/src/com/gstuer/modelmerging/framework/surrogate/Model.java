@@ -8,4 +8,6 @@ public interface Model {
     void add(Replaceable replaceable);
 
     boolean contains(Replaceable replaceable);
+    
+    void replace(Replaceable original, Replaceable replacement);
 }
