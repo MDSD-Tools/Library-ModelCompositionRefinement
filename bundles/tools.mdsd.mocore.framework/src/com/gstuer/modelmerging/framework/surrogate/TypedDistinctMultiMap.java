@@ -7,21 +7,21 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class TypedDistinctMultiMap {
-    private final Map<Class<?>, Set<Object>> data;
+public class TypedDistinctMultiMap<S extends Object> {
+    private final Map<Class<?>, Set<S>> data;
 
     public TypedDistinctMultiMap() {
         this.data = new HashMap<>();
     }
 
-    public <T> void put(T element) {
-        Set<Object> elements = this.data.getOrDefault(element.getClass(), new HashSet<>());
+    public void put(S element) {
+        Set<S> elements = this.data.getOrDefault(element.getClass(), new HashSet<>());
         elements.add(element);
         this.data.put(element.getClass(), elements);
     }
 
-    public <T> List<T> get(Class<T> key) {
-        Set<Object> objects = this.data.getOrDefault(key, new HashSet<>());
+    public <T extends S> List<T> get(Class<T> key) {
+        Set<S> objects = this.data.getOrDefault(key, new HashSet<>());
         return objects.stream().map(key::cast).collect(Collectors.toList());
     }
 
@@ -29,8 +29,8 @@ public class TypedDistinctMultiMap {
         return this.data.containsKey(key);
     }
 
-    public <T> boolean containsElement(T element) {
-        Set<Object> elements = this.data.getOrDefault(element.getClass(), new HashSet<>());
+    public boolean containsElement(S element) {
+        Set<S> elements = this.data.getOrDefault(element.getClass(), new HashSet<>());
         return elements.contains(element);
     }
 }
