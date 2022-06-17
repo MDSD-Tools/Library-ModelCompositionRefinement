@@ -1,7 +1,14 @@
 package com.gstuer.modelmerging.framework.merger;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import com.gstuer.modelmerging.framework.surrogate.Model;
 import com.gstuer.modelmerging.framework.surrogate.Relation;
+import com.gstuer.modelmerging.framework.surrogate.Replaceable;
 
 public abstract class RelationMerger<M extends Model, T extends Relation<?, ?>> extends Merger<M, T> {
     protected RelationMerger(M model, Class<T> processableType) {
@@ -15,5 +22,67 @@ public abstract class RelationMerger<M extends Model, T extends Relation<?, ?>> 
         // Add trivial implications for source and destination of relation
         addImplication(discovery.getSource());
         addImplication(discovery.getDestination());
+    }
+
+    @Override
+    protected void refine(T discovery) {
+        replaceDirectPlaceholders(discovery);
+        replaceIndirectPlaceholders(discovery);
+    }
+
+    protected void replaceDirectPlaceholders(T discovery) {
+        // Get relevant placeholder relations from the model
+        List<T> relations = this.getModel().getByType(this.getProcessableType());
+        relations.removeIf(relation -> relation.isPlaceholderOf(discovery));
+
+        Set<Replaceable> implications = new HashSet<>();
+        for (T placeholder : relations) {
+            // Replace placeholder & collect possible implications. May include discovery.
+            implications.addAll(this.getModel().replace(placeholder, discovery));
+        }
+        // The discovery was already added to the model by the merge operation.
+        implications.remove(discovery);
+    }
+
+    protected void replaceIndirectPlaceholders(T discovery) {
+        // Get relations of same type with equal source or destination
+        Set<T> relations = this.getModel().getByType(this.getProcessableType()).stream()
+                .filter(relation -> !Objects.equals(relation, discovery)
+                        && (discovery.getSource().equals(relation.getSource())
+                                || discovery.getDestination().equals(relation.getDestination())))
+                .collect(Collectors.toSet());
+
+        Set<Replaceable> implications = new HashSet<>();
+        for (T relation : relations) {
+            /*
+             * For each possible placeholder relation identify the common side with the discovery relation. Then check
+             * whether the uncommon side of a possible placeholder is a placeholder itself. If yes, the possible
+             * placeholder is a certain placeholder and replacement of the uncommon side is needed. Moreover,
+             * replacement of the whole relation is needed if the discovery relation is not a placeholder. Afterwards
+             * replace the uncommon side of the placeholder relation with the uncommon side of the discovery. This may
+             * be a renaming without information benefit if both uncommon sides are placeholders.
+             */
+            if (Objects.equals(discovery.getSource(), relation.getSource())) {
+                // Left side equals -> Right side replacement if needed
+                if (relation.getDestination().isPlaceholder()) {
+                    if (!discovery.isPlaceholder()) {
+                        implications.addAll(this.getModel().replace(relation, discovery));
+                    }
+                    implications.addAll(this.getModel()
+                            .replace(relation.getDestination(), discovery.getDestination()));
+                }
+            } else if (Objects.equals(discovery.getDestination(), relation.getDestination())) {
+                // Right side equals -> Left side replacement if needed
+                if (relation.getSource().isPlaceholder()) {
+                    if (!discovery.isPlaceholder()) {
+                        implications.addAll(this.getModel().replace(relation, discovery));
+                    }
+                    implications.addAll(this.getModel()
+                            .replace(relation.getSource(), discovery.getSource()));
+                }
+            }
+        }
+        // The discovery was already added to the model by the merge operation.
+        implications.remove(discovery);
     }
 }
