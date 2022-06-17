@@ -6,7 +6,7 @@ import com.gstuer.modelmerging.framework.merger.Merger;
 import com.gstuer.modelmerging.instance.pcm.surrogate.PcmSurrogate;
 import com.gstuer.modelmerging.instance.pcm.surrogate.element.Component;
 import com.gstuer.modelmerging.instance.pcm.surrogate.element.Deployment;
-import com.gstuer.modelmerging.instance.pcm.surrogate.relation.ComponentDeploymentRelation;
+import com.gstuer.modelmerging.instance.pcm.surrogate.relation.ComponentAllocationRelation;
 
 public class ComponentMerger extends Merger<PcmSurrogate, Component> {
     public ComponentMerger(PcmSurrogate model) {
@@ -15,12 +15,12 @@ public class ComponentMerger extends Merger<PcmSurrogate, Component> {
 
     @Override
     protected void refine(Component discovery) {
-        List<ComponentDeploymentRelation> deploymentRelations = getModel().getByType(ComponentDeploymentRelation.class);
+        List<ComponentAllocationRelation> deploymentRelations = getModel().getByType(ComponentAllocationRelation.class);
         deploymentRelations.removeIf(relation -> !relation.getSource().equals(discovery));
 
         if (deploymentRelations.isEmpty()) {
             Deployment deployment = Deployment.getUniquePlaceholder();
-            ComponentDeploymentRelation relation = new ComponentDeploymentRelation(discovery, deployment, true);
+            ComponentAllocationRelation relation = new ComponentAllocationRelation(discovery, deployment, true);
             addImplication(relation);
         }
     }

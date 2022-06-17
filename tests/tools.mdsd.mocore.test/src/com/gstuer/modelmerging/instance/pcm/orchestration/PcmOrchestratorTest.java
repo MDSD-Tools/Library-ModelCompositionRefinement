@@ -3,7 +3,7 @@ package com.gstuer.modelmerging.instance.pcm.orchestration;
 import com.gstuer.modelmerging.instance.pcm.surrogate.PcmSurrogate;
 import com.gstuer.modelmerging.instance.pcm.surrogate.element.Component;
 import com.gstuer.modelmerging.instance.pcm.surrogate.element.Deployment;
-import com.gstuer.modelmerging.instance.pcm.surrogate.relation.ComponentDeploymentRelation;
+import com.gstuer.modelmerging.instance.pcm.surrogate.relation.ComponentAllocationRelation;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -29,7 +29,7 @@ public class PcmOrchestratorTest {
 
         PcmSurrogate model = orchestrator.getModel();
         List<Deployment> deployments = model.getByType(Deployment.class);
-        Stream<ComponentDeploymentRelation> componentDeploymentRelations = model.getByType(ComponentDeploymentRelation.class).stream();
+        Stream<ComponentAllocationRelation> componentDeploymentRelations = model.getByType(ComponentAllocationRelation.class).stream();
 
         // Assertions
         assertTrue(model.contains(component));
