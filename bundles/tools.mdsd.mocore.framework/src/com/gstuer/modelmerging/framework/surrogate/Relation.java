@@ -64,6 +64,18 @@ public abstract class Relation<T extends Replaceable, S extends Replaceable> ext
     }
 
     @Override
+    public boolean isPlaceholderOf(Replaceable replaceable) {
+        if (!this.isPlaceholder() || replaceable.isPlaceholder()) {
+            return false;
+        }
+        if (getClass() != replaceable.getClass()) {
+            return false;
+        }
+        Relation<?, ?> relation = (Relation<?, ?>) replaceable;
+        return Objects.equals(destination, relation.destination) && Objects.equals(source, relation.source);
+    }
+
+    @Override
     public boolean equals(Object object) {
         if (this == object) {
             return true;

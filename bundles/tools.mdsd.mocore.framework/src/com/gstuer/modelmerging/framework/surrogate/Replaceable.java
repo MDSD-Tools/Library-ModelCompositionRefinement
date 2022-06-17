@@ -17,6 +17,8 @@ public abstract class Replaceable {
 
     public abstract <T extends Replaceable> Replaceable replace(T original, T replacement);
 
+    public abstract boolean isPlaceholderOf(Replaceable replaceable);
+
     @Override
     public boolean equals(Object object) {
         if (this == object) {

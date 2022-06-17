@@ -28,6 +28,18 @@ public abstract class Element<T> extends Replaceable {
     }
 
     @Override
+    public boolean isPlaceholderOf(Replaceable replaceable) {
+        if (!this.isPlaceholder() || replaceable.isPlaceholder()) {
+            return false;
+        }
+        if (getClass() != replaceable.getClass()) {
+            return false;
+        }
+        Element<?> element = (Element<?>) replaceable;
+        return Objects.equals(value, element.value);
+    }
+
+    @Override
     public boolean equals(Object object) {
         if (this == object) {
             return true;
