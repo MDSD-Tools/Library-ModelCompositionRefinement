@@ -32,15 +32,21 @@ public abstract class Element<T> extends Replaceable {
         if (this == object) {
             return true;
         }
-        if (object == null || getClass() != object.getClass()) {
+        if (!super.equals(object)) {
+            return false;
+        }
+        if (getClass() != object.getClass()) {
             return false;
         }
         Element<?> element = (Element<?>) object;
-        return value.equals(element.value);
+        return Objects.equals(value, element.value);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(value);
+        final int prime = 31;
+        int result = super.hashCode();
+        result = prime * result + Objects.hash(value);
+        return result;
     }
 }

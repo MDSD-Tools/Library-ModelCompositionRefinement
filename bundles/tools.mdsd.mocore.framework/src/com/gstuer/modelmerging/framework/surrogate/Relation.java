@@ -68,15 +68,21 @@ public abstract class Relation<T extends Replaceable, S extends Replaceable> ext
         if (this == object) {
             return true;
         }
-        if (object == null || getClass() != object.getClass()) {
+        if (!super.equals(object)) {
+            return false;
+        }
+        if (getClass() != object.getClass()) {
             return false;
         }
         Relation<?, ?> relation = (Relation<?, ?>) object;
-        return source.equals(relation.source) && destination.equals(relation.destination);
+        return Objects.equals(destination, relation.destination) && Objects.equals(source, relation.source);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(source, destination);
+        final int prime = 31;
+        int result = super.hashCode();
+        result = prime * result + Objects.hash(destination, source);
+        return result;
     }
 }
