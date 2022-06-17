@@ -21,8 +21,7 @@ public class InterfaceMerger extends Merger<PcmSurrogate, Interface> {
         requiresRelations.removeIf(relation -> !relation.getDestination().equals(discovery));
 
         if (providesRelations.isEmpty() && requiresRelations.isEmpty()) {
-            // TODO Replace with concrete pcm placeholder
-            Component component = new Component("Placeholder", true);
+            Component component = Component.getUniquePlaceholder();
             ProvidesRelation relation = new ProvidesRelation(component, discovery, true);
             addImplication(relation);
         }

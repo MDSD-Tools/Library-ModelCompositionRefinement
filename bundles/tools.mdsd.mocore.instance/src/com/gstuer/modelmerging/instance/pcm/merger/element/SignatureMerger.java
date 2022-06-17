@@ -17,10 +17,9 @@ public class SignatureMerger extends Merger<PcmSurrogate, Signature> {
     protected void refine(Signature discovery) {
         List<SignatureInterfaceRelation> interfaceRelations = getModel().getByType(SignatureInterfaceRelation.class);
         interfaceRelations.removeIf(relation -> !relation.getSource().equals(discovery));
-        
+
         if (interfaceRelations.isEmpty()) {
-            // TODO Replace with concrete pcm placeholder
-            Interface interfaceElement = new Interface("Placeholder", true);
+            Interface interfaceElement = Interface.getUniquePlaceholder();
             SignatureInterfaceRelation relation = new SignatureInterfaceRelation(discovery, interfaceElement, true);
             addImplication(relation);
         }

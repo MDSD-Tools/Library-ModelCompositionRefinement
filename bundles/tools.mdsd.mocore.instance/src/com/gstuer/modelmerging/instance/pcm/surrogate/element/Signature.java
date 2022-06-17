@@ -7,4 +7,9 @@ public class Signature extends Element<String> {
     public Signature(String value, boolean isPlaceholder) {
         super(value, isPlaceholder);
     }
+
+    public static Signature getUniquePlaceholder() {
+        String identifier = "Placeholder_" + getUniqueValue();
+        return new Signature(identifier, true);
+    }
 }

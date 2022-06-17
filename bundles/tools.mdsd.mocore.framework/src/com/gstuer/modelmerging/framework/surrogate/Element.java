@@ -3,6 +3,7 @@ package com.gstuer.modelmerging.framework.surrogate;
 import java.util.Objects;
 
 public abstract class Element<T> extends Replaceable {
+    private static long nextUniqueValue;
     private final T value;
 
     protected Element(T value, boolean isPlaceholder) {
@@ -60,5 +61,9 @@ public abstract class Element<T> extends Replaceable {
         int result = super.hashCode();
         result = prime * result + Objects.hash(value);
         return result;
+    }
+
+    protected static long getUniqueValue() {
+        return nextUniqueValue++;
     }
 }

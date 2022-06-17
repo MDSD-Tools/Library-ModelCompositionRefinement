@@ -7,4 +7,9 @@ public class Deployment extends Element<String> {
     public Deployment(String value, boolean isPlaceholder) {
         super(value, isPlaceholder);
     }
+
+    public static Deployment getUniquePlaceholder() {
+        String identifier = "Placeholder_" + getUniqueValue();
+        return new Deployment(identifier, true);
+    }
 }
