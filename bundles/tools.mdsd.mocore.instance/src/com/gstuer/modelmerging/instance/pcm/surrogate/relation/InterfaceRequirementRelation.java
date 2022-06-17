@@ -5,22 +5,22 @@ import com.gstuer.modelmerging.framework.surrogate.Replaceable;
 import com.gstuer.modelmerging.instance.pcm.surrogate.element.Component;
 import com.gstuer.modelmerging.instance.pcm.surrogate.element.Interface;
 
-public class ProvidesRelation extends Relation<Component, Interface> {
-    public ProvidesRelation(Component source, Interface destination, boolean isPlaceholder) {
+public class InterfaceRequirementRelation extends Relation<Component, Interface> {
+    public InterfaceRequirementRelation(Component source, Interface destination, boolean isPlaceholder) {
         super(source, destination, isPlaceholder);
     }
 
     @Override
-    public <U extends Replaceable> ProvidesRelation replace(U original, U replacement) {
+    public <U extends Replaceable> InterfaceRequirementRelation replace(U original, U replacement) {
         if (!this.canReplace(original)) {
             // TODO Add message to exception
             throw new IllegalArgumentException();
         }
         if (this.equals(original)) {
-            return (ProvidesRelation) replacement;
+            return (InterfaceRequirementRelation) replacement;
         }
         Component source = getSourceReplacement(original, replacement);
         Interface destination = getDestinationReplacement(original, replacement);
-        return new ProvidesRelation(source, destination, this.isPlaceholder());
+        return new InterfaceRequirementRelation(source, destination, this.isPlaceholder());
     }
 }

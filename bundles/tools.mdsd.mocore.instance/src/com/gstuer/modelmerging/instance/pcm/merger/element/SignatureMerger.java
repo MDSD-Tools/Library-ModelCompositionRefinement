@@ -6,7 +6,7 @@ import com.gstuer.modelmerging.framework.merger.Merger;
 import com.gstuer.modelmerging.instance.pcm.surrogate.PcmSurrogate;
 import com.gstuer.modelmerging.instance.pcm.surrogate.element.Interface;
 import com.gstuer.modelmerging.instance.pcm.surrogate.element.Signature;
-import com.gstuer.modelmerging.instance.pcm.surrogate.relation.SignatureInterfaceRelation;
+import com.gstuer.modelmerging.instance.pcm.surrogate.relation.SignatureProvisionRelation;
 
 public class SignatureMerger extends Merger<PcmSurrogate, Signature> {
     public SignatureMerger(PcmSurrogate model) {
@@ -15,12 +15,12 @@ public class SignatureMerger extends Merger<PcmSurrogate, Signature> {
 
     @Override
     protected void refine(Signature discovery) {
-        List<SignatureInterfaceRelation> interfaceRelations = getModel().getByType(SignatureInterfaceRelation.class);
+        List<SignatureProvisionRelation> interfaceRelations = getModel().getByType(SignatureProvisionRelation.class);
         interfaceRelations.removeIf(relation -> !relation.getSource().equals(discovery));
 
         if (interfaceRelations.isEmpty()) {
             Interface interfaceElement = Interface.getUniquePlaceholder();
-            SignatureInterfaceRelation relation = new SignatureInterfaceRelation(discovery, interfaceElement, true);
+            SignatureProvisionRelation relation = new SignatureProvisionRelation(discovery, interfaceElement, true);
             addImplication(relation);
         }
     }

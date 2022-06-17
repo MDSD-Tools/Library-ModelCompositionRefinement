@@ -5,22 +5,22 @@ import com.gstuer.modelmerging.framework.surrogate.Replaceable;
 import com.gstuer.modelmerging.instance.pcm.surrogate.element.Interface;
 import com.gstuer.modelmerging.instance.pcm.surrogate.element.Signature;
 
-public class SignatureInterfaceRelation extends Relation<Signature, Interface> {
-    public SignatureInterfaceRelation(Signature source, Interface destination, boolean isPlaceholder) {
+public class SignatureProvisionRelation extends Relation<Signature, Interface> {
+    public SignatureProvisionRelation(Signature source, Interface destination, boolean isPlaceholder) {
         super(source, destination, isPlaceholder);
     }
 
     @Override
-    public <U extends Replaceable> SignatureInterfaceRelation replace(U original, U replacement) {
+    public <U extends Replaceable> SignatureProvisionRelation replace(U original, U replacement) {
         if (!this.canReplace(original)) {
             // TODO Add message to exception
             throw new IllegalArgumentException();
         }
         if (this.equals(original)) {
-            return (SignatureInterfaceRelation) replacement;
+            return (SignatureProvisionRelation) replacement;
         }
         Signature source = getSourceReplacement(original, replacement);
         Interface destination = getDestinationReplacement(original, replacement);
-        return new SignatureInterfaceRelation(source, destination, this.isPlaceholder());
+        return new SignatureProvisionRelation(source, destination, this.isPlaceholder());
     }
 }
