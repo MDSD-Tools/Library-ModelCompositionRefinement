@@ -22,12 +22,18 @@ public abstract class Relation<T extends Replaceable, S extends Replaceable> ext
 
     @Override
     public boolean canReplace(Replaceable replaceable) {
-        return this.source.canReplace(replaceable) || this.destination.canReplace(replaceable);
+        return this.equals(replaceable) || this.source.canReplace(replaceable)
+                || this.destination.canReplace(replaceable);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public <U extends Replaceable> Relation<T, S> replace(U original, U replacement) {
-        if (original.isPlaceholder() || replacement.isPlaceholder()) {
+        if (this.equals(original)) {
+            // Type-safe cast due to this.equals(original) == true
+            // => this.getClass() == original.getClass() == replacement.getClass()
+            return (Relation<T, S>) replacement;
+        } else if (original.isPlaceholder() || replacement.isPlaceholder()) {
             return this.replace(original, replacement, true);
         }
         return this.replace(original, replacement, false);
