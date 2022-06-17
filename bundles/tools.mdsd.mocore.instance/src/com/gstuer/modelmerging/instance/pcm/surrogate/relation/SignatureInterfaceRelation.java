@@ -11,14 +11,16 @@ public class SignatureInterfaceRelation extends Relation<Signature, Interface> {
     }
 
     @Override
-    public <U extends Replaceable> SignatureInterfaceRelation replace(U original, U replacement,
-            boolean isPlaceholder) {
+    public <U extends Replaceable> SignatureInterfaceRelation replace(U original, U replacement) {
         if (!this.canReplace(original)) {
             // TODO Add message to exception
             throw new IllegalArgumentException();
         }
+        if (this.equals(original)) {
+            return (SignatureInterfaceRelation) replacement;
+        }
         Signature source = getSourceReplacement(original, replacement);
         Interface destination = getDestinationReplacement(original, replacement);
-        return new SignatureInterfaceRelation(source, destination, isPlaceholder);
+        return new SignatureInterfaceRelation(source, destination, this.isPlaceholder());
     }
 }

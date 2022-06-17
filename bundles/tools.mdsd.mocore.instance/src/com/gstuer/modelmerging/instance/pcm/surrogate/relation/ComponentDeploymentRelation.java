@@ -11,14 +11,16 @@ public class ComponentDeploymentRelation extends Relation<Component, Deployment>
     }
 
     @Override
-    public <U extends Replaceable> ComponentDeploymentRelation replace(U original, U replacement,
-            boolean isPlaceholder) {
+    public <U extends Replaceable> ComponentDeploymentRelation replace(U original, U replacement) {
         if (!this.canReplace(original)) {
             // TODO Add message to exception
             throw new IllegalArgumentException();
         }
+        if (this.equals(original)) {
+            return (ComponentDeploymentRelation) replacement;
+        }
         Component source = getSourceReplacement(original, replacement);
         Deployment destination = getDestinationReplacement(original, replacement);
-        return new ComponentDeploymentRelation(source, destination, isPlaceholder);
+        return new ComponentDeploymentRelation(source, destination, this.isPlaceholder());
     }
 }

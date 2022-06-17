@@ -27,31 +27,6 @@ public abstract class Relation<T extends Replaceable, S extends Replaceable> ext
     }
 
     @SuppressWarnings("unchecked")
-    @Override
-    public <U extends Replaceable> Relation<T, S> replace(U original, U replacement) {
-        if (this.equals(original)) {
-            // Type-safe cast due to this.equals(original) == true
-            // => this.getClass() == original.getClass() == replacement.getClass()
-            return (Relation<T, S>) replacement;
-        } else if (original.isPlaceholder() || replacement.isPlaceholder()) {
-            return this.replace(original, replacement, true);
-        }
-        return this.replace(original, replacement, false);
-    }
-
-    /**
-     * Overloaded variant of {@link #replace(Replaceable, Replaceable)} with
-     * specified placeholder state. Allows the creation of a replacement relation as
-     * placeholder regardless of the state of its children replaceables.
-     *
-     * @param original      the replaceable to be replaced
-     * @param replacement   the successor of the replaceable to be replaced
-     * @param isPlaceholder indicates whether the returned relation is a placeholder
-     * @return the replacement relation of this relation
-     */
-    public abstract <U extends Replaceable> Relation<T, S> replace(U original, U replacement, boolean isPlaceholder);
-
-    @SuppressWarnings("unchecked")
     protected <U extends Replaceable> T getSourceReplacement(U original, U replacement) {
         if (this.source.canReplace(original)) {
             // Type-safe cast due to possible replacement of source with original type.

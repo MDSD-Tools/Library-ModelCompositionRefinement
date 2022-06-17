@@ -11,13 +11,16 @@ public class RequiresRelation extends Relation<Component, Interface> {
     }
 
     @Override
-    public <U extends Replaceable> RequiresRelation replace(U original, U replacement, boolean isPlaceholder) {
+    public <U extends Replaceable> RequiresRelation replace(U original, U replacement) {
         if (!this.canReplace(original)) {
             // TODO Add message to exception
             throw new IllegalArgumentException();
         }
+        if (this.equals(original)) {
+            return (RequiresRelation) replacement;
+        }
         Component source = getSourceReplacement(original, replacement);
         Interface destination = getDestinationReplacement(original, replacement);
-        return new RequiresRelation(source, destination, isPlaceholder);
+        return new RequiresRelation(source, destination, this.isPlaceholder());
     }
 }
