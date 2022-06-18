@@ -29,8 +29,8 @@ public abstract class Relation<T extends Replaceable, S extends Replaceable> ext
     @SuppressWarnings("unchecked")
     protected <U extends Replaceable> T getSourceReplacement(U original, U replacement) {
         if (this.source.canReplace(original)) {
-            // Type-safe cast due to possible replacement of source with original type.
-            return (T) replacement;
+            // Replace always returns an instance of the same type. See Replaceable.replace();
+            return (T) this.source.replace(original, replacement);
         }
         return this.source;
     }
@@ -38,8 +38,8 @@ public abstract class Relation<T extends Replaceable, S extends Replaceable> ext
     @SuppressWarnings("unchecked")
     protected <U extends Replaceable> S getDestinationReplacement(U original, U replacement) {
         if (this.destination.canReplace(original)) {
-            // Type-safe cast due to possible replacement of source with original type.
-            return (S) replacement;
+            // Replace always returns an instance of the same type. See Replaceable.replace();
+            return (S) this.destination.replace(original, replacement);
         }
         return this.destination;
     }
