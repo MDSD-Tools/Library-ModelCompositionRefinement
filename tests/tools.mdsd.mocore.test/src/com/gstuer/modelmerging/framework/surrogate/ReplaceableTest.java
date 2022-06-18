@@ -11,6 +11,8 @@ import java.util.Objects;
 import org.junit.jupiter.api.Test;
 
 public abstract class ReplaceableTest<T extends Replaceable> {
+    private static long nextUniqueValue;
+
     @Test
     public void testIsPlaceholderNonPlaceholder() {
         // Test data
@@ -227,5 +229,9 @@ public abstract class ReplaceableTest<T extends Replaceable> {
         public boolean isPlaceholderOf(Replaceable replaceable) {
             return false;
         }
+    }
+
+    protected static long getUniqueLongValue() {
+        return nextUniqueValue++;
     }
 }

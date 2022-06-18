@@ -6,8 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import org.junit.jupiter.api.Test;
 
 public abstract class ElementTest<T extends Element<S>, S> extends ReplaceableTest<T> {
-    private static long nextUniqueValue;
-
     @Test
     public void testCanReplaceUnequalReplaceable() {
         // Test data
@@ -36,8 +34,4 @@ public abstract class ElementTest<T extends Element<S>, S> extends ReplaceableTe
     protected abstract T createElement(S value, boolean isPlaceholder);
 
     protected abstract S getUniqueValue();
-
-    protected static long getUniqueLongValue() {
-        return nextUniqueValue++;
-    }
 }
