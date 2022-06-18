@@ -6,9 +6,9 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.Objects;
-
 import org.junit.jupiter.api.Test;
+
+import com.gstuer.modelmerging.test.utility.SimpleElement;
 
 public abstract class ReplaceableTest<T extends Replaceable> {
     private static long nextUniqueValue;
@@ -129,7 +129,7 @@ public abstract class ReplaceableTest<T extends Replaceable> {
         // Test data
         T nonPlaceholder = getUniqueNonPlaceholder();
         T placeholder = getPlaceholderOf(nonPlaceholder);
-        SimpleReplaceable differentTypeReplaceable = new SimpleReplaceable(false);
+        SimpleElement differentTypeReplaceable = new SimpleElement(false);
 
         // Assertions
         assertFalse(nonPlaceholder.isPlaceholderOf(differentTypeReplaceable));
@@ -159,7 +159,7 @@ public abstract class ReplaceableTest<T extends Replaceable> {
     public void testEqualsAndHashCodeDifferentType() {
         // Test data
         T entity = getUniqueNonPlaceholder();
-        SimpleReplaceable differentTypeReplaceable = new SimpleReplaceable(false);
+        SimpleElement differentTypeReplaceable = new SimpleElement(false);
 
         // Assertions
         assertFalse(entity.equals(differentTypeReplaceable));
@@ -206,30 +206,6 @@ public abstract class ReplaceableTest<T extends Replaceable> {
     protected abstract T getUniqueNonPlaceholder();
 
     protected abstract T getPlaceholderOf(T replaceable);
-
-    protected class SimpleReplaceable extends Replaceable {
-        protected SimpleReplaceable(boolean isPlaceholder) {
-            super(isPlaceholder);
-        }
-
-        @Override
-        public boolean canReplace(Replaceable replaceable) {
-            return Objects.equals(this, replaceable);
-        }
-
-        @Override
-        public <S extends Replaceable> Replaceable replace(S original, S replacement) {
-            if (Objects.equals(this, original)) {
-                return replacement;
-            }
-            throw new IllegalArgumentException();
-        }
-
-        @Override
-        public boolean isPlaceholderOf(Replaceable replaceable) {
-            return false;
-        }
-    }
 
     protected static long getUniqueLongValue() {
         return nextUniqueValue++;
