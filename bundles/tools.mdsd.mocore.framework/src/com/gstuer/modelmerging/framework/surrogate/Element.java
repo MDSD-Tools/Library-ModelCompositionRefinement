@@ -22,7 +22,7 @@ public abstract class Element<T> extends Replaceable {
 
     @Override
     public <U extends Replaceable> U replace(U original, U replacement) {
-        if (this.canReplace(original)) {
+        if (!this.canReplace(original)) {
             throw new IllegalArgumentException();
         }
         return replacement;
