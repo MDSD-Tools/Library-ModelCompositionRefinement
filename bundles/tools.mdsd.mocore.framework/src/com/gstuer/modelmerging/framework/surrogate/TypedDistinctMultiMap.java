@@ -35,10 +35,16 @@ public class TypedDistinctMultiMap<S extends Object> implements Iterable<S> {
     }
 
     public boolean containsKey(Class<?> key) {
+        if (Objects.isNull(key)) {
+            return false;
+        }
         return this.data.containsKey(key);
     }
 
     public boolean containsElement(S element) {
+        if (Objects.isNull(element)) {
+            return false;
+        }
         Set<S> elements = this.data.getOrDefault(element.getClass(), new HashSet<>());
         return elements.contains(element);
     }
