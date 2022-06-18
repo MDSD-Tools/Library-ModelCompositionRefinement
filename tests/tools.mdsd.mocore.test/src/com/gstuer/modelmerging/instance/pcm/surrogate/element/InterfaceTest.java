@@ -1,7 +1,6 @@
-package com.gstuer.modelmerging.instance.pcm.surrogate;
+package com.gstuer.modelmerging.instance.pcm.surrogate.element;
 
 import com.gstuer.modelmerging.framework.surrogate.ElementTest;
-import com.gstuer.modelmerging.instance.pcm.surrogate.element.Interface;
 
 public class InterfaceTest extends ElementTest<Interface, String> {
     @Override
