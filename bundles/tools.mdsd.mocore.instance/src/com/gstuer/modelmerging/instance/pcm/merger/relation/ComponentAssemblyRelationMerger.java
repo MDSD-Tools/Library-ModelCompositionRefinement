@@ -8,9 +8,4 @@ public class ComponentAssemblyRelationMerger extends RelationMerger<PcmSurrogate
     public ComponentAssemblyRelationMerger(PcmSurrogate model) {
         super(model, ComponentAssemblyRelation.class);
     }
-
-    @Override
-    protected void refine(ComponentAssemblyRelation discovery) {
-        // TODO Add missing refinement steps -> Especially replace placeholders
-    }
 }
