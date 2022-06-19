@@ -36,7 +36,7 @@ public abstract class RelationMergerTest<RM extends RelationMerger<M, R>, M exte
         // Assertions Post-Execution
         assertFalse(model.contains(source));
         assertFalse(model.contains(destination));
-        assertFalse(model.contains(relation));
+        assertTrue(model.contains(relation));
         assertTrue(merger.getImplications().contains(source));
         assertTrue(merger.getImplications().contains(destination));
         assertFalse(merger.getImplications().contains(relation));
@@ -208,12 +208,12 @@ public abstract class RelationMergerTest<RM extends RelationMerger<M, R>, M exte
         assertFalse(model.contains(placeholder));
         assertTrue(model.contains(source));
         assertFalse(model.contains(destinationPlaceholder));
-        assertTrue(model.contains(destination));
+        assertFalse(model.contains(destination));
         assertTrue(model.contains(relation));
 
         // Assertions - Implications
         assertFalse(implications.contains(placeholder));
-        assertFalse(implications.contains(source));
+        assertTrue(implications.contains(source));
         assertFalse(implications.contains(destinationPlaceholder));
         assertTrue(implications.contains(destination));
         assertFalse(implications.contains(relation));
@@ -285,6 +285,13 @@ public abstract class RelationMergerTest<RM extends RelationMerger<M, R>, M exte
         assertFalse(implications.contains(otherSource));
         assertFalse(implications.contains(otherRelation));
         assertFalse(implications.contains(relation));
+    }
+
+    @Override
+    protected R createUniqueReplaceable() {
+        T source = getUniqueNonPlaceholderSourceEntity();
+        S destination = getUniqueNonPlaceholderDestinationEntity();
+        return createRelation(source, destination, false);
     }
 
     protected abstract R createRelation(T source, S destination, boolean isPlaceholder);
