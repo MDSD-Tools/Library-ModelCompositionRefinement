@@ -42,6 +42,7 @@ public abstract class RelationMerger<M extends Model, T extends Relation<?, ?>> 
         }
         // The discovery was already added to the model by the merge operation.
         implications.remove(discovery);
+        this.addImplications(implications);
     }
 
     protected void replaceIndirectPlaceholders(T discovery) {
@@ -84,5 +85,6 @@ public abstract class RelationMerger<M extends Model, T extends Relation<?, ?>> 
         }
         // The discovery was already added to the model by the merge operation.
         implications.remove(discovery);
+        this.addImplications(implications);
     }
 }
