@@ -1,11 +1,11 @@
 package com.gstuer.modelmerging.framework.merger;
 
-import com.gstuer.modelmerging.framework.surrogate.Model;
-import com.gstuer.modelmerging.framework.surrogate.Replaceable;
-
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+
+import com.gstuer.modelmerging.framework.surrogate.Model;
+import com.gstuer.modelmerging.framework.surrogate.Replaceable;
 
 public abstract class Merger<M extends Model, T extends Replaceable> {
     private final M model;
