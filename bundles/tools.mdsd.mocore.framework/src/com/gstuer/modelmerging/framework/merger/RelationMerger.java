@@ -33,7 +33,7 @@ public abstract class RelationMerger<M extends Model, T extends Relation<?, ?>> 
     protected void replaceDirectPlaceholders(T discovery) {
         // Get relevant placeholder relations from the model
         List<T> relations = this.getModel().getByType(this.getProcessableType());
-        relations.removeIf(relation -> relation.isPlaceholderOf(discovery));
+        relations.removeIf(relation -> !relation.isPlaceholderOf(discovery));
 
         Set<Replaceable> implications = new HashSet<>();
         for (T placeholder : relations) {
