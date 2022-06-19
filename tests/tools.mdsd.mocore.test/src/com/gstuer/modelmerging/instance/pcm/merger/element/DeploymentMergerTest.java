@@ -1,11 +1,10 @@
-package com.gstuer.modelmerging.instance.pcm.merger;
+package com.gstuer.modelmerging.instance.pcm.merger.element;
 
 import static org.junit.Assert.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
 import com.gstuer.modelmerging.framework.merger.MergerTest;
-import com.gstuer.modelmerging.instance.pcm.merger.element.DeploymentMerger;
 import com.gstuer.modelmerging.instance.pcm.surrogate.PcmSurrogate;
 import com.gstuer.modelmerging.instance.pcm.surrogate.element.Deployment;
 

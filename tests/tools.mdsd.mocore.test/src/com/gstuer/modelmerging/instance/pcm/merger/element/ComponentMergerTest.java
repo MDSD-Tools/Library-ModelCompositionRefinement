@@ -1,7 +1,6 @@
-package com.gstuer.modelmerging.instance.pcm.merger;
+package com.gstuer.modelmerging.instance.pcm.merger.element;
 
 import com.gstuer.modelmerging.framework.merger.MergerTest;
-import com.gstuer.modelmerging.instance.pcm.merger.element.ComponentMerger;
 import com.gstuer.modelmerging.instance.pcm.surrogate.PcmSurrogate;
 import com.gstuer.modelmerging.instance.pcm.surrogate.element.Component;
 
