@@ -2,11 +2,10 @@ package com.gstuer.modelmerging.instance.pcm.surrogate.relation;
 
 import com.gstuer.modelmerging.framework.surrogate.Relation;
 import com.gstuer.modelmerging.framework.surrogate.Replaceable;
-import com.gstuer.modelmerging.instance.pcm.surrogate.element.Component;
 
-// TODO Migrate to Component Component Interface or Provides Requires Relation
-public class ComponentAssemblyRelation extends Relation<Component, Component> {
-    public ComponentAssemblyRelation(Component source, Component destination, boolean isPlaceholder) {
+public class ComponentAssemblyRelation extends Relation<InterfaceProvisionRelation, InterfaceRequirementRelation> {
+    public ComponentAssemblyRelation(InterfaceProvisionRelation source, InterfaceRequirementRelation destination,
+            boolean isPlaceholder) {
         super(source, destination, isPlaceholder);
     }
 
@@ -19,8 +18,8 @@ public class ComponentAssemblyRelation extends Relation<Component, Component> {
         if (this.equals(original)) {
             return (ComponentAssemblyRelation) replacement;
         }
-        Component source = getSourceReplacement(original, replacement);
-        Component destination = getDestinationReplacement(original, replacement);
+        InterfaceProvisionRelation source = getSourceReplacement(original, replacement);
+        InterfaceRequirementRelation destination = getDestinationReplacement(original, replacement);
         return new ComponentAssemblyRelation(source, destination, this.isPlaceholder());
     }
 }

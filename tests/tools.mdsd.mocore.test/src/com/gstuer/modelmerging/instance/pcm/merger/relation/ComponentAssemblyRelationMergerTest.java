@@ -3,35 +3,42 @@ package com.gstuer.modelmerging.instance.pcm.merger.relation;
 import com.gstuer.modelmerging.framework.merger.RelationMergerTest;
 import com.gstuer.modelmerging.instance.pcm.surrogate.PcmSurrogate;
 import com.gstuer.modelmerging.instance.pcm.surrogate.element.Component;
+import com.gstuer.modelmerging.instance.pcm.surrogate.element.Interface;
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.ComponentAssemblyRelation;
-import com.gstuer.modelmerging.test.utility.IdentifierGenerator;
+import com.gstuer.modelmerging.instance.pcm.surrogate.relation.InterfaceProvisionRelation;
+import com.gstuer.modelmerging.instance.pcm.surrogate.relation.InterfaceRequirementRelation;
 
 public class ComponentAssemblyRelationMergerTest extends RelationMergerTest<ComponentAssemblyRelationMerger,
-        PcmSurrogate, ComponentAssemblyRelation, Component, Component> {
+        PcmSurrogate, ComponentAssemblyRelation, InterfaceProvisionRelation, InterfaceRequirementRelation> {
     @Override
-    protected ComponentAssemblyRelation createRelation(Component source, Component destination,
+    protected ComponentAssemblyRelation createRelation(InterfaceProvisionRelation source,
+            InterfaceRequirementRelation destination,
             boolean isPlaceholder) {
         return new ComponentAssemblyRelation(source, destination, isPlaceholder);
     }
 
     @Override
-    protected Component getUniqueNonPlaceholderSourceEntity() {
-        return new Component(IdentifierGenerator.getUniqueIdentifier(), false);
+    protected InterfaceProvisionRelation getUniqueNonPlaceholderSourceEntity() {
+        Component source = Component.getUniquePlaceholder();
+        Interface destination = Interface.getUniquePlaceholder();
+        return new InterfaceProvisionRelation(source, destination, false);
     }
 
     @Override
-    protected Component getPlaceholderOfSourceEntity(Component source) {
-        return new Component(source.getValue(), true);
+    protected InterfaceProvisionRelation getPlaceholderOfSourceEntity(InterfaceProvisionRelation source) {
+        return new InterfaceProvisionRelation(source.getSource(), source.getDestination(), true);
     }
 
     @Override
-    protected Component getUniqueNonPlaceholderDestinationEntity() {
-        return getUniqueNonPlaceholderSourceEntity();
+    protected InterfaceRequirementRelation getUniqueNonPlaceholderDestinationEntity() {
+        Component source = Component.getUniquePlaceholder();
+        Interface destination = Interface.getUniquePlaceholder();
+        return new InterfaceRequirementRelation(source, destination, false);
     }
 
     @Override
-    protected Component getPlaceholderOfDestinationEntity(Component destination) {
-        return getPlaceholderOfSourceEntity(destination);
+    protected InterfaceRequirementRelation getPlaceholderOfDestinationEntity(InterfaceRequirementRelation destination) {
+        return new InterfaceRequirementRelation(destination.getSource(), destination.getDestination(), true);
     }
 
     @Override
