@@ -1,12 +1,19 @@
 package com.gstuer.modelmerging.instance.pcm.surrogate.relation;
 
+import java.util.Objects;
+
 import com.gstuer.modelmerging.framework.surrogate.Relation;
 import com.gstuer.modelmerging.framework.surrogate.Replaceable;
 
 public class ComponentAssemblyRelation extends Relation<InterfaceProvisionRelation, InterfaceRequirementRelation> {
+    private static final String ERROR_UNEQUAL_INTERFACE = "Interfaces of relations have to be equal.";
+
     public ComponentAssemblyRelation(InterfaceProvisionRelation source, InterfaceRequirementRelation destination,
             boolean isPlaceholder) {
         super(source, destination, isPlaceholder);
+        if (!Objects.equals(source.getDestination(), destination.getDestination())) {
+            throw new IllegalArgumentException(ERROR_UNEQUAL_INTERFACE);
+        }
     }
 
     @Override
