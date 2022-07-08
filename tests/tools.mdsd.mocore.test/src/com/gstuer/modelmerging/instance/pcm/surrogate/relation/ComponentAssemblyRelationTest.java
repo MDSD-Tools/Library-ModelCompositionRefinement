@@ -6,6 +6,8 @@ import com.gstuer.modelmerging.instance.pcm.surrogate.element.Interface;
 
 public class ComponentAssemblyRelationTest
         extends RelationTest<ComponentAssemblyRelation, InterfaceProvisionRelation, InterfaceRequirementRelation> {
+    private static final Interface RELATION_DESTINATION = Interface.getUniquePlaceholder();
+
     @Override
     protected ComponentAssemblyRelation createRelation(InterfaceProvisionRelation source,
             InterfaceRequirementRelation destination,
@@ -16,14 +18,12 @@ public class ComponentAssemblyRelationTest
     @Override
     protected InterfaceProvisionRelation getUniqueSourceEntity() {
         Component source = Component.getUniquePlaceholder();
-        Interface destination = Interface.getUniquePlaceholder();
-        return new InterfaceProvisionRelation(source, destination, true);
+        return new InterfaceProvisionRelation(source, RELATION_DESTINATION, true);
     }
 
     @Override
     protected InterfaceRequirementRelation getUniqueDestinationEntity() {
         Component source = Component.getUniquePlaceholder();
-        Interface destination = Interface.getUniquePlaceholder();
-        return new InterfaceRequirementRelation(source, destination, true);
+        return new InterfaceRequirementRelation(source, RELATION_DESTINATION, true);
     }
 }
