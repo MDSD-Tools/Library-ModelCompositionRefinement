@@ -1,16 +1,22 @@
 package com.gstuer.modelmerging.instance.pcm.surrogate.element;
 
-import com.gstuer.modelmerging.framework.surrogate.ElementTest;
+import org.palladiosimulator.generator.fluent.repository.factory.FluentRepositoryFactory;
+import org.palladiosimulator.pcm.repository.BasicComponent;
 
-public class ComponentTest extends ElementTest<Component, String> {
+import com.gstuer.modelmerging.framework.surrogate.ElementTest;
+import com.gstuer.modelmerging.test.utility.IdentifierGenerator;
+
+public class ComponentTest extends ElementTest<Component, BasicComponent> {
     @Override
-    protected Component createElement(String value, boolean isPlaceholder) {
+    protected Component createElement(BasicComponent value, boolean isPlaceholder) {
         return new Component(value, isPlaceholder);
     }
 
     @Override
-    protected String getUniqueValue() {
-        return String.valueOf(getUniqueLongValue());
+    protected BasicComponent getUniqueValue() {
+        String identifier = IdentifierGenerator.getUniqueIdentifier();
+        BasicComponent value = new FluentRepositoryFactory().newBasicComponent().withName(identifier).build();
+        return value;
     }
 
     @Override

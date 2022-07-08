@@ -1,16 +1,23 @@
 package com.gstuer.modelmerging.instance.pcm.surrogate.element;
 
-import com.gstuer.modelmerging.framework.surrogate.ElementTest;
+import org.palladiosimulator.pcm.resourceenvironment.ResourceContainer;
+import org.palladiosimulator.pcm.resourceenvironment.ResourceenvironmentFactory;
 
-public class DeploymentTest extends ElementTest<Deployment, String> {
+import com.gstuer.modelmerging.framework.surrogate.ElementTest;
+import com.gstuer.modelmerging.test.utility.IdentifierGenerator;
+
+public class DeploymentTest extends ElementTest<Deployment, ResourceContainer> {
     @Override
-    protected Deployment createElement(String value, boolean isPlaceholder) {
+    protected Deployment createElement(ResourceContainer value, boolean isPlaceholder) {
         return new Deployment(value, isPlaceholder);
     }
 
     @Override
-    protected String getUniqueValue() {
-        return String.valueOf(getUniqueLongValue());
+    protected ResourceContainer getUniqueValue() {
+        String identifier = IdentifierGenerator.getUniqueIdentifier();
+        ResourceContainer value = ResourceenvironmentFactory.eINSTANCE.createResourceContainer();
+        value.setEntityName(identifier);
+        return value;
     }
 
     @Override

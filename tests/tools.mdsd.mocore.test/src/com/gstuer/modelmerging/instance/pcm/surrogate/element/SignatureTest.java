@@ -1,16 +1,23 @@
 package com.gstuer.modelmerging.instance.pcm.surrogate.element;
 
-import com.gstuer.modelmerging.framework.surrogate.ElementTest;
+import org.palladiosimulator.pcm.repository.OperationSignature;
+import org.palladiosimulator.pcm.repository.RepositoryFactory;
 
-public class SignatureTest extends ElementTest<Signature, String> {
+import com.gstuer.modelmerging.framework.surrogate.ElementTest;
+import com.gstuer.modelmerging.test.utility.IdentifierGenerator;
+
+public class SignatureTest extends ElementTest<Signature, OperationSignature> {
     @Override
-    protected Signature createElement(String value, boolean isPlaceholder) {
+    protected Signature createElement(OperationSignature value, boolean isPlaceholder) {
         return new Signature(value, isPlaceholder);
     }
 
     @Override
-    protected String getUniqueValue() {
-        return String.valueOf(getUniqueLongValue());
+    protected OperationSignature getUniqueValue() {
+        String identifier = IdentifierGenerator.getUniqueIdentifier();
+        OperationSignature value = RepositoryFactory.eINSTANCE.createOperationSignature();
+        value.setEntityName(identifier);
+        return value;
     }
 
     @Override
