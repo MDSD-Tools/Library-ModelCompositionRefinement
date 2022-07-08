@@ -1,15 +1,18 @@
 package com.gstuer.modelmerging.instance.pcm.surrogate.element;
 
+import org.palladiosimulator.generator.fluent.repository.factory.FluentRepositoryFactory;
+import org.palladiosimulator.pcm.repository.OperationInterface;
+
 import com.gstuer.modelmerging.framework.surrogate.Element;
 
-// TODO Change generic to real palladio component
-public class Interface extends Element<String> {
-    public Interface(String value, boolean isPlaceholder) {
+public class Interface extends Element<OperationInterface> {
+    public Interface(OperationInterface value, boolean isPlaceholder) {
         super(value, isPlaceholder);
     }
 
     public static Interface getUniquePlaceholder() {
         String identifier = "Placeholder_" + getUniqueValue();
-        return new Interface(identifier, true);
+        OperationInterface value = new FluentRepositoryFactory().newOperationInterface().withName(identifier).build();
+        return new Interface(value, true);
     }
 }

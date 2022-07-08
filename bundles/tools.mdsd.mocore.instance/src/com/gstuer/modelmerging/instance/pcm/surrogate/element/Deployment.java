@@ -1,15 +1,19 @@
 package com.gstuer.modelmerging.instance.pcm.surrogate.element;
 
+import org.palladiosimulator.pcm.resourceenvironment.ResourceContainer;
+import org.palladiosimulator.pcm.resourceenvironment.ResourceenvironmentFactory;
+
 import com.gstuer.modelmerging.framework.surrogate.Element;
 
-// TODO Change generic to real palladio deployment
-public class Deployment extends Element<String> {
-    public Deployment(String value, boolean isPlaceholder) {
+public class Deployment extends Element<ResourceContainer> {
+    public Deployment(ResourceContainer value, boolean isPlaceholder) {
         super(value, isPlaceholder);
     }
 
     public static Deployment getUniquePlaceholder() {
         String identifier = "Placeholder_" + getUniqueValue();
-        return new Deployment(identifier, true);
+        ResourceContainer value = ResourceenvironmentFactory.eINSTANCE.createResourceContainer();
+        value.setEntityName(identifier);
+        return new Deployment(value, true);
     }
 }
