@@ -9,4 +9,7 @@ Bundle-RequiredExecutionEnvironment: JavaSE-11
 Require-Bundle: org.junit,
  org.junit.jupiter.api,
  tools.mdsd.mocore.framework,
- tools.mdsd.mocore.instance
+ tools.mdsd.mocore.instance,
+ org.palladiosimulator.pcm,
+ org.palladiosimulator.pcm.resources,
+ org.palladiosimulator.generator.fluent
