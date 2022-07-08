@@ -4,7 +4,7 @@ import com.gstuer.modelmerging.framework.merger.RelationMergerTest;
 import com.gstuer.modelmerging.instance.pcm.surrogate.PcmSurrogate;
 import com.gstuer.modelmerging.instance.pcm.surrogate.element.Deployment;
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.DeploymentDeploymentRelation;
-import com.gstuer.modelmerging.test.utility.IdentifierGenerator;
+import com.gstuer.modelmerging.test.utility.ElementFactory;
 
 public class DeploymentDeploymentRelationMergerTest extends RelationMergerTest<DeploymentDeploymentRelationMerger,
         PcmSurrogate, DeploymentDeploymentRelation, Deployment, Deployment> {
@@ -16,7 +16,7 @@ public class DeploymentDeploymentRelationMergerTest extends RelationMergerTest<D
 
     @Override
     protected Deployment getUniqueNonPlaceholderSourceEntity() {
-        return new Deployment(IdentifierGenerator.getUniqueIdentifier(), false);
+        return ElementFactory.createUniqueDeployment(false);
     }
 
     @Override

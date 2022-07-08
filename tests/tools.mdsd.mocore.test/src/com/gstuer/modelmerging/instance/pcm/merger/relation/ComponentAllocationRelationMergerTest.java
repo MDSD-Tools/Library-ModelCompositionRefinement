@@ -5,7 +5,7 @@ import com.gstuer.modelmerging.instance.pcm.surrogate.PcmSurrogate;
 import com.gstuer.modelmerging.instance.pcm.surrogate.element.Component;
 import com.gstuer.modelmerging.instance.pcm.surrogate.element.Deployment;
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.ComponentAllocationRelation;
-import com.gstuer.modelmerging.test.utility.IdentifierGenerator;
+import com.gstuer.modelmerging.test.utility.ElementFactory;
 
 public class ComponentAllocationRelationMergerTest extends RelationMergerTest<ComponentAllocationRelationMerger,
         PcmSurrogate, ComponentAllocationRelation, Component, Deployment> {
@@ -17,7 +17,7 @@ public class ComponentAllocationRelationMergerTest extends RelationMergerTest<Co
 
     @Override
     protected Component getUniqueNonPlaceholderSourceEntity() {
-        return new Component(IdentifierGenerator.getUniqueIdentifier(), false);
+        return ElementFactory.createUniqueComponent(false);
     }
 
     @Override
@@ -27,7 +27,7 @@ public class ComponentAllocationRelationMergerTest extends RelationMergerTest<Co
 
     @Override
     protected Deployment getUniqueNonPlaceholderDestinationEntity() {
-        return new Deployment(IdentifierGenerator.getUniqueIdentifier(), false);
+        return ElementFactory.createUniqueDeployment(false);
     }
 
     @Override

@@ -5,7 +5,7 @@ import com.gstuer.modelmerging.instance.pcm.surrogate.PcmSurrogate;
 import com.gstuer.modelmerging.instance.pcm.surrogate.element.Component;
 import com.gstuer.modelmerging.instance.pcm.surrogate.element.Interface;
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.InterfaceRequirementRelation;
-import com.gstuer.modelmerging.test.utility.IdentifierGenerator;
+import com.gstuer.modelmerging.test.utility.ElementFactory;
 
 public class InterfaceRequirementRelationMergerTest extends RelationMergerTest<InterfaceRequirementRelationMerger,
         PcmSurrogate, InterfaceRequirementRelation, Component, Interface> {
@@ -17,7 +17,7 @@ public class InterfaceRequirementRelationMergerTest extends RelationMergerTest<I
 
     @Override
     protected Component getUniqueNonPlaceholderSourceEntity() {
-        return new Component(IdentifierGenerator.getUniqueIdentifier(), false);
+        return ElementFactory.createUniqueComponent(false);
     }
 
     @Override
@@ -27,7 +27,7 @@ public class InterfaceRequirementRelationMergerTest extends RelationMergerTest<I
 
     @Override
     protected Interface getUniqueNonPlaceholderDestinationEntity() {
-        return new Interface(IdentifierGenerator.getUniqueIdentifier(), false);
+        return ElementFactory.createUniqueInterface(false);
     }
 
     @Override

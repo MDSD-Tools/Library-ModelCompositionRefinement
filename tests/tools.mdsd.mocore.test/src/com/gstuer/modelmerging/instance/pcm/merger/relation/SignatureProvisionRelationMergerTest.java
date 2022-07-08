@@ -5,7 +5,7 @@ import com.gstuer.modelmerging.instance.pcm.surrogate.PcmSurrogate;
 import com.gstuer.modelmerging.instance.pcm.surrogate.element.Interface;
 import com.gstuer.modelmerging.instance.pcm.surrogate.element.Signature;
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.SignatureProvisionRelation;
-import com.gstuer.modelmerging.test.utility.IdentifierGenerator;
+import com.gstuer.modelmerging.test.utility.ElementFactory;
 
 public class SignatureProvisionRelationMergerTest extends RelationMergerTest<SignatureProvisionRelationMerger,
         PcmSurrogate, SignatureProvisionRelation, Signature, Interface> {
@@ -17,7 +17,7 @@ public class SignatureProvisionRelationMergerTest extends RelationMergerTest<Sig
 
     @Override
     protected Signature getUniqueNonPlaceholderSourceEntity() {
-        return new Signature(IdentifierGenerator.getUniqueIdentifier(), false);
+        return ElementFactory.createUniqueSignature(false);
     }
 
     @Override
@@ -27,7 +27,7 @@ public class SignatureProvisionRelationMergerTest extends RelationMergerTest<Sig
 
     @Override
     protected Interface getUniqueNonPlaceholderDestinationEntity() {
-        return new Interface(IdentifierGenerator.getUniqueIdentifier(), false);
+        return ElementFactory.createUniqueInterface(false);
     }
 
     @Override
