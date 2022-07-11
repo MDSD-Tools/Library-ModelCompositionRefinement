@@ -23,6 +23,9 @@ import com.gstuer.modelmerging.instance.pcm.surrogate.relation.InterfaceRequirem
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.SignatureProvisionRelation;
 
 public class RepositoryTransformer implements Transformer<PcmSurrogate, Repository> {
+    private static final String ROLE_PROVIDES_NAME_PATTERN = "%s Provider";
+    private static final String ROLE_REQUIRES_NAME_PATTERN = "%s Consumer";
+
     @Override
     public Repository transform(PcmSurrogate model) {
         FluentRepositoryFactory repositoryFactory = new FluentRepositoryFactory();
@@ -55,19 +58,21 @@ public class RepositoryTransformer implements Transformer<PcmSurrogate, Reposito
 
             // Add provided interfaces
             for (InterfaceProvisionRelation relation : provisionRelations) {
+                Interface interfaceInstance = relation.getDestination();
                 if (relation.getSource().equals(component)) {
-                    String interfaceName = relation.getDestination().getValue().getEntityName();
+                    String interfaceName = interfaceInstance.getValue().getEntityName();
                     OperationInterface operationInterface = repositoryFactory.fetchOfOperationInterface(interfaceName);
-                    componentCreator.provides(operationInterface);
+                    componentCreator.provides(operationInterface, getProvidedRoleName(interfaceInstance));
                 }
             }
 
             // Add required interfaces
             for (InterfaceRequirementRelation relation : requirementRelations) {
+                Interface interfaceInstance = relation.getDestination();
                 if (relation.getSource().equals(component)) {
-                    String interfaceName = relation.getDestination().getValue().getEntityName();
+                    String interfaceName = interfaceInstance.getValue().getEntityName();
                     OperationInterface operationInterface = repositoryFactory.fetchOfOperationInterface(interfaceName);
-                    componentCreator.requires(operationInterface);
+                    componentCreator.requires(operationInterface, getRequiredRoleName(interfaceInstance));
                 }
             }
 
@@ -112,5 +117,15 @@ public class RepositoryTransformer implements Transformer<PcmSurrogate, Reposito
         }
 
         return signatureCreator;
+    }
+
+    protected static String getProvidedRoleName(Interface interfaceInstance) {
+        String interfaceEntityName = interfaceInstance.getValue().getEntityName();
+        return String.format(ROLE_PROVIDES_NAME_PATTERN, interfaceEntityName);
+    }
+
+    protected static String getRequiredRoleName(Interface interfaceInstance) {
+        String interfaceEntityName = interfaceInstance.getValue().getEntityName();
+        return String.format(ROLE_REQUIRES_NAME_PATTERN, interfaceEntityName);
     }
 }
