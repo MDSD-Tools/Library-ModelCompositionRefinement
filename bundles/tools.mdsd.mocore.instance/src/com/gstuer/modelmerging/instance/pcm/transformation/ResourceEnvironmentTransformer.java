@@ -2,22 +2,64 @@ package com.gstuer.modelmerging.instance.pcm.transformation;
 
 import org.palladiosimulator.generator.fluent.resourceenvironment.api.IResourceEnvironment;
 import org.palladiosimulator.generator.fluent.resourceenvironment.factory.FluentResourceEnvironmentFactory;
+import org.palladiosimulator.generator.fluent.resourceenvironment.structure.LinkingResourceCreator;
+import org.palladiosimulator.generator.fluent.resourceenvironment.structure.ResourceContainerCreator;
+import org.palladiosimulator.pcm.resourceenvironment.ResourceContainer;
 import org.palladiosimulator.pcm.resourceenvironment.ResourceEnvironment;
 
 import com.gstuer.modelmerging.framework.transformation.Transformer;
 import com.gstuer.modelmerging.instance.pcm.surrogate.PcmSurrogate;
+import com.gstuer.modelmerging.instance.pcm.surrogate.element.Deployment;
+import com.gstuer.modelmerging.instance.pcm.surrogate.relation.DeploymentDeploymentRelation;
 
 public class ResourceEnvironmentTransformer implements Transformer<PcmSurrogate, ResourceEnvironment> {
-
     @Override
     public ResourceEnvironment transform(PcmSurrogate model) {
         FluentResourceEnvironmentFactory resourceEnvironmentFactory = new FluentResourceEnvironmentFactory();
         IResourceEnvironment fluentResourceEnvironment = resourceEnvironmentFactory.newResourceEnvironment();
 
-        // TODO Add resource containers (deployments)
+        // Add resource containers to resource environment
+        for (Deployment deployment : model.getByType(Deployment.class)) {
+            ResourceContainerCreator containerCreator = getContainerCreator(deployment);
+            fluentResourceEnvironment.addToResourceEnvironment(containerCreator);
+        }
 
-        // TODO Add linking resources (deployment <-> deployment)
+        // Add linking resources (deployment <-> deployment) to resource environment
+        for (DeploymentDeploymentRelation linkingRelation : model.getByType(DeploymentDeploymentRelation.class)) {
+            LinkingResourceCreator linkingResourceCreator = getLinkingResourceCreator(linkingRelation);
+            fluentResourceEnvironment.addToResourceEnvironment(linkingResourceCreator);
+        }
 
-        return fluentResourceEnvironment.createResourceEnvironmentNow();
+        // Create PCM resource environment
+        ResourceEnvironment resourceEnvironment = fluentResourceEnvironment.createResourceEnvironmentNow();
+
+        // Copy resource specifications from old to new containers
+        for (ResourceContainer container : resourceEnvironment.getResourceContainer_ResourceEnvironment()) {
+            for (Deployment deployment : model.getByType(Deployment.class)) {
+                ResourceContainer wrappedContainer = deployment.getValue();
+                if (container.getEntityName().equals(wrappedContainer.getEntityName())) {
+                    container.getActiveResourceSpecifications_ResourceContainer()
+                            .addAll(wrappedContainer.getActiveResourceSpecifications_ResourceContainer());
+                    container.getHddResourceSpecifications().addAll(wrappedContainer.getHddResourceSpecifications());
+                }
+            }
+        }
+
+        return resourceEnvironment;
+    }
+
+    private ResourceContainerCreator getContainerCreator(Deployment deployment) {
+        FluentResourceEnvironmentFactory resourceEnvironmentFactory = new FluentResourceEnvironmentFactory();
+        ResourceContainer wrappedContainer = deployment.getValue();
+
+        // Create a container creator instance w/o processing specifications due to missing fluentApi copy support
+        ResourceContainerCreator containerCreator = resourceEnvironmentFactory.newResourceContainer()
+                .withName(wrappedContainer.getEntityName());
+        return containerCreator;
+    }
+
+    private LinkingResourceCreator getLinkingResourceCreator(DeploymentDeploymentRelation linkingRelation) {
+        // TODO Return copied linking resource
+        return null;
     }
 }
