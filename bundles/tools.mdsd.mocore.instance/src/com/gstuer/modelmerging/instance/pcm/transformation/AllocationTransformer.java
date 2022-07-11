@@ -38,10 +38,9 @@ public class AllocationTransformer implements Transformer<PcmSurrogate, Allocati
         AllocationContextCreator contextCreator = new FluentAllocationFactory().newAllocationContext();
 
         // Use name of entities to fetch up-to-date entities from system and resource environment
-        String componentEntityName = relation.getSource().getValue().getEntityName();
+        String assemblyContextName = SystemTransformer.getAssemblyContextName(relation.getSource());
         String deploymentEntityName = relation.getDestination().getValue().getEntityName();
-        // Assembly context represents component in system view
-        contextCreator.withAssemblyContext(componentEntityName).withResourceContainer(deploymentEntityName);
+        contextCreator.withAssemblyContext(assemblyContextName).withResourceContainer(deploymentEntityName);
 
         return contextCreator;
     }
