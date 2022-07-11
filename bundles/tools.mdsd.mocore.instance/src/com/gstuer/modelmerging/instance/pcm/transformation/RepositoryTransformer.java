@@ -38,13 +38,13 @@ public class RepositoryTransformer implements Transformer<PcmSurrogate, Reposito
 
         // Add interfaces to fluent repository
         for (Interface interfaceInstance : interfaces) {
-            OperationInterfaceCreator interfaceCreator = getCreator(interfaceInstance);
+            OperationInterfaceCreator interfaceCreator = getCreator(repositoryFactory, interfaceInstance);
 
             // Add signatures
             for (SignatureProvisionRelation relation : signatureRelations) {
                 if (relation.getDestination().equals(interfaceInstance)) {
                     Signature signature = relation.getSource();
-                    OperationSignatureCreator signatureCreator = getCreator(signature);
+                    OperationSignatureCreator signatureCreator = getCreator(repositoryFactory, signature);
                     interfaceCreator.withOperationSignature(signatureCreator);
                 }
             }
@@ -54,7 +54,7 @@ public class RepositoryTransformer implements Transformer<PcmSurrogate, Reposito
 
         // Add components to fluent repository
         for (Component component : model.getByType(Component.class)) {
-            BasicComponentCreator componentCreator = getCreator(component);
+            BasicComponentCreator componentCreator = getCreator(repositoryFactory, component);
 
             // Add provided interfaces
             for (InterfaceProvisionRelation relation : provisionRelations) {
@@ -82,8 +82,8 @@ public class RepositoryTransformer implements Transformer<PcmSurrogate, Reposito
         return fluentRepository.createRepositoryNow();
     }
 
-    private BasicComponentCreator getCreator(Component component) {
-        BasicComponentCreator componentCreator = new FluentRepositoryFactory().newBasicComponent();
+    private BasicComponentCreator getCreator(FluentRepositoryFactory fluentFactory, Component component) {
+        BasicComponentCreator componentCreator = fluentFactory.newBasicComponent();
 
         // TODO Identify important information within wrapped component
         // Copy information from wrapped component, dismiss deprecated information.
@@ -93,8 +93,8 @@ public class RepositoryTransformer implements Transformer<PcmSurrogate, Reposito
         return componentCreator;
     }
 
-    private OperationInterfaceCreator getCreator(Interface interfaceInstance) {
-        OperationInterfaceCreator interfaceCreator = new FluentRepositoryFactory().newOperationInterface();
+    private OperationInterfaceCreator getCreator(FluentRepositoryFactory fluentFactory, Interface interfaceInstance) {
+        OperationInterfaceCreator interfaceCreator = fluentFactory.newOperationInterface();
 
         // TODO Identify important information within wrapped interface
         // Copy information from wrapped interface, dismiss deprecated information.
@@ -104,8 +104,8 @@ public class RepositoryTransformer implements Transformer<PcmSurrogate, Reposito
         return interfaceCreator;
     }
 
-    private OperationSignatureCreator getCreator(Signature signature) {
-        OperationSignatureCreator signatureCreator = new FluentRepositoryFactory().newOperationSignature();
+    private OperationSignatureCreator getCreator(FluentRepositoryFactory fluentFactory, Signature signature) {
+        OperationSignatureCreator signatureCreator = fluentFactory.newOperationSignature();
 
         // Copy information from wrapped signature, dismiss deprecated information.
         OperationSignature wrappedSignature = signature.getValue();

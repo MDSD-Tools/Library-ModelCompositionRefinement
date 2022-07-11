@@ -25,13 +25,13 @@ public class SystemTransformer implements Transformer<PcmSurrogate, org.palladio
 
         // Add repository components as assembly contexts to system
         for (Component component : model.getByType(Component.class)) {
-            AssemblyContextCreator contextCreator = getAssemblyContextCreator(component);
+            AssemblyContextCreator contextCreator = getAssemblyContextCreator(systemFactory, component);
             fluentSystem.addToSystem(contextCreator);
         }
 
         // Add assembly connectors (component assembly relations)
         for (ComponentAssemblyRelation relation : model.getByType(ComponentAssemblyRelation.class)) {
-            AssemblyConnectorCreator connectorCreator = getAssemblyConnectorCreator(relation);
+            AssemblyConnectorCreator connectorCreator = getAssemblyConnectorCreator(systemFactory, relation);
             fluentSystem.addToSystem(connectorCreator);
         }
 
@@ -48,19 +48,17 @@ public class SystemTransformer implements Transformer<PcmSurrogate, org.palladio
         return String.format(ASSEMBLY_CONNECTOR_NAME_PATTERN, interfaceEntityName);
     }
 
-    private AssemblyContextCreator getAssemblyContextCreator(Component component) {
-        FluentSystemFactory systemFactory = new FluentSystemFactory();
+    private AssemblyContextCreator getAssemblyContextCreator(FluentSystemFactory fluentFactory, Component component) {
         String componentEntityName = component.getValue().getEntityName();
         String assemblyContextName = getAssemblyContextName(component);
-        AssemblyContextCreator contextCreator = systemFactory.newAssemblyContext()
+        AssemblyContextCreator contextCreator = fluentFactory.newAssemblyContext()
                 .withName(assemblyContextName)
                 .withEncapsulatedComponent(componentEntityName);
         return contextCreator;
     }
 
-    private AssemblyConnectorCreator getAssemblyConnectorCreator(ComponentAssemblyRelation assemblyRelation) {
-        FluentSystemFactory systemFactory = new FluentSystemFactory();
-
+    private AssemblyConnectorCreator getAssemblyConnectorCreator(FluentSystemFactory fluentFactory,
+            ComponentAssemblyRelation assemblyRelation) {
         // Get wrapper from relation
         Component provider = assemblyRelation.getSource().getSource();
         Component consumer = assemblyRelation.getDestination().getSource();
@@ -73,7 +71,7 @@ public class SystemTransformer implements Transformer<PcmSurrogate, org.palladio
         String providedRoleName = RepositoryTransformer.getProvidedRoleName(interfaceInstance);
         String requiredRoleName = RepositoryTransformer.getRequiredRoleName(interfaceInstance);
 
-        AssemblyConnectorCreator connectorCreator = systemFactory.newAssemblyConnector()
+        AssemblyConnectorCreator connectorCreator = fluentFactory.newAssemblyConnector()
                 .withName(connectorName)
                 .withProvidingAssemblyContext(providerName)
                 .withOperationProvidedRole(providedRoleName)

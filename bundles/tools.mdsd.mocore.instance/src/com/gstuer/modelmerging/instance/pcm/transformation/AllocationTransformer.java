@@ -27,15 +27,16 @@ public class AllocationTransformer implements Transformer<PcmSurrogate, Allocati
         List<ComponentAllocationRelation> relations = model.getByType(ComponentAllocationRelation.class);
         for (ComponentAllocationRelation relation : relations) {
             // Get and add context (creator) for specific allocation relation
-            AllocationContextCreator contextCreator = getCreator(relation);
+            AllocationContextCreator contextCreator = getCreator(allocationFactory, relation);
             fluentAllocation.addToAllocation(contextCreator);
         }
 
         return fluentAllocation.createAllocationNow();
     }
 
-    private AllocationContextCreator getCreator(ComponentAllocationRelation relation) {
-        AllocationContextCreator contextCreator = new FluentAllocationFactory().newAllocationContext();
+    private AllocationContextCreator getCreator(FluentAllocationFactory fluentFactory,
+            ComponentAllocationRelation relation) {
+        AllocationContextCreator contextCreator = fluentFactory.newAllocationContext();
 
         // Use name of entities to fetch up-to-date entities from system and resource environment
         String assemblyContextName = SystemTransformer.getAssemblyContextName(relation.getSource());

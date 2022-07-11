@@ -20,13 +20,14 @@ public class ResourceEnvironmentTransformer implements Transformer<PcmSurrogate,
 
         // Add resource containers to resource environment
         for (Deployment deployment : model.getByType(Deployment.class)) {
-            ResourceContainerCreator containerCreator = getContainerCreator(deployment);
+            ResourceContainerCreator containerCreator = getContainerCreator(resourceEnvironmentFactory, deployment);
             fluentResourceEnvironment.addToResourceEnvironment(containerCreator);
         }
 
         // Add linking resources (deployment <-> deployment) to resource environment
         for (DeploymentDeploymentRelation linkingRelation : model.getByType(DeploymentDeploymentRelation.class)) {
-            LinkingResourceCreator linkingResourceCreator = getLinkingResourceCreator(linkingRelation);
+            LinkingResourceCreator linkingResourceCreator = getLinkingResourceCreator(resourceEnvironmentFactory,
+                    linkingRelation);
             fluentResourceEnvironment.addToResourceEnvironment(linkingResourceCreator);
         }
 
@@ -48,17 +49,18 @@ public class ResourceEnvironmentTransformer implements Transformer<PcmSurrogate,
         return resourceEnvironment;
     }
 
-    private ResourceContainerCreator getContainerCreator(Deployment deployment) {
-        FluentResourceEnvironmentFactory resourceEnvironmentFactory = new FluentResourceEnvironmentFactory();
+    private ResourceContainerCreator getContainerCreator(FluentResourceEnvironmentFactory fluentFactory,
+            Deployment deployment) {
         ResourceContainer wrappedContainer = deployment.getValue();
 
         // Create a container creator instance w/o processing specifications due to missing fluentApi copy support
-        ResourceContainerCreator containerCreator = resourceEnvironmentFactory.newResourceContainer()
+        ResourceContainerCreator containerCreator = fluentFactory.newResourceContainer()
                 .withName(wrappedContainer.getEntityName());
         return containerCreator;
     }
 
-    private LinkingResourceCreator getLinkingResourceCreator(DeploymentDeploymentRelation linkingRelation) {
+    private LinkingResourceCreator getLinkingResourceCreator(FluentResourceEnvironmentFactory fluentFactory,
+            DeploymentDeploymentRelation linkingRelation) {
         // TODO Return copied linking resource
         return null;
     }
