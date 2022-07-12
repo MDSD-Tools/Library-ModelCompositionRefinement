@@ -1,9 +1,13 @@
 package com.gstuer.modelmerging.instance.pcm.transformation;
 
+import java.util.Objects;
+
 import org.palladiosimulator.generator.fluent.resourceenvironment.api.IResourceEnvironment;
 import org.palladiosimulator.generator.fluent.resourceenvironment.factory.FluentResourceEnvironmentFactory;
 import org.palladiosimulator.generator.fluent.resourceenvironment.structure.LinkingResourceCreator;
 import org.palladiosimulator.generator.fluent.resourceenvironment.structure.ResourceContainerCreator;
+import org.palladiosimulator.pcm.resourceenvironment.CommunicationLinkResourceSpecification;
+import org.palladiosimulator.pcm.resourceenvironment.LinkingResource;
 import org.palladiosimulator.pcm.resourceenvironment.ResourceContainer;
 import org.palladiosimulator.pcm.resourceenvironment.ResourceEnvironment;
 
@@ -11,8 +15,11 @@ import com.gstuer.modelmerging.framework.transformation.Transformer;
 import com.gstuer.modelmerging.instance.pcm.surrogate.PcmSurrogate;
 import com.gstuer.modelmerging.instance.pcm.surrogate.element.Deployment;
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.DeploymentDeploymentRelation;
+import com.gstuer.modelmerging.instance.pcm.surrogate.relation.LinkResourceSpecificationRelation;
 
 public class ResourceEnvironmentTransformer implements Transformer<PcmSurrogate, ResourceEnvironment> {
+    private static final String LINKING_RESSOURCE_NAME_PATTERN = "%s %s Link";
+
     @Override
     public ResourceEnvironment transform(PcmSurrogate model) {
         FluentResourceEnvironmentFactory resourceEnvironmentFactory = new FluentResourceEnvironmentFactory();
@@ -24,8 +31,9 @@ public class ResourceEnvironmentTransformer implements Transformer<PcmSurrogate,
             fluentResourceEnvironment.addToResourceEnvironment(containerCreator);
         }
 
-        // Add linking resources (deployment <-> deployment) to resource environment
-        for (DeploymentDeploymentRelation linkingRelation : model.getByType(DeploymentDeploymentRelation.class)) {
+        // Add linking resources (specification <-> [deployment <-> deployment]) to resource environment
+        for (LinkResourceSpecificationRelation linkingRelation : model
+                .getByType(LinkResourceSpecificationRelation.class)) {
             LinkingResourceCreator linkingResourceCreator = getLinkingResourceCreator(resourceEnvironmentFactory,
                     linkingRelation);
             fluentResourceEnvironment.addToResourceEnvironment(linkingResourceCreator);
@@ -46,7 +54,25 @@ public class ResourceEnvironmentTransformer implements Transformer<PcmSurrogate,
             }
         }
 
+        // Add linking resource specifications to PCM linking resources
+        for (LinkResourceSpecificationRelation linkingRelation : model
+                .getByType(LinkResourceSpecificationRelation.class)) {
+            for (LinkingResource linkingResource : resourceEnvironment.getLinkingResources__ResourceEnvironment()) {
+                if (Objects.equals(getLinkingResourceName(linkingRelation), linkingResource.getEntityName())) {
+                    CommunicationLinkResourceSpecification specification = linkingRelation.getSource().getValue();
+                    linkingResource.setCommunicationLinkResourceSpecifications_LinkingResource(specification);
+                }
+            }
+        }
+
         return resourceEnvironment;
+    }
+
+    protected static String getLinkingResourceName(LinkResourceSpecificationRelation linkingRelation) {
+        DeploymentDeploymentRelation deploymentRelation = linkingRelation.getDestination();
+        String sourceName = deploymentRelation.getSource().getValue().getEntityName();
+        String destinationName = deploymentRelation.getDestination().getValue().getEntityName();
+        return String.format(LINKING_RESSOURCE_NAME_PATTERN, sourceName, destinationName);
     }
 
     private ResourceContainerCreator getContainerCreator(FluentResourceEnvironmentFactory fluentFactory,
@@ -60,8 +86,10 @@ public class ResourceEnvironmentTransformer implements Transformer<PcmSurrogate,
     }
 
     private LinkingResourceCreator getLinkingResourceCreator(FluentResourceEnvironmentFactory fluentFactory,
-            DeploymentDeploymentRelation linkingRelation) {
-        // TODO Return copied linking resource
-        return null;
+            LinkResourceSpecificationRelation linkingRelation) {
+        // Create a linking resource creator w/o specifications due to missing fluentApi copy support
+        String entityName = getLinkingResourceName(linkingRelation);
+        LinkingResourceCreator creator = fluentFactory.newLinkingResource().withName(entityName);
+        return creator;
     }
 }
