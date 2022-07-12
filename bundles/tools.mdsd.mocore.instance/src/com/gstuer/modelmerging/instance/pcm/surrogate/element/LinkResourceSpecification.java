@@ -1,0 +1,23 @@
+package com.gstuer.modelmerging.instance.pcm.surrogate.element;
+
+import org.palladiosimulator.pcm.resourceenvironment.CommunicationLinkResourceSpecification;
+import org.palladiosimulator.pcm.resourceenvironment.ResourceenvironmentFactory;
+
+import com.gstuer.modelmerging.framework.surrogate.Element;
+
+public class LinkResourceSpecification extends Element<CommunicationLinkResourceSpecification> {
+    public LinkResourceSpecification(CommunicationLinkResourceSpecification value, boolean isPlaceholder) {
+        super(value, isPlaceholder);
+    }
+
+    public static LinkResourceSpecification getUniquePlaceholder() {
+        String identifier = "Placeholder_" + getUniqueValue();
+        double failureProbability = 0D;
+
+        CommunicationLinkResourceSpecification value = ResourceenvironmentFactory.eINSTANCE
+                .createCommunicationLinkResourceSpecification();
+        value.setId(identifier);
+        value.setFailureProbability(failureProbability);
+        return new LinkResourceSpecification(value, true);
+    }
+}
