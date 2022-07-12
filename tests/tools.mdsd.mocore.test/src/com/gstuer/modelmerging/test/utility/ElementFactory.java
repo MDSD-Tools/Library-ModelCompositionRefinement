@@ -5,17 +5,19 @@ import org.palladiosimulator.pcm.repository.BasicComponent;
 import org.palladiosimulator.pcm.repository.OperationInterface;
 import org.palladiosimulator.pcm.repository.OperationSignature;
 import org.palladiosimulator.pcm.repository.RepositoryFactory;
+import org.palladiosimulator.pcm.resourceenvironment.CommunicationLinkResourceSpecification;
 import org.palladiosimulator.pcm.resourceenvironment.ResourceContainer;
 import org.palladiosimulator.pcm.resourceenvironment.ResourceenvironmentFactory;
 
 import com.gstuer.modelmerging.instance.pcm.surrogate.element.Component;
 import com.gstuer.modelmerging.instance.pcm.surrogate.element.Deployment;
 import com.gstuer.modelmerging.instance.pcm.surrogate.element.Interface;
+import com.gstuer.modelmerging.instance.pcm.surrogate.element.LinkResourceSpecification;
 import com.gstuer.modelmerging.instance.pcm.surrogate.element.Signature;
 
 public final class ElementFactory {
     private ElementFactory() {
-
+        // TODO Throw appropriate exception on call
     }
 
     public static Signature createUniqueSignature(boolean isPlaceholder) {
@@ -42,5 +44,13 @@ public final class ElementFactory {
         ResourceContainer value = ResourceenvironmentFactory.eINSTANCE.createResourceContainer();
         value.setEntityName(identifier);
         return new Deployment(value, isPlaceholder);
+    }
+
+    public static LinkResourceSpecification createUniqueLinkResourceSpecification(boolean isPlaceholder) {
+        String identifier = IdentifierGenerator.getUniqueIdentifier();
+        CommunicationLinkResourceSpecification value = ResourceenvironmentFactory.eINSTANCE
+                .createCommunicationLinkResourceSpecification();
+        value.setId(identifier);
+        return new LinkResourceSpecification(value, isPlaceholder);
     }
 }
