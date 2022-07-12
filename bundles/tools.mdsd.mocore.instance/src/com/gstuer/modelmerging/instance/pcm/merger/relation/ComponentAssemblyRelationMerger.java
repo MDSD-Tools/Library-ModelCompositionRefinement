@@ -1,6 +1,7 @@
 package com.gstuer.modelmerging.instance.pcm.merger.relation;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.gstuer.modelmerging.framework.merger.RelationMerger;
@@ -23,15 +24,8 @@ public class ComponentAssemblyRelationMerger extends RelationMerger<PcmSurrogate
         // Identify all allocations of the providing and consuming component in the assembly
         Component provider = discovery.getSource().getSource();
         Component consumer = discovery.getDestination().getSource();
-        List<ComponentAllocationRelation> allocations = this.getModel().getByType(ComponentAllocationRelation.class);
-        List<Deployment> providerAllocations = allocations.stream()
-                .filter(allocation -> allocation.getSource().equals(provider))
-                .map(ComponentAllocationRelation::getDestination)
-                .collect(Collectors.toList());
-        List<Deployment> consumerAllocations = allocations.stream()
-                .filter(allocation -> allocation.getSource().equals(consumer))
-                .map(ComponentAllocationRelation::getDestination)
-                .collect(Collectors.toList());
+        List<Deployment> providerAllocations = getAllocatedContainers(provider);
+        List<Deployment> consumerAllocations = getAllocatedContainers(consumer);
 
         // Add link between allocation containers of assembled components if needed
         for (Deployment providerContainer : providerAllocations) {
@@ -44,5 +38,43 @@ public class ComponentAssemblyRelationMerger extends RelationMerger<PcmSurrogate
                 }
             }
         }
+
+        // Remove component assembly fully-placeholder relation (non-direct & non-indirect)
+        List<ComponentAssemblyRelation> assemblies = this.getModel().getByType(ComponentAssemblyRelation.class);
+        assemblies.removeIf(assembly -> !assembly.getSource().isPlaceholder()
+                || !assembly.getDestination().isPlaceholder());
+        for (ComponentAssemblyRelation placeholderAssembly : assemblies) {
+            Component source = placeholderAssembly.getSource().getSource();
+            Component destination = placeholderAssembly.getDestination().getSource();
+            // Placeholder are unique and can only be allocated to a single container
+            Optional<Deployment> optionalSourceContainer = getAllocatedContainers(source)
+                    .stream().findFirst();
+            Optional<Deployment> optionalDestinationContainer = getAllocatedContainers(destination)
+                    .stream().findFirst();
+
+            if (optionalSourceContainer.isPresent() && optionalDestinationContainer.isPresent()) {
+                Deployment sourceContainer = optionalSourceContainer.get();
+                Deployment destinationContainer = optionalDestinationContainer.get();
+
+                // Container links are bi-directional => Parallel or inverse assemblies are valid
+                boolean isParallelAssembly = providerAllocations.contains(sourceContainer)
+                        && consumerAllocations.contains(destinationContainer);
+                boolean isInverseAssembly = providerAllocations.contains(destinationContainer)
+                        && consumerAllocations.contains(sourceContainer);
+                if (isParallelAssembly || isInverseAssembly) {
+                    this.addImplications(this.getModel().replace(placeholderAssembly, discovery));
+                    this.addImplications(this.getModel().replace(source, provider));
+                    this.addImplications(this.getModel().replace(destination, consumer));
+                }
+            }
+        }
+    }
+
+    private List<Deployment> getAllocatedContainers(Component component) {
+        List<ComponentAllocationRelation> allocations = this.getModel().getByType(ComponentAllocationRelation.class);
+        return allocations.stream()
+                .filter(allocation -> allocation.getSource().equals(component))
+                .map(ComponentAllocationRelation::getDestination)
+                .collect(Collectors.toList());
     }
 }
