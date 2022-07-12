@@ -17,7 +17,7 @@ import com.gstuer.modelmerging.instance.pcm.surrogate.element.Signature;
 
 public final class ElementFactory {
     private ElementFactory() {
-        // TODO Throw appropriate exception on call
+        throw new IllegalStateException("Cannot instantiate utility class.");
     }
 
     public static Signature createUniqueSignature(boolean isPlaceholder) {
