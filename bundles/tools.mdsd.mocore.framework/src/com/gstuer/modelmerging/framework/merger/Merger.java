@@ -48,6 +48,16 @@ public abstract class Merger<M extends Model, T extends Replaceable> {
         }
     }
 
+    protected void removeImplication(Replaceable replaceable) {
+        this.implications.remove(replaceable);
+    }
+
+    protected void removeImplications(Iterable<Replaceable> replaceables) {
+        for (Replaceable replaceable : replaceables) {
+            this.implications.remove(replaceable);
+        }
+    }
+
     public Class<T> getProcessableType() {
         return processableType;
     }
