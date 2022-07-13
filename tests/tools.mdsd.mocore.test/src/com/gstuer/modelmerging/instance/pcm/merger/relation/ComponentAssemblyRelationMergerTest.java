@@ -130,6 +130,8 @@ public class ComponentAssemblyRelationMergerTest extends RelationMergerTest<Comp
         Set<Replaceable> implications = new HashSet<>(merger.getImplications());
 
         // Assertions: Post-execution
+        assertTrue(implications.remove(relation.getSource()));
+        assertTrue(implications.remove(relation.getDestination()));
         assertEquals(1, implications.size());
         Replaceable implication = implications.stream().findFirst().orElseThrow();
         assertEquals(DeploymentDeploymentRelation.class, implication.getClass());

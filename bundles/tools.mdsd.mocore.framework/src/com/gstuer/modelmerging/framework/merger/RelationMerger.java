@@ -16,16 +16,12 @@ public abstract class RelationMerger<M extends Model, T extends Relation<?, ?>> 
     }
 
     @Override
-    public void process(T discovery) {
-        super.process(discovery);
-
+    protected void refine(T discovery) {
         // Add trivial implications for source and destination of relation
         addImplication(discovery.getSource());
         addImplication(discovery.getDestination());
-    }
 
-    @Override
-    protected void refine(T discovery) {
+        // Replace indirect and direct placeholder relations of the merged relation
         replaceDirectPlaceholders(discovery);
         replaceIndirectPlaceholders(discovery);
     }
@@ -74,7 +70,7 @@ public abstract class RelationMerger<M extends Model, T extends Relation<?, ?>> 
                 } else if (discovery.getDestination().isPlaceholder()) {
                     implications.addAll(this.getModel()
                             .replace(discovery.getDestination(), relation.getDestination()));
-                    // TODO Remove discovery.getDestination() from implications
+                    this.removeImplication(discovery.getDestination());
                 }
             } else if (Objects.equals(discovery.getDestination(), relation.getDestination())) {
                 // Right side equals -> Left side replacement if needed
@@ -87,7 +83,7 @@ public abstract class RelationMerger<M extends Model, T extends Relation<?, ?>> 
                 } else if (discovery.getSource().isPlaceholder()) {
                     implications.addAll(this.getModel()
                             .replace(discovery.getSource(), relation.getSource()));
-                    // TODO Remove discovery.getSource() from implications
+                    this.removeImplication(discovery.getSource());
                 }
             }
         }

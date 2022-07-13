@@ -35,6 +35,8 @@ public class DeploymentDeploymentRelationMergerTest extends RelationMergerTest<D
         Set<Replaceable> implications = new HashSet<>(merger.getImplications());
 
         // Assertions: Post-execution
+        assertTrue(implications.remove(relation.getSource()));
+        assertTrue(implications.remove(relation.getDestination()));
         assertEquals(2, implications.size());
 
         //// Implicit ComponentAssemblyRelation
