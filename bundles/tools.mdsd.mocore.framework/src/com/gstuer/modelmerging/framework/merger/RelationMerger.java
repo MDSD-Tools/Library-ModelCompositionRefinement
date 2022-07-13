@@ -71,6 +71,10 @@ public abstract class RelationMerger<M extends Model, T extends Relation<?, ?>> 
                     }
                     implications.addAll(this.getModel()
                             .replace(relation.getDestination(), discovery.getDestination()));
+                } else if (discovery.getDestination().isPlaceholder()) {
+                    implications.addAll(this.getModel()
+                            .replace(discovery.getDestination(), relation.getDestination()));
+                    // TODO Remove discovery.getDestination() from implications
                 }
             } else if (Objects.equals(discovery.getDestination(), relation.getDestination())) {
                 // Right side equals -> Left side replacement if needed
@@ -80,6 +84,10 @@ public abstract class RelationMerger<M extends Model, T extends Relation<?, ?>> 
                     }
                     implications.addAll(this.getModel()
                             .replace(relation.getSource(), discovery.getSource()));
+                } else if (discovery.getSource().isPlaceholder()) {
+                    implications.addAll(this.getModel()
+                            .replace(discovery.getSource(), relation.getSource()));
+                    // TODO Remove discovery.getSource() from implications
                 }
             }
         }
