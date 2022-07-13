@@ -29,12 +29,16 @@ public abstract class RelationMerger<M extends Model, T extends Relation<?, ?>> 
     protected void replaceDirectPlaceholders(T discovery) {
         // Get relevant placeholder relations from the model
         List<T> relations = this.getModel().getByType(this.getProcessableType());
-        relations.removeIf(relation -> !relation.isPlaceholderOf(discovery));
+        relations.removeIf(relation -> !relation.isPlaceholderOf(discovery) && !discovery.isPlaceholderOf(relation));
 
         Set<Replaceable> implications = new HashSet<>();
-        for (T placeholder : relations) {
+        for (T relation : relations) {
             // Replace placeholder & collect possible implications. May include discovery.
-            implications.addAll(this.getModel().replace(placeholder, discovery));
+            if (relation.isPlaceholderOf(discovery)) {
+                implications.addAll(this.getModel().replace(relation, discovery));
+            } else if (discovery.isPlaceholderOf(relation)) {
+                implications.addAll(this.getModel().replace(discovery, relation));
+            }
         }
         // The discovery was already added to the model by the merge operation.
         implications.remove(discovery);
