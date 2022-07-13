@@ -1,6 +1,7 @@
 package com.gstuer.modelmerging.instance.pcm.merger.relation;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.util.HashSet;
@@ -23,6 +24,80 @@ import com.gstuer.modelmerging.instance.pcm.surrogate.relation.InterfaceRequirem
 public class ComponentAssemblyRelationMergerTest extends RelationMergerTest<ComponentAssemblyRelationMerger,
         PcmSurrogate, ComponentAssemblyRelation, InterfaceProvisionRelation, InterfaceRequirementRelation> {
     private static final Interface RELATION_DESTINATION = Interface.getUniquePlaceholder();
+
+    @Test
+    public void testRefinementRemovesParallelAssemblyPlaceholder() {
+        // Test data
+        PcmSurrogate model = createEmptyModel();
+        ComponentAssemblyRelationMerger merger = createMerger(model);
+
+        InterfaceProvisionRelation interfaceProvision = getUniqueNonPlaceholderSourceEntity();
+        InterfaceRequirementRelation interfaceRequirement = getUniqueNonPlaceholderDestinationEntity();
+        ComponentAssemblyRelation relation = createRelation(interfaceProvision, interfaceRequirement, false);
+
+        Deployment providingContainer = Deployment.getUniquePlaceholder();
+        Deployment requiringContainer = Deployment.getUniquePlaceholder();
+        ComponentAllocationRelation providingAllocation = new ComponentAllocationRelation(
+                interfaceProvision.getSource(), providingContainer, false);
+        ComponentAllocationRelation requiringAllocation = new ComponentAllocationRelation(
+                interfaceRequirement.getSource(), requiringContainer, false);
+
+        InterfaceProvisionRelation placeholderProvision = getPlaceholderOfSourceEntity(
+                getUniqueNonPlaceholderSourceEntity());
+        InterfaceRequirementRelation placeholderRequirement = getPlaceholderOfDestinationEntity(
+                getUniqueNonPlaceholderDestinationEntity());
+        ComponentAllocationRelation placeholderProvidingAllocation = new ComponentAllocationRelation(
+                placeholderProvision.getSource(), providingContainer, false);
+        ComponentAllocationRelation placeholderRequiringAllocation = new ComponentAllocationRelation(
+                placeholderRequirement.getSource(), requiringContainer, false);
+        ComponentAssemblyRelation placeholderRelation = createRelation(placeholderProvision,
+                placeholderRequirement, true);
+
+        // Add containers, placeholder assembly & allocations to model
+        model.add(providingContainer);
+        model.add(requiringContainer);
+        model.add(providingAllocation);
+        model.add(requiringAllocation);
+
+        model.add(placeholderProvision.getSource());
+        model.add(placeholderProvision.getDestination());
+        model.add(placeholderRequirement.getSource());
+        model.add(placeholderProvision);
+        model.add(placeholderRequirement);
+        model.add(placeholderProvidingAllocation);
+        model.add(placeholderRequiringAllocation);
+        model.add(placeholderRelation);
+
+        // Assertions: Pre-execution
+        assertTrue(merger.getImplications().isEmpty());
+        assertTrue(model.contains(placeholderProvision.getSource()));
+        assertTrue(model.contains(placeholderProvision.getDestination()));
+        assertTrue(model.contains(placeholderRequirement.getSource()));
+        assertTrue(model.contains(placeholderProvision));
+        assertTrue(model.contains(placeholderRequirement));
+        assertTrue(model.contains(placeholderProvidingAllocation));
+        assertTrue(model.contains(placeholderRequiringAllocation));
+        assertTrue(model.contains(placeholderRelation));
+
+        // Execution
+        merger.refine(relation);
+        Set<Replaceable> implications = new HashSet<>(merger.getImplications());
+
+        // Assertions: Post-execution
+        assertFalse(model.contains(placeholderProvision.getSource()));
+        assertFalse(model.contains(placeholderProvision.getDestination()));
+        assertFalse(model.contains(placeholderRequirement.getSource()));
+        assertFalse(model.contains(placeholderProvision));
+        assertFalse(model.contains(placeholderRequirement));
+        assertFalse(model.contains(placeholderProvidingAllocation));
+        assertFalse(model.contains(placeholderRequiringAllocation));
+        assertFalse(model.contains(placeholderRelation));
+
+        assertTrue(implications.contains(relation));
+        assertTrue(implications.contains(interfaceProvision.getSource()));
+        assertTrue(implications.contains(interfaceProvision.getDestination()));
+        assertTrue(implications.contains(interfaceRequirement.getSource()));
+    }
 
     @Test
     public void testRefinementAddsImplicitDeploymentRelation() {
