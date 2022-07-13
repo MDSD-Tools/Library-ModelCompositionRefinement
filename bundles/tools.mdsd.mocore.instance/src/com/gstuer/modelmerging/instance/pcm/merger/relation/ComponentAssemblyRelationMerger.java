@@ -8,6 +8,7 @@ import com.gstuer.modelmerging.framework.merger.RelationMerger;
 import com.gstuer.modelmerging.instance.pcm.surrogate.PcmSurrogate;
 import com.gstuer.modelmerging.instance.pcm.surrogate.element.Component;
 import com.gstuer.modelmerging.instance.pcm.surrogate.element.Deployment;
+import com.gstuer.modelmerging.instance.pcm.surrogate.element.Interface;
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.ComponentAllocationRelation;
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.ComponentAssemblyRelation;
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.DeploymentDeploymentRelation;
@@ -24,6 +25,7 @@ public class ComponentAssemblyRelationMerger extends RelationMerger<PcmSurrogate
         // Identify all allocations of the providing and consuming component in the assembly
         Component provider = discovery.getSource().getSource();
         Component consumer = discovery.getDestination().getSource();
+        Interface providerConsumerInterface = discovery.getSource().getDestination();
         List<Deployment> providerAllocations = getAllocatedContainers(provider);
         List<Deployment> consumerAllocations = getAllocatedContainers(consumer);
 
@@ -46,6 +48,7 @@ public class ComponentAssemblyRelationMerger extends RelationMerger<PcmSurrogate
         for (ComponentAssemblyRelation placeholderAssembly : assemblies) {
             Component source = placeholderAssembly.getSource().getSource();
             Component destination = placeholderAssembly.getDestination().getSource();
+            Interface sourceDestinationInterface = placeholderAssembly.getSource().getDestination();
             // Placeholder are unique and can only be allocated to a single container
             Optional<Deployment> optionalSourceContainer = getAllocatedContainers(source)
                     .stream().findFirst();
@@ -65,6 +68,8 @@ public class ComponentAssemblyRelationMerger extends RelationMerger<PcmSurrogate
                     this.addImplications(this.getModel().replace(placeholderAssembly, discovery));
                     this.addImplications(this.getModel().replace(source, provider));
                     this.addImplications(this.getModel().replace(destination, consumer));
+                    this.addImplications(this.getModel().replace(sourceDestinationInterface,
+                            providerConsumerInterface));
                 }
             }
         }
