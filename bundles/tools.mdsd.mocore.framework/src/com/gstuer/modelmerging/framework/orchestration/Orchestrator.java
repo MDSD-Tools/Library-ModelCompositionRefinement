@@ -1,15 +1,15 @@
 package com.gstuer.modelmerging.framework.orchestration;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+
 import com.gstuer.modelmerging.framework.discovery.Discoverer;
 import com.gstuer.modelmerging.framework.merger.Merger;
 import com.gstuer.modelmerging.framework.surrogate.Model;
 import com.gstuer.modelmerging.framework.surrogate.Replaceable;
 import com.gstuer.modelmerging.framework.transformation.Transformer;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
 
 public abstract class Orchestrator<M extends Model> {
     private final M model;
