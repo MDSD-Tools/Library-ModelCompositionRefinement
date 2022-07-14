@@ -7,7 +7,9 @@ import org.palladiosimulator.generator.fluent.repository.factory.FluentRepositor
 import org.palladiosimulator.generator.fluent.repository.structure.components.BasicComponentCreator;
 import org.palladiosimulator.generator.fluent.repository.structure.interfaces.OperationInterfaceCreator;
 import org.palladiosimulator.generator.fluent.repository.structure.interfaces.OperationSignatureCreator;
+import org.palladiosimulator.pcm.reliability.FailureType;
 import org.palladiosimulator.pcm.repository.BasicComponent;
+import org.palladiosimulator.pcm.repository.ExceptionType;
 import org.palladiosimulator.pcm.repository.OperationInterface;
 import org.palladiosimulator.pcm.repository.OperationSignature;
 import org.palladiosimulator.pcm.repository.Parameter;
@@ -114,6 +116,12 @@ public class RepositoryTransformer implements Transformer<PcmSurrogate, Reposito
         for (Parameter parameter : wrappedSignature.getParameters__OperationSignature()) {
             signatureCreator.withParameter(parameter.getParameterName(), parameter.getDataType__Parameter(),
                     parameter.getModifier__Parameter());
+        }
+        for (ExceptionType exceptionType : wrappedSignature.getExceptions__Signature()) {
+            signatureCreator.withExceptionType(exceptionType);
+        }
+        for (FailureType failureType : wrappedSignature.getFailureType()) {
+            signatureCreator.withFailureType(failureType);
         }
 
         return signatureCreator;
