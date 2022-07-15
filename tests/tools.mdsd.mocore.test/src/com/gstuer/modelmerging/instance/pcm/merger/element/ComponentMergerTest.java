@@ -34,6 +34,7 @@ public class ComponentMergerTest extends MergerTest<ComponentMerger, PcmSurrogat
         assertEquals(ComponentAllocationRelation.class, implication.getClass());
         ComponentAllocationRelation relation = (ComponentAllocationRelation) implication;
         assertEquals(element, relation.getSource());
+        assertTrue(relation.isPlaceholder());
         assertTrue(relation.getDestination().isPlaceholder());
     }
 

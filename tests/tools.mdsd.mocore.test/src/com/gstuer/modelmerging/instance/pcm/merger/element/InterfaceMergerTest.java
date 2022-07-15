@@ -34,6 +34,7 @@ public class InterfaceMergerTest extends MergerTest<InterfaceMerger, PcmSurrogat
         assertEquals(InterfaceProvisionRelation.class, implication.getClass());
         InterfaceProvisionRelation relation = (InterfaceProvisionRelation) implication;
         assertEquals(element, relation.getDestination());
+        assertTrue(relation.isPlaceholder());
         assertTrue(relation.getSource().isPlaceholder());
     }
 

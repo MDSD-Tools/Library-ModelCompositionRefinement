@@ -34,6 +34,7 @@ public class SignatureMergerTest extends MergerTest<SignatureMerger, PcmSurrogat
         assertEquals(SignatureProvisionRelation.class, implication.getClass());
         SignatureProvisionRelation relation = (SignatureProvisionRelation) implication;
         assertEquals(element, relation.getSource());
+        assertTrue(relation.isPlaceholder());
         assertTrue(relation.getDestination().isPlaceholder());
     }
 
