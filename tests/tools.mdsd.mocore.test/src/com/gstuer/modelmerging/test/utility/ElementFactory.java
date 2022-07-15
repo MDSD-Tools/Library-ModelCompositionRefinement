@@ -13,6 +13,7 @@ import com.gstuer.modelmerging.instance.pcm.surrogate.element.Component;
 import com.gstuer.modelmerging.instance.pcm.surrogate.element.Deployment;
 import com.gstuer.modelmerging.instance.pcm.surrogate.element.Interface;
 import com.gstuer.modelmerging.instance.pcm.surrogate.element.LinkResourceSpecification;
+import com.gstuer.modelmerging.instance.pcm.surrogate.element.ServiceEffectSpecification;
 import com.gstuer.modelmerging.instance.pcm.surrogate.element.Signature;
 
 public final class ElementFactory {
@@ -52,5 +53,10 @@ public final class ElementFactory {
                 .createCommunicationLinkResourceSpecification();
         value.setId(identifier);
         return new LinkResourceSpecification(value, isPlaceholder);
+    }
+
+    public static ServiceEffectSpecification createUniqueServiceEffectSpecification(boolean isPlaceholder) {
+        ServiceEffectSpecification placeholderSpecification = ServiceEffectSpecification.getUniquePlaceholder();
+        return new ServiceEffectSpecification(placeholderSpecification.getValue(), isPlaceholder);
     }
 }
