@@ -3,10 +3,12 @@ package com.gstuer.modelmerging.instance.pcm.surrogate.relation;
 import com.gstuer.modelmerging.framework.surrogate.Relation;
 import com.gstuer.modelmerging.framework.surrogate.Replaceable;
 import com.gstuer.modelmerging.instance.pcm.surrogate.element.ServiceEffectSpecification;
-import com.gstuer.modelmerging.instance.pcm.surrogate.element.Signature;
+import com.gstuer.modelmerging.instance.pcm.surrogate.relation.pseudo.ComponentSignatureProvisionRelation;
 
-public class SignatureSpecificationRelation extends Relation<Signature, ServiceEffectSpecification> {
-    public SignatureSpecificationRelation(Signature source, ServiceEffectSpecification destination,
+public class SignatureSpecificationRelation
+        extends Relation<ComponentSignatureProvisionRelation, ServiceEffectSpecification> {
+    public SignatureSpecificationRelation(ComponentSignatureProvisionRelation source,
+            ServiceEffectSpecification destination,
             boolean isPlaceholder) {
         super(source, destination, isPlaceholder);
     }
@@ -20,7 +22,7 @@ public class SignatureSpecificationRelation extends Relation<Signature, ServiceE
         if (this.equals(original)) {
             return (SignatureSpecificationRelation) replacement;
         }
-        Signature source = getSourceReplacement(original, replacement);
+        ComponentSignatureProvisionRelation source = getSourceReplacement(original, replacement);
         ServiceEffectSpecification destination = getDestinationReplacement(original, replacement);
         return new SignatureSpecificationRelation(source, destination, this.isPlaceholder());
     }

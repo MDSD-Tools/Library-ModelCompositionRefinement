@@ -11,7 +11,6 @@ import com.gstuer.modelmerging.framework.merger.MergerTest;
 import com.gstuer.modelmerging.framework.surrogate.Replaceable;
 import com.gstuer.modelmerging.instance.pcm.surrogate.PcmSurrogate;
 import com.gstuer.modelmerging.instance.pcm.surrogate.element.ServiceEffectSpecification;
-import com.gstuer.modelmerging.instance.pcm.surrogate.relation.SignatureSpecificationRelation;
 
 public class ServiceEffectSpecificationMergerTest
         extends MergerTest<ServiceEffectSpecificationMerger, PcmSurrogate, ServiceEffectSpecification> {
@@ -30,13 +29,7 @@ public class ServiceEffectSpecificationMergerTest
         Set<Replaceable> implications = merger.getImplications();
 
         // Assertions: Post-execution
-        assertEquals(1, implications.size());
-        Replaceable implication = implications.stream().findFirst().orElseThrow();
-        assertEquals(SignatureSpecificationRelation.class, implication.getClass());
-        SignatureSpecificationRelation relation = (SignatureSpecificationRelation) implication;
-        assertEquals(element, relation.getDestination());
-        assertTrue(relation.isPlaceholder());
-        assertTrue(relation.getSource().isPlaceholder());
+        assertEquals(0, implications.size());
     }
 
     @Override

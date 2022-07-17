@@ -13,7 +13,6 @@ import com.gstuer.modelmerging.framework.surrogate.Replaceable;
 import com.gstuer.modelmerging.instance.pcm.surrogate.PcmSurrogate;
 import com.gstuer.modelmerging.instance.pcm.surrogate.element.Signature;
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.SignatureProvisionRelation;
-import com.gstuer.modelmerging.instance.pcm.surrogate.relation.SignatureSpecificationRelation;
 
 public class SignatureMergerTest extends MergerTest<SignatureMerger, PcmSurrogate, Signature> {
     @Test
@@ -31,20 +30,9 @@ public class SignatureMergerTest extends MergerTest<SignatureMerger, PcmSurrogat
         Set<Replaceable> implications = new HashSet<>(merger.getImplications());
 
         // Assertions: Post-execution
-        //// Implicit effect specification
-        assertEquals(2, implications.size());
-        Replaceable implication = implications.stream()
-                .filter(replacable -> replacable.getClass().equals(SignatureSpecificationRelation.class))
-                .findFirst().orElseThrow();
-        SignatureSpecificationRelation implicitSpecification = (SignatureSpecificationRelation) implication;
-        assertEquals(element, implicitSpecification.getSource());
-        assertTrue(implicitSpecification.isPlaceholder());
-        assertTrue(implicitSpecification.getDestination().isPlaceholder());
-        assertTrue(implications.remove(implicitSpecification));
-
         //// Implicit providing interface
         assertEquals(1, implications.size());
-        implication = implications.stream().findFirst().orElseThrow();
+        Replaceable implication = implications.stream().findFirst().orElseThrow();
         assertEquals(SignatureProvisionRelation.class, implication.getClass());
         SignatureProvisionRelation relation = (SignatureProvisionRelation) implication;
         assertEquals(element, relation.getSource());
