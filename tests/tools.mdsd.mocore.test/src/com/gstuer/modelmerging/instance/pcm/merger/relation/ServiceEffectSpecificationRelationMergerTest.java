@@ -8,17 +8,17 @@ import com.gstuer.modelmerging.instance.pcm.surrogate.element.ServiceEffectSpeci
 import com.gstuer.modelmerging.instance.pcm.surrogate.element.Signature;
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.InterfaceProvisionRelation;
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.SignatureProvisionRelation;
-import com.gstuer.modelmerging.instance.pcm.surrogate.relation.SignatureSpecificationRelation;
+import com.gstuer.modelmerging.instance.pcm.surrogate.relation.ServiceEffectSpecificationRelation;
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.pseudo.ComponentSignatureProvisionRelation;
 import com.gstuer.modelmerging.test.utility.ElementFactory;
 
-public class SignatureSpecificationRelationMergerTest extends RelationMergerTest<SignatureSpecificationRelationMerger,
-        PcmSurrogate, SignatureSpecificationRelation, ComponentSignatureProvisionRelation, ServiceEffectSpecification> {
+public class ServiceEffectSpecificationRelationMergerTest extends RelationMergerTest<ServiceEffectSpecificationRelationMerger,
+        PcmSurrogate, ServiceEffectSpecificationRelation, ComponentSignatureProvisionRelation, ServiceEffectSpecification> {
     @Override
-    protected SignatureSpecificationRelation createRelation(ComponentSignatureProvisionRelation source,
+    protected ServiceEffectSpecificationRelation createRelation(ComponentSignatureProvisionRelation source,
             ServiceEffectSpecification destination,
             boolean isPlaceholder) {
-        return new SignatureSpecificationRelation(source, destination, isPlaceholder);
+        return new ServiceEffectSpecificationRelation(source, destination, isPlaceholder);
     }
 
     @Override
@@ -51,8 +51,8 @@ public class SignatureSpecificationRelationMergerTest extends RelationMergerTest
     }
 
     @Override
-    protected SignatureSpecificationRelationMerger createMerger(PcmSurrogate model) {
-        return new SignatureSpecificationRelationMerger(model);
+    protected ServiceEffectSpecificationRelationMerger createMerger(PcmSurrogate model) {
+        return new ServiceEffectSpecificationRelationMerger(model);
     }
 
     @Override

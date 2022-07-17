@@ -5,25 +5,25 @@ import com.gstuer.modelmerging.framework.surrogate.Replaceable;
 import com.gstuer.modelmerging.instance.pcm.surrogate.element.ServiceEffectSpecification;
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.pseudo.ComponentSignatureProvisionRelation;
 
-public class SignatureSpecificationRelation
+public class ServiceEffectSpecificationRelation
         extends Relation<ComponentSignatureProvisionRelation, ServiceEffectSpecification> {
-    public SignatureSpecificationRelation(ComponentSignatureProvisionRelation source,
+    public ServiceEffectSpecificationRelation(ComponentSignatureProvisionRelation source,
             ServiceEffectSpecification destination,
             boolean isPlaceholder) {
         super(source, destination, isPlaceholder);
     }
 
     @Override
-    public <U extends Replaceable> SignatureSpecificationRelation replace(U original, U replacement) {
+    public <U extends Replaceable> ServiceEffectSpecificationRelation replace(U original, U replacement) {
         if (!this.canReplace(original)) {
             // TODO Add message to exception
             throw new IllegalArgumentException();
         }
         if (this.equals(original)) {
-            return (SignatureSpecificationRelation) replacement;
+            return (ServiceEffectSpecificationRelation) replacement;
         }
         ComponentSignatureProvisionRelation source = getSourceReplacement(original, replacement);
         ServiceEffectSpecification destination = getDestinationReplacement(original, replacement);
-        return new SignatureSpecificationRelation(source, destination, this.isPlaceholder());
+        return new ServiceEffectSpecificationRelation(source, destination, this.isPlaceholder());
     }
 }
