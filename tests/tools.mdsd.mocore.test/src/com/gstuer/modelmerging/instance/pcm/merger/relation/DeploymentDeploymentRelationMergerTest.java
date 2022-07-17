@@ -12,9 +12,14 @@ import org.junit.jupiter.api.Test;
 import com.gstuer.modelmerging.framework.merger.RelationMergerTest;
 import com.gstuer.modelmerging.framework.surrogate.Replaceable;
 import com.gstuer.modelmerging.instance.pcm.surrogate.PcmSurrogate;
+import com.gstuer.modelmerging.instance.pcm.surrogate.element.Component;
 import com.gstuer.modelmerging.instance.pcm.surrogate.element.Deployment;
+import com.gstuer.modelmerging.instance.pcm.surrogate.element.Interface;
+import com.gstuer.modelmerging.instance.pcm.surrogate.relation.ComponentAllocationRelation;
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.ComponentAssemblyRelation;
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.DeploymentDeploymentRelation;
+import com.gstuer.modelmerging.instance.pcm.surrogate.relation.InterfaceProvisionRelation;
+import com.gstuer.modelmerging.instance.pcm.surrogate.relation.InterfaceRequirementRelation;
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.LinkResourceSpecificationRelation;
 import com.gstuer.modelmerging.test.utility.ElementFactory;
 
@@ -61,6 +66,92 @@ public class DeploymentDeploymentRelationMergerTest extends RelationMergerTest<D
         assertEquals(relation, implicitSpecification.getDestination());
         assertTrue(implicitSpecification.isPlaceholder());
         assertTrue(implicitSpecification.getSource().isPlaceholder());
+    }
+
+    @Test
+    public void testRefineDoesNotAddAssemblyIfParallelExists() {
+        // Test data
+        PcmSurrogate model = createEmptyModel();
+        DeploymentDeploymentRelationMerger merger = createMerger(model);
+        DeploymentDeploymentRelation relation = createUniqueReplaceable();
+
+        Component provider = Component.getUniquePlaceholder();
+        Component consumer = Component.getUniquePlaceholder();
+        Interface interfc = Interface.getUniquePlaceholder();
+        InterfaceProvisionRelation interfaceProvision = new InterfaceProvisionRelation(provider, interfc, false);
+        InterfaceRequirementRelation interfaceRequirement = new InterfaceRequirementRelation(consumer, interfc, false);
+        ComponentAssemblyRelation assembly = new ComponentAssemblyRelation(interfaceProvision,
+                interfaceRequirement, false);
+
+        ComponentAllocationRelation providerAllocation = new ComponentAllocationRelation(provider,
+                relation.getSource(), false);
+        ComponentAllocationRelation consumerAllocation = new ComponentAllocationRelation(consumer,
+                relation.getDestination(), false);
+
+        model.add(assembly);
+        model.add(providerAllocation);
+        model.add(consumerAllocation);
+
+        // Assertions: Pre-execution
+        assertTrue(merger.getImplications().isEmpty());
+
+        // Execution
+        merger.refine(relation);
+        Set<Replaceable> implications = new HashSet<>(merger.getImplications());
+
+        // Assertions: Post-execution
+        assertTrue(implications.remove(relation.getSource()));
+        assertTrue(implications.remove(relation.getDestination()));
+        assertTrue(implications.removeIf(implication -> implication instanceof LinkResourceSpecificationRelation));
+        assertEquals(0, implications.size());
+
+        //// ComponentAssemblyRelation stays untouched
+        assertTrue(model.contains(assembly));
+        assertTrue(model.contains(providerAllocation));
+        assertTrue(model.contains(consumerAllocation));
+    }
+
+    @Test
+    public void testRefineDoesNotAddAssemblyIfInverseExists() {
+        // Test data
+        PcmSurrogate model = createEmptyModel();
+        DeploymentDeploymentRelationMerger merger = createMerger(model);
+        DeploymentDeploymentRelation relation = createUniqueReplaceable();
+
+        Component provider = Component.getUniquePlaceholder();
+        Component consumer = Component.getUniquePlaceholder();
+        Interface interfc = Interface.getUniquePlaceholder();
+        InterfaceProvisionRelation interfaceProvision = new InterfaceProvisionRelation(provider, interfc, false);
+        InterfaceRequirementRelation interfaceRequirement = new InterfaceRequirementRelation(consumer, interfc, false);
+        ComponentAssemblyRelation assembly = new ComponentAssemblyRelation(interfaceProvision,
+                interfaceRequirement, false);
+
+        ComponentAllocationRelation providerAllocation = new ComponentAllocationRelation(consumer,
+                relation.getSource(), false);
+        ComponentAllocationRelation consumerAllocation = new ComponentAllocationRelation(provider,
+                relation.getDestination(), false);
+
+        model.add(assembly);
+        model.add(providerAllocation);
+        model.add(consumerAllocation);
+
+        // Assertions: Pre-execution
+        assertTrue(merger.getImplications().isEmpty());
+
+        // Execution
+        merger.refine(relation);
+        Set<Replaceable> implications = new HashSet<>(merger.getImplications());
+
+        // Assertions: Post-execution
+        assertTrue(implications.remove(relation.getSource()));
+        assertTrue(implications.remove(relation.getDestination()));
+        assertTrue(implications.removeIf(implication -> implication instanceof LinkResourceSpecificationRelation));
+        assertEquals(0, implications.size());
+
+        //// ComponentAssemblyRelation stays untouched
+        assertTrue(model.contains(assembly));
+        assertTrue(model.contains(providerAllocation));
+        assertTrue(model.contains(consumerAllocation));
     }
 
     @Override
