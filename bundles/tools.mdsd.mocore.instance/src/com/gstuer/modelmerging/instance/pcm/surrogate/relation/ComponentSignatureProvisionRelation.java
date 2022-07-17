@@ -1,11 +1,9 @@
-package com.gstuer.modelmerging.instance.pcm.surrogate.relation.pseudo;
+package com.gstuer.modelmerging.instance.pcm.surrogate.relation;
 
 import java.util.Objects;
 
 import com.gstuer.modelmerging.framework.surrogate.Relation;
 import com.gstuer.modelmerging.framework.surrogate.Replaceable;
-import com.gstuer.modelmerging.instance.pcm.surrogate.relation.InterfaceProvisionRelation;
-import com.gstuer.modelmerging.instance.pcm.surrogate.relation.SignatureProvisionRelation;
 
 public class ComponentSignatureProvisionRelation extends Relation<InterfaceProvisionRelation, SignatureProvisionRelation> {
     private static final String ERROR_UNEQUAL_INTERFACE = "Interfaces of relations have to be equal.";

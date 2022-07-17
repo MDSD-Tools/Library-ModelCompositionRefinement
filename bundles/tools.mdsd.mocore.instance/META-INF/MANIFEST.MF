@@ -13,7 +13,6 @@ Export-Package: com.gstuer.modelmerging.instance.pcm.merger.element,
  com.gstuer.modelmerging.instance.pcm.surrogate,
  com.gstuer.modelmerging.instance.pcm.surrogate.element,
  com.gstuer.modelmerging.instance.pcm.surrogate.relation,
- com.gstuer.modelmerging.instance.pcm.surrogate.relation.pseudo,
  com.gstuer.modelmerging.instance.pcm.transformation
 Require-Bundle: tools.mdsd.mocore.framework,
  org.palladiosimulator.pcm,

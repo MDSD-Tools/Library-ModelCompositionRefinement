@@ -6,10 +6,10 @@ import com.gstuer.modelmerging.instance.pcm.surrogate.element.Component;
 import com.gstuer.modelmerging.instance.pcm.surrogate.element.Interface;
 import com.gstuer.modelmerging.instance.pcm.surrogate.element.ServiceEffectSpecification;
 import com.gstuer.modelmerging.instance.pcm.surrogate.element.Signature;
+import com.gstuer.modelmerging.instance.pcm.surrogate.relation.ComponentSignatureProvisionRelation;
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.InterfaceProvisionRelation;
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.SignatureProvisionRelation;
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.ServiceEffectSpecificationRelation;
-import com.gstuer.modelmerging.instance.pcm.surrogate.relation.pseudo.ComponentSignatureProvisionRelation;
 import com.gstuer.modelmerging.test.utility.ElementFactory;
 
 public class ServiceEffectSpecificationRelationMergerTest extends RelationMergerTest<ServiceEffectSpecificationRelationMerger,
