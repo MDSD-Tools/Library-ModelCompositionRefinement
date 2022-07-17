@@ -11,6 +11,7 @@ import com.gstuer.modelmerging.framework.surrogate.Model;
 import com.gstuer.modelmerging.framework.surrogate.PseudoReplaceableCreator;
 import com.gstuer.modelmerging.framework.surrogate.Replaceable;
 import com.gstuer.modelmerging.framework.surrogate.TypedDistinctMultiMap;
+import com.gstuer.modelmerging.instance.pcm.surrogate.relation.pseudo.ComponentSignatureProvisionPseudoCreator;
 
 public class PcmSurrogate implements Model {
     private final TypedDistinctMultiMap<Replaceable> replaceables;
@@ -19,6 +20,7 @@ public class PcmSurrogate implements Model {
     public PcmSurrogate() {
         this.replaceables = new TypedDistinctMultiMap<>();
         this.pseudoCreators = new HashSet<>();
+        this.pseudoCreators.add(new ComponentSignatureProvisionPseudoCreator());
     }
 
     @Override
