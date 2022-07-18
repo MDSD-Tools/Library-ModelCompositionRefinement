@@ -8,6 +8,7 @@ Automatic-Module-Name: tools.mdsd.mocore.test
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Require-Bundle: org.junit,
  org.junit.jupiter.api,
+ org.junit.jupiter.params,
  tools.mdsd.mocore.framework,
  tools.mdsd.mocore.instance,
  org.palladiosimulator.pcm,
