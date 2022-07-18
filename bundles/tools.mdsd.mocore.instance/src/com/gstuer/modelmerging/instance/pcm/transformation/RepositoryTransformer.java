@@ -1,6 +1,9 @@
 package com.gstuer.modelmerging.instance.pcm.transformation;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 import org.palladiosimulator.generator.fluent.repository.api.Repo;
 import org.palladiosimulator.generator.fluent.repository.factory.FluentRepositoryFactory;
@@ -14,6 +17,7 @@ import org.palladiosimulator.pcm.repository.OperationInterface;
 import org.palladiosimulator.pcm.repository.OperationSignature;
 import org.palladiosimulator.pcm.repository.Parameter;
 import org.palladiosimulator.pcm.repository.Repository;
+import org.palladiosimulator.pcm.seff.ServiceEffectSpecification;
 
 import com.gstuer.modelmerging.framework.transformation.Transformer;
 import com.gstuer.modelmerging.instance.pcm.surrogate.PcmSurrogate;
@@ -22,6 +26,7 @@ import com.gstuer.modelmerging.instance.pcm.surrogate.element.Interface;
 import com.gstuer.modelmerging.instance.pcm.surrogate.element.Signature;
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.InterfaceProvisionRelation;
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.InterfaceRequirementRelation;
+import com.gstuer.modelmerging.instance.pcm.surrogate.relation.ServiceEffectSpecificationRelation;
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.SignatureProvisionRelation;
 
 public class RepositoryTransformer implements Transformer<PcmSurrogate, Repository> {
@@ -33,6 +38,8 @@ public class RepositoryTransformer implements Transformer<PcmSurrogate, Reposito
         FluentRepositoryFactory repositoryFactory = new FluentRepositoryFactory();
         Repo fluentRepository = repositoryFactory.newRepository();
 
+        List<ServiceEffectSpecificationRelation> seffRelations = model
+                .getByType(ServiceEffectSpecificationRelation.class);
         List<InterfaceProvisionRelation> provisionRelations = model.getByType(InterfaceProvisionRelation.class);
         List<InterfaceRequirementRelation> requirementRelations = model.getByType(InterfaceRequirementRelation.class);
         List<SignatureProvisionRelation> signatureRelations = model.getByType(SignatureProvisionRelation.class);
@@ -78,7 +85,39 @@ public class RepositoryTransformer implements Transformer<PcmSurrogate, Reposito
                 }
             }
 
-            fluentRepository.addToRepository(componentCreator);
+            // Build component to make changes that are unsupported by fluent api
+            BasicComponent repositoryComponent = componentCreator.build();
+
+            // Add service effect specifications to component
+            // For each provided interface, iterate over each signature of interface and add seff if it exists
+            Stream<ServiceEffectSpecificationRelation> seffRelationStream = seffRelations.stream()
+                    .filter(relation -> relation.getSource().getSource().getSource().equals(component));
+            for (InterfaceProvisionRelation interfaceProvision : provisionRelations) {
+                if (interfaceProvision.getSource().equals(component)) {
+                    OperationInterface operationInterface = repositoryFactory
+                            .fetchOfOperationInterface(interfaceProvision.getDestination().getValue().getEntityName());
+                    for (OperationSignature signature : operationInterface.getSignatures__OperationInterface()) {
+                        // Get seff entity for specific signature in interface
+                        Predicate<ServiceEffectSpecificationRelation> filter = relation -> {
+                            final Signature wrappedSignature = relation.getSource().getDestination().getSource();
+                            final Interface wrappedInterface = relation.getSource().getSource().getDestination();
+                            return representSameSignature(signature, wrappedSignature.getValue()) &&
+                                    representSameInterface(operationInterface, wrappedInterface.getValue());
+                        };
+                        ServiceEffectSpecification seff = seffRelationStream
+                                .filter(filter)
+                                .map(relation -> relation.getDestination().getValue()).findFirst()
+                                .orElse(com.gstuer.modelmerging.instance.pcm.surrogate.element.ServiceEffectSpecification
+                                        .getUniquePlaceholder().getValue());
+
+                        // Reset component and signature within seff because they may be out-dated
+                        seff.setBasicComponent_ServiceEffectSpecification(repositoryComponent);
+                        seff.setDescribedService__SEFF(signature);
+                    }
+                }
+            }
+
+            fluentRepository.addToRepository(repositoryComponent);
         }
 
         return fluentRepository.createRepositoryNow();
@@ -135,5 +174,24 @@ public class RepositoryTransformer implements Transformer<PcmSurrogate, Reposito
     protected static String getRequiredRoleName(Interface interfaceInstance) {
         String interfaceEntityName = interfaceInstance.getValue().getEntityName();
         return String.format(ROLE_REQUIRES_NAME_PATTERN, interfaceEntityName);
+    }
+
+    // TODO Test and move to evaluation helper
+    private static boolean representSameSignature(OperationSignature signature, OperationSignature otherSignature) {
+        boolean equalName = Objects.equals(signature.getEntityName(), otherSignature.getEntityName());
+        boolean equalReturn = Objects.equals(signature.getReturnType__OperationSignature(),
+                otherSignature.getReturnType__OperationSignature());
+        boolean equalParameters = signature.getParameters__OperationSignature()
+                .containsAll(otherSignature.getParameters__OperationSignature())
+                && otherSignature.getParameters__OperationSignature()
+                        .containsAll(signature.getParameters__OperationSignature());
+        return equalName && equalReturn && equalParameters;
+    }
+
+    // TODO Test and move to evaluation helper
+    private static boolean representSameInterface(OperationInterface interFace, OperationInterface otherInterFace) {
+        boolean equalName = Objects.equals(interFace.getEntityName(), otherInterFace.getEntityName());
+        // TODO Check if signatures are equal via representSameSignature
+        return equalName;
     }
 }
