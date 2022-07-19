@@ -9,13 +9,9 @@ import org.palladiosimulator.generator.fluent.repository.api.Repo;
 import org.palladiosimulator.generator.fluent.repository.factory.FluentRepositoryFactory;
 import org.palladiosimulator.generator.fluent.repository.structure.components.BasicComponentCreator;
 import org.palladiosimulator.generator.fluent.repository.structure.interfaces.OperationInterfaceCreator;
-import org.palladiosimulator.generator.fluent.repository.structure.interfaces.OperationSignatureCreator;
-import org.palladiosimulator.pcm.reliability.FailureType;
 import org.palladiosimulator.pcm.repository.BasicComponent;
-import org.palladiosimulator.pcm.repository.ExceptionType;
 import org.palladiosimulator.pcm.repository.OperationInterface;
 import org.palladiosimulator.pcm.repository.OperationSignature;
-import org.palladiosimulator.pcm.repository.Parameter;
 import org.palladiosimulator.pcm.repository.Repository;
 import org.palladiosimulator.pcm.seff.ServiceEffectSpecification;
 
@@ -49,16 +45,19 @@ public class RepositoryTransformer implements Transformer<PcmSurrogate, Reposito
         for (Interface interfaceInstance : interfaces) {
             OperationInterfaceCreator interfaceCreator = getCreator(repositoryFactory, interfaceInstance);
 
-            // Add signatures
+            // Add interface to repository and fetch built interface
+            fluentRepository.addToRepository(interfaceCreator);
+            OperationInterface repositoryInterface = repositoryFactory
+                    .fetchOfOperationInterface(interfaceInstance.getValue().getEntityName());
+
+            // Add signatures to the added interface directly
+            // Avoids the creation of signature creator and tight coupling to fluentApi
             for (SignatureProvisionRelation relation : signatureRelations) {
                 if (relation.getDestination().equals(interfaceInstance)) {
                     Signature signature = relation.getSource();
-                    OperationSignatureCreator signatureCreator = getCreator(repositoryFactory, signature);
-                    interfaceCreator.withOperationSignature(signatureCreator);
+                    signature.getValue().setInterface__OperationSignature(repositoryInterface);
                 }
             }
-
-            fluentRepository.addToRepository(interfaceCreator);
         }
 
         // Add components to fluent repository
@@ -143,27 +142,6 @@ public class RepositoryTransformer implements Transformer<PcmSurrogate, Reposito
         interfaceCreator.withName(wrappedInterface.getEntityName());
 
         return interfaceCreator;
-    }
-
-    private OperationSignatureCreator getCreator(FluentRepositoryFactory fluentFactory, Signature signature) {
-        OperationSignatureCreator signatureCreator = fluentFactory.newOperationSignature();
-
-        // Copy information from wrapped signature, dismiss deprecated information.
-        OperationSignature wrappedSignature = signature.getValue();
-        signatureCreator.withName(wrappedSignature.getEntityName());
-        signatureCreator.withReturnType(wrappedSignature.getReturnType__OperationSignature());
-        for (Parameter parameter : wrappedSignature.getParameters__OperationSignature()) {
-            signatureCreator.withParameter(parameter.getParameterName(), parameter.getDataType__Parameter(),
-                    parameter.getModifier__Parameter());
-        }
-        for (ExceptionType exceptionType : wrappedSignature.getExceptions__Signature()) {
-            signatureCreator.withExceptionType(exceptionType);
-        }
-        for (FailureType failureType : wrappedSignature.getFailureType()) {
-            signatureCreator.withFailureType(failureType);
-        }
-
-        return signatureCreator;
     }
 
     protected static String getProvidedRoleName(Interface interfaceInstance) {
