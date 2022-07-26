@@ -1,7 +1,10 @@
 package com.gstuer.modelmerging.instance.pcm.transformation;
 
+import static com.gstuer.modelmerging.test.utility.PcmEvaluationUtility.containsRepresentative;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.palladiosimulator.pcm.system.System;
@@ -15,9 +18,26 @@ import com.gstuer.modelmerging.instance.pcm.surrogate.relation.InterfaceProvisio
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.InterfaceRequirementRelation;
 
 public class SystemTransformerTest extends TransformerTest<SystemTransformer, PcmSurrogate, System> {
+    @Test
+    public void testTransformSingleComponent() {
+        // Test data
+        SystemTransformer transformer = createTransformer();
+        PcmSurrogate model = createEmptyModel();
+        Component component = Component.getUniquePlaceholder();
+
+        model.add(component);
+
+        // Execution
+        System system = transformer.transform(model);
+
+        // Assertion
+        assertNotNull(system);
+        assertTrue(containsRepresentative(system, component));
+    }
+
     @ParameterizedTest
     @ValueSource(booleans = { true, false })
-    public void testTransformSingleAssembly(boolean isPlaceholderAssembly) {
+    public void testTransformSingleAssemblyRelation(boolean isPlaceholderAssembly) {
         // Test data
         SystemTransformer transformer = createTransformer();
         PcmSurrogate model = createEmptyModel();
@@ -44,7 +64,9 @@ public class SystemTransformerTest extends TransformerTest<SystemTransformer, Pc
 
         // Assertion
         assertNotNull(system);
-        // TODO Check whether all elements where transformed correctly
+        assertTrue(containsRepresentative(system, provider));
+        assertTrue(containsRepresentative(system, consumer));
+        assertTrue(containsRepresentative(system, assemblyRelation));
     }
 
     @Override
