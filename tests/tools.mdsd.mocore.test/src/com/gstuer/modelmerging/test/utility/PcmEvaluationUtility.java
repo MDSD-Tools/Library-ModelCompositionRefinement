@@ -5,9 +5,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.palladiosimulator.pcm.allocation.Allocation;
 import org.palladiosimulator.pcm.allocation.AllocationContext;
+import org.palladiosimulator.pcm.core.composition.AssemblyConnector;
 import org.palladiosimulator.pcm.core.composition.AssemblyContext;
 import org.palladiosimulator.pcm.repository.BasicComponent;
 import org.palladiosimulator.pcm.repository.Interface;
@@ -24,12 +26,14 @@ import org.palladiosimulator.pcm.resourceenvironment.LinkingResource;
 import org.palladiosimulator.pcm.resourceenvironment.ResourceContainer;
 import org.palladiosimulator.pcm.resourceenvironment.ResourceEnvironment;
 import org.palladiosimulator.pcm.seff.ResourceDemandingSEFF;
+import org.palladiosimulator.pcm.system.System;
 
 import com.gstuer.modelmerging.instance.pcm.surrogate.element.Component;
 import com.gstuer.modelmerging.instance.pcm.surrogate.element.Deployment;
 import com.gstuer.modelmerging.instance.pcm.surrogate.element.ServiceEffectSpecification;
 import com.gstuer.modelmerging.instance.pcm.surrogate.element.Signature;
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.ComponentAllocationRelation;
+import com.gstuer.modelmerging.instance.pcm.surrogate.relation.ComponentAssemblyRelation;
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.InterfaceProvisionRelation;
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.InterfaceRequirementRelation;
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.LinkResourceSpecificationRelation;
@@ -269,6 +273,43 @@ public final class PcmEvaluationUtility {
                 if (representSame(component.getValue(), assemblyContext.getEncapsulatedComponent__AssemblyContext())) {
                     return true;
                 }
+            }
+        }
+        return false;
+    }
+
+    public static boolean containsRepresentative(System system, Component component) {
+        List<AssemblyContext> assemblyContexts = system.getAssemblyContexts__ComposedStructure();
+        for (AssemblyContext assemblyContext : assemblyContexts) {
+            if (representSame(component.getValue(), assemblyContext.getEncapsulatedComponent__AssemblyContext())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean containsRepresentative(System system, ComponentAssemblyRelation assemblyRelation) {
+        BasicComponent provider = assemblyRelation.getSource().getSource().getValue();
+        BasicComponent consumer = assemblyRelation.getDestination().getSource().getValue();
+        OperationInterface providerConsumerInterface = assemblyRelation.getSource().getDestination().getValue();
+
+        List<AssemblyConnector> assemblyConnectors = system.getConnectors__ComposedStructure().stream()
+                .filter(connector -> connector instanceof AssemblyConnector)
+                .map(connector -> (AssemblyConnector) connector)
+                .collect(Collectors.toList());
+        for (AssemblyConnector connector : assemblyConnectors) {
+            RepositoryComponent connectorProvider = connector.getProvidingAssemblyContext_AssemblyConnector()
+                    .getEncapsulatedComponent__AssemblyContext();
+            RepositoryComponent connectorConsumer = connector.getRequiringAssemblyContext_AssemblyConnector()
+                    .getEncapsulatedComponent__AssemblyContext();
+            OperationInterface connectorProviderConsumerInterface = connector.getProvidedRole_AssemblyConnector()
+                    .getProvidedInterface__OperationProvidedRole();
+
+            boolean sameProvider = representSame(provider, connectorProvider);
+            boolean sameConsumer = representSame(consumer, connectorConsumer);
+            boolean sameInterface = representSame(providerConsumerInterface, connectorProviderConsumerInterface);
+            if (sameProvider && sameConsumer && sameInterface) {
+                return true;
             }
         }
         return false;
