@@ -100,8 +100,8 @@ public class RepositoryTransformer implements Transformer<PcmSurrogate, Reposito
                         Predicate<ServiceEffectSpecificationRelation> filter = relation -> {
                             final Signature wrappedSignature = relation.getSource().getDestination().getSource();
                             final Interface wrappedInterface = relation.getSource().getSource().getDestination();
-                            return representSameSignature(signature, wrappedSignature.getValue()) &&
-                                    representSameInterface(operationInterface, wrappedInterface.getValue());
+                            return representSameSignature(signature, wrappedSignature.getValue())
+                                    && representSameInterface(operationInterface, wrappedInterface.getValue());
                         };
                         ServiceEffectSpecification seff = seffRelationStream
                                 .filter(filter)
