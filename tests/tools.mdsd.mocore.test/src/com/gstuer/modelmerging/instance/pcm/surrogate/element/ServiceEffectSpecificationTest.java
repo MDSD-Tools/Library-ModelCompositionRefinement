@@ -1,18 +1,19 @@
 package com.gstuer.modelmerging.instance.pcm.surrogate.element;
 
+import org.palladiosimulator.pcm.seff.ResourceDemandingSEFF;
+
 import com.gstuer.modelmerging.framework.surrogate.ElementTest;
 import com.gstuer.modelmerging.test.utility.ElementFactory;
 
 public class ServiceEffectSpecificationTest
-        extends ElementTest<ServiceEffectSpecification, org.palladiosimulator.pcm.seff.ServiceEffectSpecification> {
+        extends ElementTest<ServiceEffectSpecification, ResourceDemandingSEFF> {
     @Override
-    protected ServiceEffectSpecification createElement(org.palladiosimulator.pcm.seff.ServiceEffectSpecification value,
-            boolean isPlaceholder) {
+    protected ServiceEffectSpecification createElement(ResourceDemandingSEFF value, boolean isPlaceholder) {
         return new ServiceEffectSpecification(value, isPlaceholder);
     }
 
     @Override
-    protected org.palladiosimulator.pcm.seff.ServiceEffectSpecification getUniqueValue() {
+    protected ResourceDemandingSEFF getUniqueValue() {
         return ElementFactory.createUniqueServiceEffectSpecification(false).getValue();
     }
 
