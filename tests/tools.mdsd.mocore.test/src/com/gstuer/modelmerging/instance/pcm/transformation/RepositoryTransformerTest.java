@@ -1,6 +1,8 @@
 package com.gstuer.modelmerging.instance.pcm.transformation;
 
+import static com.gstuer.modelmerging.test.utility.PcmEvaluationUtility.containsRepresentative;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -34,7 +36,7 @@ public class RepositoryTransformerTest extends TransformerTest<RepositoryTransfo
 
         // Assertion
         assertNotNull(repository);
-        // TODO Check whether all elements where transformed correctly
+        assertTrue(containsRepresentative(repository, component));
     }
 
     @Test
@@ -51,7 +53,7 @@ public class RepositoryTransformerTest extends TransformerTest<RepositoryTransfo
 
         // Assertion
         assertNotNull(repository);
-        // TODO Check whether all elements where transformed correctly
+        assertTrue(containsRepresentative(repository, element));
     }
 
     @ParameterizedTest
@@ -74,7 +76,9 @@ public class RepositoryTransformerTest extends TransformerTest<RepositoryTransfo
 
         // Assertion
         assertNotNull(repository);
-        // TODO Check whether all elements where transformed correctly
+        assertTrue(containsRepresentative(repository, provider));
+        assertTrue(containsRepresentative(repository, providerInterface));
+        assertTrue(containsRepresentative(repository, interfaceProvision));
     }
 
     @ParameterizedTest
@@ -97,7 +101,9 @@ public class RepositoryTransformerTest extends TransformerTest<RepositoryTransfo
 
         // Assertion
         assertNotNull(repository);
-        // TODO Check whether all elements where transformed correctly
+        assertTrue(containsRepresentative(repository, consumer));
+        assertTrue(containsRepresentative(repository, consumerInterface));
+        assertTrue(containsRepresentative(repository, interfaceRequirement));
     }
 
     @ParameterizedTest
@@ -125,7 +131,10 @@ public class RepositoryTransformerTest extends TransformerTest<RepositoryTransfo
 
         // Assertion
         assertNotNull(repository);
-        // TODO Check whether all elements where transformed correctly
+        assertTrue(containsRepresentative(repository, provider));
+        assertTrue(containsRepresentative(repository, providerInterface));
+        assertTrue(containsRepresentative(repository, interfaceProvision));
+        assertTrue(containsRepresentative(repository, signatureProvision));
     }
 
     @ParameterizedTest
@@ -161,7 +170,11 @@ public class RepositoryTransformerTest extends TransformerTest<RepositoryTransfo
 
         // Assertion
         assertNotNull(repository);
-        // TODO Check whether all elements where transformed correctly
+        assertTrue(containsRepresentative(repository, provider));
+        assertTrue(containsRepresentative(repository, providerInterface));
+        assertTrue(containsRepresentative(repository, interfaceProvision));
+        assertTrue(containsRepresentative(repository, signatureProvision));
+        assertTrue(containsRepresentative(repository, seffRelation));
     }
 
     @Override
