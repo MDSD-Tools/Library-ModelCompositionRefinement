@@ -87,9 +87,15 @@ public class ResourceEnvironmentTransformer implements Transformer<PcmSurrogate,
 
     private LinkingResourceCreator getLinkingResourceCreator(FluentResourceEnvironmentFactory fluentFactory,
             LinkResourceSpecificationRelation linkingRelation) {
+        ResourceContainer provider = linkingRelation.getDestination().getSource().getValue();
+        ResourceContainer consumer = linkingRelation.getDestination().getDestination().getValue();
+
         // Create a linking resource creator w/o specifications due to missing fluentApi copy support
         String entityName = getLinkingResourceName(linkingRelation);
-        LinkingResourceCreator creator = fluentFactory.newLinkingResource().withName(entityName);
+        LinkingResourceCreator creator = fluentFactory.newLinkingResource()
+                .withName(entityName)
+                .addLinkedResourceContainer(provider.getEntityName())
+                .addLinkedResourceContainer(consumer.getEntityName());
         return creator;
     }
 }
