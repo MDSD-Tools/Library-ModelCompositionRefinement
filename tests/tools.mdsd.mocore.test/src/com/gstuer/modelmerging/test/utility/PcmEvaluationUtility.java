@@ -1,6 +1,7 @@
 package com.gstuer.modelmerging.test.utility;
 
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -15,6 +16,8 @@ import org.palladiosimulator.pcm.repository.ProvidedRole;
 import org.palladiosimulator.pcm.repository.Repository;
 import org.palladiosimulator.pcm.repository.RepositoryComponent;
 import org.palladiosimulator.pcm.repository.RequiredRole;
+import org.palladiosimulator.pcm.resourceenvironment.CommunicationLinkResourceSpecification;
+import org.palladiosimulator.pcm.resourceenvironment.LinkingResource;
 import org.palladiosimulator.pcm.resourceenvironment.ResourceContainer;
 import org.palladiosimulator.pcm.resourceenvironment.ResourceEnvironment;
 import org.palladiosimulator.pcm.seff.ResourceDemandingSEFF;
@@ -25,6 +28,7 @@ import com.gstuer.modelmerging.instance.pcm.surrogate.element.ServiceEffectSpeci
 import com.gstuer.modelmerging.instance.pcm.surrogate.element.Signature;
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.InterfaceProvisionRelation;
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.InterfaceRequirementRelation;
+import com.gstuer.modelmerging.instance.pcm.surrogate.relation.LinkResourceSpecificationRelation;
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.ServiceEffectSpecificationRelation;
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.SignatureProvisionRelation;
 
@@ -114,6 +118,17 @@ public final class PcmEvaluationUtility {
                 otherSeff.getAbstractBranchTransition_ResourceDemandingBehaviour());
         return equalIdentifier && equalTypeIdentifier && equalSteps && equalInternalBehaviors
                 && equalLoopAction && equalBranchTransition;
+    }
+
+    public static Optional<ResourceContainer> getRepresentative(ResourceEnvironment resourceEnvironment,
+            Deployment container) {
+        List<ResourceContainer> containers = resourceEnvironment.getResourceContainer_ResourceEnvironment();
+        for (ResourceContainer environmentContainer : containers) {
+            if (representSame(container.getValue(), environmentContainer)) {
+                return Optional.of(environmentContainer);
+            }
+        }
+        return Optional.empty();
     }
 
     public static Optional<BasicComponent> getRepresentative(Repository repository, Component component) {
@@ -211,9 +226,31 @@ public final class PcmEvaluationUtility {
     }
 
     public static boolean containsRepresentative(ResourceEnvironment resourceEnvironment, Deployment container) {
-        List<ResourceContainer> containers = resourceEnvironment.getResourceContainer_ResourceEnvironment();
-        return containers.stream()
-                .anyMatch(environmentContainer -> representSame(container.getValue(), environmentContainer));
+        return getRepresentative(resourceEnvironment, container).isPresent();
+    }
+
+    public static boolean containsRepresentative(ResourceEnvironment resourceEnvironment,
+            LinkResourceSpecificationRelation linkRelation) {
+        Deployment relationSource = linkRelation.getDestination().getSource();
+        Deployment relationDestination = linkRelation.getDestination().getDestination();
+        CommunicationLinkResourceSpecification relationSpecification = linkRelation.getSource().getValue();
+        List<LinkingResource> linkingResources = resourceEnvironment.getLinkingResources__ResourceEnvironment();
+        for (LinkingResource linkingResource : linkingResources) {
+            List<ResourceContainer> linkedContainers = new LinkedList<>(
+                    linkingResource.getConnectedResourceContainers_LinkingResource());
+            CommunicationLinkResourceSpecification linkSpecification = linkingResource
+                    .getCommunicationLinkResourceSpecifications_LinkingResource();
+            boolean containsSourceContainer = linkedContainers
+                    .removeIf(element -> representSame(relationSource.getValue(), element));
+            boolean containsDestinationContainer = linkedContainers
+                    .removeIf(element -> representSame(relationDestination.getValue(), element));
+            if (containsSourceContainer && containsDestinationContainer && linkedContainers.isEmpty()) {
+                if (relationSpecification.equals(linkSpecification)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     private static <T> boolean areCollectionsEqualIgnoringOrder(Collection<T> collection,
