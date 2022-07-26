@@ -1,6 +1,8 @@
 package com.gstuer.modelmerging.instance.pcm.transformation;
 
+import static com.gstuer.modelmerging.test.utility.PcmEvaluationUtility.containsRepresentative;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -33,7 +35,7 @@ public class AllocationTransformerTest extends TransformerTest<AllocationTransfo
 
         // Assertion
         assertNotNull(allocation);
-        // TODO Check whether all elements where transformed correctly
+        assertTrue(containsRepresentative(allocation, allocationRelation));
     }
 
     @Override
