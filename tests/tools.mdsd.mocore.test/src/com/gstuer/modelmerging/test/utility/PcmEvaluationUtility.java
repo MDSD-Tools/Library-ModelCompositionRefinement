@@ -6,6 +6,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import org.palladiosimulator.pcm.allocation.Allocation;
+import org.palladiosimulator.pcm.allocation.AllocationContext;
+import org.palladiosimulator.pcm.core.composition.AssemblyContext;
 import org.palladiosimulator.pcm.repository.BasicComponent;
 import org.palladiosimulator.pcm.repository.Interface;
 import org.palladiosimulator.pcm.repository.OperationInterface;
@@ -26,6 +29,7 @@ import com.gstuer.modelmerging.instance.pcm.surrogate.element.Component;
 import com.gstuer.modelmerging.instance.pcm.surrogate.element.Deployment;
 import com.gstuer.modelmerging.instance.pcm.surrogate.element.ServiceEffectSpecification;
 import com.gstuer.modelmerging.instance.pcm.surrogate.element.Signature;
+import com.gstuer.modelmerging.instance.pcm.surrogate.relation.ComponentAllocationRelation;
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.InterfaceProvisionRelation;
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.InterfaceRequirementRelation;
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.LinkResourceSpecificationRelation;
@@ -246,6 +250,23 @@ public final class PcmEvaluationUtility {
                     .removeIf(element -> representSame(relationDestination.getValue(), element));
             if (containsSourceContainer && containsDestinationContainer && linkedContainers.isEmpty()) {
                 if (relationSpecification.equals(linkSpecification)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public static boolean containsRepresentative(Allocation allocation,
+            ComponentAllocationRelation allocationRelation) {
+        Component component = allocationRelation.getSource();
+        Deployment deployment = allocationRelation.getDestination();
+
+        List<AllocationContext> allocationContexts = allocation.getAllocationContexts_Allocation();
+        for (AllocationContext allocationContext : allocationContexts) {
+            if (representSame(deployment.getValue(), allocationContext.getResourceContainer_AllocationContext())) {
+                AssemblyContext assemblyContext = allocationContext.getAssemblyContext_AllocationContext();
+                if (representSame(component.getValue(), assemblyContext.getEncapsulatedComponent__AssemblyContext())) {
                     return true;
                 }
             }
