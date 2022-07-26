@@ -1,6 +1,8 @@
 package com.gstuer.modelmerging.instance.pcm.transformation;
 
+import static com.gstuer.modelmerging.test.utility.PcmEvaluationUtility.containsRepresentative;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 import org.palladiosimulator.pcm.resourceenvironment.ResourceEnvironment;
@@ -34,7 +36,10 @@ public class ResourceEnvironmentTransformerTest
 
         // Assertion
         assertNotNull(environment);
-        // TODO Check whether all elements where transformed correctly
+        assertTrue(containsRepresentative(environment, fstDeployment));
+        assertTrue(containsRepresentative(environment, sndDeployment));
+        assertTrue(containsRepresentative(environment, trdDeployment));
+        assertTrue(containsRepresentative(environment, fthDeployment));
     }
 
     @Test
@@ -72,7 +77,11 @@ public class ResourceEnvironmentTransformerTest
 
         // Assertion
         assertNotNull(environment);
-        // TODO Check whether all elements where transformed correctly
+        assertTrue(containsRepresentative(environment, fstDeployment));
+        assertTrue(containsRepresentative(environment, sndDeployment));
+        assertTrue(containsRepresentative(environment, trdDeployment));
+        assertTrue(containsRepresentative(environment, fstLinkSpecificationRelation));
+        assertTrue(containsRepresentative(environment, sndLinkSpecificationRelation));
     }
 
     @Override
