@@ -15,11 +15,17 @@ import org.palladiosimulator.pcm.core.composition.AssemblyConnector;
 import org.palladiosimulator.pcm.core.composition.AssemblyContext;
 import org.palladiosimulator.pcm.repository.BasicComponent;
 import org.palladiosimulator.pcm.repository.OperationInterface;
+import org.palladiosimulator.pcm.repository.OperationProvidedRole;
+import org.palladiosimulator.pcm.repository.OperationRequiredRole;
+import org.palladiosimulator.pcm.repository.OperationSignature;
+import org.palladiosimulator.pcm.repository.ProvidedRole;
 import org.palladiosimulator.pcm.repository.Repository;
 import org.palladiosimulator.pcm.repository.RepositoryComponent;
+import org.palladiosimulator.pcm.repository.RequiredRole;
 import org.palladiosimulator.pcm.resourceenvironment.LinkingResource;
 import org.palladiosimulator.pcm.resourceenvironment.ResourceContainer;
 import org.palladiosimulator.pcm.resourceenvironment.ResourceEnvironment;
+import org.palladiosimulator.pcm.seff.ResourceDemandingSEFF;
 import org.palladiosimulator.pcm.system.System;
 
 import com.gstuer.modelmerging.framework.discovery.Discoverer;
@@ -27,12 +33,16 @@ import com.gstuer.modelmerging.instance.pcm.surrogate.element.Component;
 import com.gstuer.modelmerging.instance.pcm.surrogate.element.Deployment;
 import com.gstuer.modelmerging.instance.pcm.surrogate.element.Interface;
 import com.gstuer.modelmerging.instance.pcm.surrogate.element.LinkResourceSpecification;
+import com.gstuer.modelmerging.instance.pcm.surrogate.element.ServiceEffectSpecification;
+import com.gstuer.modelmerging.instance.pcm.surrogate.element.Signature;
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.ComponentAllocationRelation;
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.ComponentAssemblyRelation;
+import com.gstuer.modelmerging.instance.pcm.surrogate.relation.ComponentSignatureProvisionRelation;
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.DeploymentDeploymentRelation;
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.InterfaceProvisionRelation;
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.InterfaceRequirementRelation;
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.LinkResourceSpecificationRelation;
+import com.gstuer.modelmerging.instance.pcm.surrogate.relation.ServiceEffectSpecificationRelation;
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.SignatureProvisionRelation;
 import com.gstuer.modelmerging.test.utility.IdentifierGenerator;
 
@@ -60,14 +70,87 @@ public class PcmDiscovererCreator {
     }
 
     public Collection<Discoverer<?>> createDiscoverersFromRepository() {
-        Set<Component> components = new HashSet<>();
+        // Fetch operation interfaces and their provided signatures from repository
         Set<Interface> interfaces = new HashSet<>();
         Set<SignatureProvisionRelation> signatureProvisions = new HashSet<>();
+        for (org.palladiosimulator.pcm.repository.Interface interFace : this.repository.getInterfaces__Repository()) {
+            if (interFace instanceof OperationInterface) {
+                OperationInterface operationInterface = (OperationInterface) interFace;
+                Interface interfaceWrapper = new Interface(operationInterface, false);
+                interfaces.add(interfaceWrapper);
+                for (OperationSignature operationSignature : operationInterface.getSignatures__OperationInterface()) {
+                    Signature signatureWrapper = new Signature(operationSignature, false);
+                    signatureProvisions.add(new SignatureProvisionRelation(signatureWrapper, interfaceWrapper, false));
+                }
+            }
+        }
+
+        // Fetch components, interface provisions and requirements, and service effect specifications from repository
+        Set<Component> components = new HashSet<>();
         Set<InterfaceProvisionRelation> interfaceProvisions = new HashSet<>();
         Set<InterfaceRequirementRelation> interfaceRequirements = new HashSet<>();
+        Set<ServiceEffectSpecificationRelation> seffProvisions = new HashSet<>();
+        for (RepositoryComponent repositoryComponent : this.repository.getComponents__Repository()) {
+            Component component = createComponentFromRepositoryComponent(repositoryComponent);
+            components.add(component);
 
-        // TODO
-        return null;
+            // Transform provided roles into interface provision relations
+            for (ProvidedRole providedRole : repositoryComponent.getProvidedRoles_InterfaceProvidingEntity()) {
+                if (providedRole instanceof OperationProvidedRole) {
+                    OperationProvidedRole operationProvidedRole = (OperationProvidedRole) providedRole;
+                    Interface providerInterface = new Interface(
+                            operationProvidedRole.getProvidedInterface__OperationProvidedRole(), false);
+                    interfaceProvisions.add(new InterfaceProvisionRelation(component, providerInterface, false));
+                }
+            }
+
+            // Transform required roles into interface requirement relations
+            for (RequiredRole requiredRole : repositoryComponent.getRequiredRoles_InterfaceRequiringEntity()) {
+                if (requiredRole instanceof OperationRequiredRole) {
+                    OperationRequiredRole operationRequiredRole = (OperationRequiredRole) requiredRole;
+                    Interface consumerInterface = new Interface(
+                            operationRequiredRole.getRequiredInterface__OperationRequiredRole(), false);
+                    interfaceRequirements.add(new InterfaceRequirementRelation(component, consumerInterface, false));
+                }
+            }
+
+            // Fetch service effect specifications from component
+            for (org.palladiosimulator.pcm.seff.ServiceEffectSpecification seff : component.getValue()
+                    .getServiceEffectSpecifications__BasicComponent()) {
+                if (seff instanceof ResourceDemandingSEFF) {
+                    ServiceEffectSpecification seffWrapper = new ServiceEffectSpecification(null, false);
+                    if (seff.getDescribedService__SEFF() instanceof OperationSignature) {
+                        OperationSignature operationSignature = (OperationSignature) seff.getDescribedService__SEFF();
+                        Signature signature = new Signature(operationSignature, false);
+                        Interface interFace = new Interface(operationSignature.getInterface__OperationSignature(),
+                                false);
+                        SignatureProvisionRelation signatureProvision = new SignatureProvisionRelation(signature,
+                                interFace, false);
+                        InterfaceProvisionRelation interfaceProvision = new InterfaceProvisionRelation(component,
+                                interFace, false);
+                        ComponentSignatureProvisionRelation componentSignatureProvision = new ComponentSignatureProvisionRelation(
+                                interfaceProvision, signatureProvision, false);
+                        seffProvisions.add(new ServiceEffectSpecificationRelation(componentSignatureProvision,
+                                seffWrapper, false));
+                    }
+                }
+            }
+        }
+
+        PcmDiscoverer<Component> componentDiscoverer = new PcmDiscoverer<>(components,
+                Component.class);
+        PcmDiscoverer<Interface> interfaceDiscoverer = new PcmDiscoverer<>(interfaces,
+                Interface.class);
+        PcmDiscoverer<SignatureProvisionRelation> signatureProvisionDiscoverer = new PcmDiscoverer<>(
+                signatureProvisions, SignatureProvisionRelation.class);
+        PcmDiscoverer<InterfaceProvisionRelation> interfaceProvisionDiscoverer = new PcmDiscoverer<>(
+                interfaceProvisions, InterfaceProvisionRelation.class);
+        PcmDiscoverer<InterfaceRequirementRelation> interfaceRequirementDiscoverer = new PcmDiscoverer<>(
+                interfaceRequirements, InterfaceRequirementRelation.class);
+        PcmDiscoverer<ServiceEffectSpecificationRelation> seffProvisionDiscoverer = new PcmDiscoverer<>(
+                seffProvisions, ServiceEffectSpecificationRelation.class);
+        return List.of(componentDiscoverer, interfaceDiscoverer, signatureProvisionDiscoverer,
+                interfaceProvisionDiscoverer, interfaceRequirementDiscoverer, seffProvisionDiscoverer);
     }
 
     public Collection<Discoverer<?>> createDiscoverersFromSystem() {
