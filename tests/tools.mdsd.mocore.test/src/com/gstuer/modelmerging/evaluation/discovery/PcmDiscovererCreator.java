@@ -10,7 +10,9 @@ import java.util.stream.Collectors;
 
 import org.palladiosimulator.generator.fluent.repository.factory.FluentRepositoryFactory;
 import org.palladiosimulator.pcm.allocation.Allocation;
+import org.palladiosimulator.pcm.allocation.AllocationContext;
 import org.palladiosimulator.pcm.core.composition.AssemblyConnector;
+import org.palladiosimulator.pcm.core.composition.AssemblyContext;
 import org.palladiosimulator.pcm.repository.BasicComponent;
 import org.palladiosimulator.pcm.repository.OperationInterface;
 import org.palladiosimulator.pcm.repository.Repository;
@@ -25,6 +27,7 @@ import com.gstuer.modelmerging.instance.pcm.surrogate.element.Component;
 import com.gstuer.modelmerging.instance.pcm.surrogate.element.Deployment;
 import com.gstuer.modelmerging.instance.pcm.surrogate.element.Interface;
 import com.gstuer.modelmerging.instance.pcm.surrogate.element.LinkResourceSpecification;
+import com.gstuer.modelmerging.instance.pcm.surrogate.relation.ComponentAllocationRelation;
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.ComponentAssemblyRelation;
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.DeploymentDeploymentRelation;
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.InterfaceProvisionRelation;
@@ -101,8 +104,22 @@ public class PcmDiscovererCreator {
     }
 
     public Collection<Discoverer<?>> createDiscoverersFromAllocation() {
-        // TODO
-        return null;
+        Set<ComponentAllocationRelation> allocations = new HashSet<>();
+        for (AllocationContext allocationContext : this.allocation.getAllocationContexts_Allocation()) {
+            AssemblyContext assemblyContext = allocationContext.getAssemblyContext_AllocationContext();
+            ResourceContainer container = allocationContext.getResourceContainer_AllocationContext();
+
+            Component component = createComponentFromRepositoryComponent(
+                    assemblyContext.getEncapsulatedComponent__AssemblyContext());
+            Deployment deployment = new Deployment(container, false);
+            ComponentAllocationRelation componentAllocationRelation = new ComponentAllocationRelation(component,
+                    deployment, false);
+            allocations.add(componentAllocationRelation);
+        }
+
+        PcmDiscoverer<ComponentAllocationRelation> allocationDiscoverer = new PcmDiscoverer<>(allocations,
+                ComponentAllocationRelation.class);
+        return List.of(allocationDiscoverer);
     }
 
     public Collection<Discoverer<?>> createDiscoverersFromResourceEnvironment() {
