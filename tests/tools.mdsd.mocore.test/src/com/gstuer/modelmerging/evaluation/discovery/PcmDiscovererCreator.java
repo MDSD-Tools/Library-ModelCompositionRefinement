@@ -237,7 +237,7 @@ public class PcmDiscovererCreator {
         return List.of(containerDiscoverer, linkRelationDiscoverer);
     }
 
-    private Component createComponentFromRepositoryComponent(RepositoryComponent repositoryComponent) {
+    public static Component createComponentFromRepositoryComponent(RepositoryComponent repositoryComponent) {
         if (repositoryComponent instanceof BasicComponent) {
             return new Component((BasicComponent) repositoryComponent, false);
         }
