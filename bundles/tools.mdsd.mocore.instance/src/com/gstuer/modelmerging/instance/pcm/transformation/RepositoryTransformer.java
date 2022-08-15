@@ -3,7 +3,6 @@ package com.gstuer.modelmerging.instance.pcm.transformation;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Predicate;
-import java.util.stream.Stream;
 
 import org.palladiosimulator.generator.fluent.repository.api.Repo;
 import org.palladiosimulator.generator.fluent.repository.factory.FluentRepositoryFactory;
@@ -89,8 +88,6 @@ public class RepositoryTransformer implements Transformer<PcmSurrogate, Reposito
 
             // Add service effect specifications to component
             // For each provided interface, iterate over each signature of interface and add seff if it exists
-            Stream<ServiceEffectSpecificationRelation> seffRelationStream = seffRelations.stream()
-                    .filter(relation -> relation.getSource().getSource().getSource().equals(component));
             for (InterfaceProvisionRelation interfaceProvision : provisionRelations) {
                 if (interfaceProvision.getSource().equals(component)) {
                     OperationInterface operationInterface = repositoryFactory
@@ -103,7 +100,8 @@ public class RepositoryTransformer implements Transformer<PcmSurrogate, Reposito
                             return representSameSignature(signature, wrappedSignature.getValue())
                                     && representSameInterface(operationInterface, wrappedInterface.getValue());
                         };
-                        ServiceEffectSpecification seff = seffRelationStream
+                        ServiceEffectSpecification seff = seffRelations.stream()
+                                .filter(relation -> relation.getSource().getSource().getSource().equals(component))
                                 .filter(filter)
                                 .map(relation -> relation.getDestination().getValue()).findFirst()
                                 .orElse(com.gstuer.modelmerging.instance.pcm.surrogate.element.ServiceEffectSpecification
