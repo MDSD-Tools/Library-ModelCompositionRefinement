@@ -118,8 +118,9 @@ public class PcmDiscovererCreator {
             for (org.palladiosimulator.pcm.seff.ServiceEffectSpecification seff : component.getValue()
                     .getServiceEffectSpecifications__BasicComponent()) {
                 if (seff instanceof ResourceDemandingSEFF) {
-                    ServiceEffectSpecification seffWrapper = new ServiceEffectSpecification(null, false);
                     if (seff.getDescribedService__SEFF() instanceof OperationSignature) {
+                        ServiceEffectSpecification seffWrapper = new ServiceEffectSpecification(
+                                (ResourceDemandingSEFF) seff, false);
                         OperationSignature operationSignature = (OperationSignature) seff.getDescribedService__SEFF();
                         Signature signature = new Signature(operationSignature, false);
                         Interface interFace = new Interface(operationSignature.getInterface__OperationSignature(),
