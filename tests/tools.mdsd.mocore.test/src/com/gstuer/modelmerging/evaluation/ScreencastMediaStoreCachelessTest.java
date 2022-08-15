@@ -2,36 +2,27 @@ package com.gstuer.modelmerging.evaluation;
 
 import java.io.File;
 
-import org.palladiosimulator.pcm.allocation.Allocation;
-import org.palladiosimulator.pcm.repository.Repository;
-import org.palladiosimulator.pcm.resourceenvironment.ResourceEnvironment;
-import org.palladiosimulator.pcm.system.System;
-
 public class ScreencastMediaStoreCachelessTest extends CaseStudyTest {
     private static final String FILE_PATH_PREFIX = "./resources/evaluation/case-studies/palladio-example-models/"
             + "ScreencastMediaStore/";
 
     @Override
-    protected Repository getRepository() {
-        File file = new File(FILE_PATH_PREFIX + "MediaStore.repository");
-        return loadRepositoryFromFile(file);
+    protected File getRepositoryFile() {
+        return new File(FILE_PATH_PREFIX + "MediaStore.repository");
     }
 
     @Override
-    protected System getSystem() {
-        File file = new File(FILE_PATH_PREFIX + "MediaStore-Cacheless.system");
-        return loadSystemFromFile(file);
+    protected File getSystemFile() {
+        return new File(FILE_PATH_PREFIX + "MediaStore-Cacheless.system");
     }
 
     @Override
-    protected Allocation getAllocation() {
-        File file = new File(FILE_PATH_PREFIX + "MediaStore-Cacheless.allocation");
-        return loadAllocationFromFile(file);
+    protected File getAllocationFile() {
+        return new File(FILE_PATH_PREFIX + "MediaStore-Cacheless.allocation");
     }
 
     @Override
-    protected ResourceEnvironment getResourceEnvironment() {
-        File file = new File(FILE_PATH_PREFIX + "MediaStore.resourceenvironment");
-        return loadResourceEnvironmentFromFile(file);
+    protected File getResourceEnvironmentFile() {
+        return new File(FILE_PATH_PREFIX + "MediaStore.resourceenvironment");
     }
 }
