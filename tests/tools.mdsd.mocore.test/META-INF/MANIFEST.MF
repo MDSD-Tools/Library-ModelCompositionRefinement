@@ -13,4 +13,5 @@ Require-Bundle: org.junit,
  tools.mdsd.mocore.instance,
  org.palladiosimulator.pcm,
  org.palladiosimulator.pcm.resources,
- org.palladiosimulator.generator.fluent
+ org.palladiosimulator.generator.fluent,
+ org.apache.log4j
