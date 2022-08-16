@@ -7,7 +7,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 import org.junit.jupiter.api.AfterAll;
@@ -24,7 +26,7 @@ import org.palladiosimulator.pcm.core.composition.Connector;
 import org.palladiosimulator.pcm.repository.OperationSignature;
 import org.palladiosimulator.pcm.repository.Repository;
 import org.palladiosimulator.pcm.repository.RepositoryComponent;
-import org.palladiosimulator.pcm.resourceenvironment.ResourceContainer;
+import org.palladiosimulator.pcm.resourceenvironment.LinkingResource;
 import org.palladiosimulator.pcm.resourceenvironment.ResourceEnvironment;
 import org.palladiosimulator.pcm.seff.ResourceDemandingSEFF;
 import org.palladiosimulator.pcm.system.System;
@@ -43,10 +45,8 @@ import com.gstuer.modelmerging.instance.pcm.surrogate.element.Signature;
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.ComponentAllocationRelation;
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.ComponentAssemblyRelation;
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.ComponentSignatureProvisionRelation;
-import com.gstuer.modelmerging.instance.pcm.surrogate.relation.DeploymentDeploymentRelation;
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.InterfaceProvisionRelation;
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.InterfaceRequirementRelation;
-import com.gstuer.modelmerging.instance.pcm.surrogate.relation.LinkResourceSpecificationRelation;
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.ServiceEffectSpecificationRelation;
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.SignatureProvisionRelation;
 import com.gstuer.modelmerging.instance.pcm.transformation.AllocationTransformer;
@@ -247,23 +247,14 @@ public abstract class CaseStudyTest {
         });
 
         // Assert all container links are present
-        originalEnvironment.getLinkingResources__ResourceEnvironment().forEach(originalLink -> {
-            for (ResourceContainer source : originalLink.getConnectedResourceContainers_LinkingResource()) {
-                final Deployment sourceDeployment = new Deployment(source, false);
-                for (ResourceContainer destination : originalLink.getConnectedResourceContainers_LinkingResource()) {
-                    final Deployment destinationDeployment = new Deployment(destination, false);
-                    if (!sourceDeployment.equals(destinationDeployment)) {
-                        final DeploymentDeploymentRelation deploymentRelation = new DeploymentDeploymentRelation(
-                                sourceDeployment, destinationDeployment, false);
-                        final LinkResourceSpecification specification = new LinkResourceSpecification(
-                                originalLink.getCommunicationLinkResourceSpecifications_LinkingResource(), false);
-                        final LinkResourceSpecificationRelation link = new LinkResourceSpecificationRelation(
-                                specification, deploymentRelation, false);
-                        assertTrue(containsRepresentative(environment, link));
-                    }
-                }
-            }
-        });
+        for (LinkingResource originalLink : originalEnvironment.getLinkingResources__ResourceEnvironment()) {
+            Set<Deployment> deployments = new HashSet<>();
+            originalLink.getConnectedResourceContainers_LinkingResource()
+                    .forEach(container -> deployments.add(new Deployment(container, false)));
+            LinkResourceSpecification specification = new LinkResourceSpecification(
+                    originalLink.getCommunicationLinkResourceSpecifications_LinkingResource(), false);
+            assertTrue(containsRepresentative(environment, specification, deployments));
+        }
     }
 
     protected Collection<Discoverer<?>> getDiscoverers() {

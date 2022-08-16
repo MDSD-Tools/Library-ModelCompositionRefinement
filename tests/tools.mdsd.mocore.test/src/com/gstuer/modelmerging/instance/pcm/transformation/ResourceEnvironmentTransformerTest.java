@@ -4,6 +4,8 @@ import static com.gstuer.modelmerging.test.utility.PcmEvaluationUtility.contains
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 import org.palladiosimulator.pcm.resourceenvironment.ResourceEnvironment;
 
@@ -80,8 +82,12 @@ public class ResourceEnvironmentTransformerTest
         assertTrue(containsRepresentative(environment, fstDeployment));
         assertTrue(containsRepresentative(environment, sndDeployment));
         assertTrue(containsRepresentative(environment, trdDeployment));
-        assertTrue(containsRepresentative(environment, fstLinkSpecificationRelation));
-        assertTrue(containsRepresentative(environment, sndLinkSpecificationRelation));
+        assertTrue(containsRepresentative(environment, fstLinkSpecificationRelation.getSource(),
+                List.of(fstLinkSpecificationRelation.getDestination().getSource(),
+                        fstLinkSpecificationRelation.getDestination().getDestination())));
+        assertTrue(containsRepresentative(environment, sndLinkSpecificationRelation.getSource(),
+                List.of(sndLinkSpecificationRelation.getDestination().getSource(),
+                        sndLinkSpecificationRelation.getDestination().getDestination())));
     }
 
     @Override

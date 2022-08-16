@@ -33,13 +33,13 @@ import org.palladiosimulator.pcm.system.System;
 
 import com.gstuer.modelmerging.instance.pcm.surrogate.element.Component;
 import com.gstuer.modelmerging.instance.pcm.surrogate.element.Deployment;
+import com.gstuer.modelmerging.instance.pcm.surrogate.element.LinkResourceSpecification;
 import com.gstuer.modelmerging.instance.pcm.surrogate.element.ServiceEffectSpecification;
 import com.gstuer.modelmerging.instance.pcm.surrogate.element.Signature;
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.ComponentAllocationRelation;
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.ComponentAssemblyRelation;
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.InterfaceProvisionRelation;
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.InterfaceRequirementRelation;
-import com.gstuer.modelmerging.instance.pcm.surrogate.relation.LinkResourceSpecificationRelation;
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.ServiceEffectSpecificationRelation;
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.SignatureProvisionRelation;
 
@@ -264,22 +264,21 @@ public final class PcmEvaluationUtility {
     }
 
     public static boolean containsRepresentative(ResourceEnvironment resourceEnvironment,
-            LinkResourceSpecificationRelation linkRelation) {
-        Deployment relationSource = linkRelation.getDestination().getSource();
-        Deployment relationDestination = linkRelation.getDestination().getDestination();
-        CommunicationLinkResourceSpecification relationSpecification = linkRelation.getSource().getValue();
+            LinkResourceSpecification relationSpecification, Collection<Deployment> deployments) {
+        CommunicationLinkResourceSpecification specification = relationSpecification.getValue();
         List<LinkingResource> linkingResources = resourceEnvironment.getLinkingResources__ResourceEnvironment();
         for (LinkingResource linkingResource : linkingResources) {
             List<ResourceContainer> linkedContainers = new LinkedList<>(
                     linkingResource.getConnectedResourceContainers_LinkingResource());
             CommunicationLinkResourceSpecification linkSpecification = linkingResource
                     .getCommunicationLinkResourceSpecifications_LinkingResource();
-            boolean containsSourceContainer = linkedContainers
-                    .removeIf(element -> representSame(relationSource.getValue(), element));
-            boolean containsDestinationContainer = linkedContainers
-                    .removeIf(element -> representSame(relationDestination.getValue(), element));
-            if (containsSourceContainer && containsDestinationContainer && linkedContainers.isEmpty()) {
-                if (relationSpecification.getId().equals(linkSpecification.getId())) {
+            boolean containsContainers = true;
+            for (Deployment deployment : deployments) {
+                containsContainers = containsContainers
+                        && linkedContainers.removeIf(element -> representSame(deployment.getValue(), element));
+            }
+            if (containsContainers && linkedContainers.isEmpty()) {
+                if (specification.getId().equals(linkSpecification.getId())) {
                     return true;
                 }
             }
