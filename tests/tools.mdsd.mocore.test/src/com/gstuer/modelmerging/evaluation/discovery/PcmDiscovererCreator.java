@@ -18,7 +18,6 @@ import org.palladiosimulator.pcm.repository.OperationProvidedRole;
 import org.palladiosimulator.pcm.repository.OperationRequiredRole;
 import org.palladiosimulator.pcm.repository.OperationSignature;
 import org.palladiosimulator.pcm.repository.ProvidedRole;
-import org.palladiosimulator.pcm.repository.Repository;
 import org.palladiosimulator.pcm.repository.RepositoryComponent;
 import org.palladiosimulator.pcm.repository.RequiredRole;
 import org.palladiosimulator.pcm.resourceenvironment.LinkingResource;
@@ -46,14 +45,12 @@ import com.gstuer.modelmerging.instance.pcm.surrogate.relation.SignatureProvisio
 import com.gstuer.modelmerging.test.utility.IdentifierGenerator;
 
 public class PcmDiscovererCreator {
-    private final Repository repository;
     private final System system;
     private final Allocation allocation;
     private final ResourceEnvironment resourceEnvironment;
 
-    public PcmDiscovererCreator(Repository repository, System system, Allocation allocation,
+    public PcmDiscovererCreator(System system, Allocation allocation,
             ResourceEnvironment resourceEnvironment) {
-        this.repository = repository;
         this.system = system;
         this.allocation = allocation;
         this.resourceEnvironment = resourceEnvironment;
@@ -69,27 +66,14 @@ public class PcmDiscovererCreator {
     }
 
     public Collection<Discoverer<?>> createDiscoverersFromRepository() {
-        // Fetch operation interfaces and their provided signatures from repository
-        Set<Interface> interfaces = new HashSet<>();
-        Set<SignatureProvisionRelation> signatureProvisions = new HashSet<>();
-        for (org.palladiosimulator.pcm.repository.Interface interFace : this.repository.getInterfaces__Repository()) {
-            if (interFace instanceof OperationInterface) {
-                OperationInterface operationInterface = (OperationInterface) interFace;
-                Interface interfaceWrapper = new Interface(operationInterface, false);
-                interfaces.add(interfaceWrapper);
-                for (OperationSignature operationSignature : operationInterface.getSignatures__OperationInterface()) {
-                    Signature signatureWrapper = new Signature(operationSignature, false);
-                    signatureProvisions.add(new SignatureProvisionRelation(signatureWrapper, interfaceWrapper, false));
-                }
-            }
-        }
-
-        // Fetch components, interface provisions and requirements, and service effect specifications from repository
+        // Fetch components, interface provisions and requirements, signatures, and service effect specifications
         Set<Component> components = new HashSet<>();
         Set<InterfaceProvisionRelation> interfaceProvisions = new HashSet<>();
         Set<InterfaceRequirementRelation> interfaceRequirements = new HashSet<>();
+        Set<SignatureProvisionRelation> signatureProvisions = new HashSet<>();
         Set<ServiceEffectSpecificationRelation> seffProvisions = new HashSet<>();
-        for (RepositoryComponent repositoryComponent : this.repository.getComponents__Repository()) {
+        for (AssemblyContext assemblyContext : this.system.getAssemblyContexts__ComposedStructure()) {
+            RepositoryComponent repositoryComponent = assemblyContext.getEncapsulatedComponent__AssemblyContext();
             Component component = createComponentFromRepositoryComponent(repositoryComponent);
             components.add(component);
 
@@ -100,6 +84,14 @@ public class PcmDiscovererCreator {
                     Interface providerInterface = new Interface(
                             operationProvidedRole.getProvidedInterface__OperationProvidedRole(), false);
                     interfaceProvisions.add(new InterfaceProvisionRelation(component, providerInterface, false));
+
+                    // Create signature provisions for provider interface
+                    for (OperationSignature operationSignature : providerInterface.getValue()
+                            .getSignatures__OperationInterface()) {
+                        Signature signatureWrapper = new Signature(operationSignature, false);
+                        signatureProvisions.add(new SignatureProvisionRelation(signatureWrapper,
+                                providerInterface, false));
+                    }
                 }
             }
 
@@ -110,6 +102,14 @@ public class PcmDiscovererCreator {
                     Interface consumerInterface = new Interface(
                             operationRequiredRole.getRequiredInterface__OperationRequiredRole(), false);
                     interfaceRequirements.add(new InterfaceRequirementRelation(component, consumerInterface, false));
+
+                    // Create signature provisions for consumer interface
+                    for (OperationSignature operationSignature : consumerInterface.getValue()
+                            .getSignatures__OperationInterface()) {
+                        Signature signatureWrapper = new Signature(operationSignature, false);
+                        signatureProvisions.add(new SignatureProvisionRelation(signatureWrapper,
+                                consumerInterface, false));
+                    }
                 }
             }
 
@@ -139,8 +139,6 @@ public class PcmDiscovererCreator {
 
         PcmDiscoverer<Component> componentDiscoverer = new PcmDiscoverer<>(components,
                 Component.class);
-        PcmDiscoverer<Interface> interfaceDiscoverer = new PcmDiscoverer<>(interfaces,
-                Interface.class);
         PcmDiscoverer<SignatureProvisionRelation> signatureProvisionDiscoverer = new PcmDiscoverer<>(
                 signatureProvisions, SignatureProvisionRelation.class);
         PcmDiscoverer<InterfaceProvisionRelation> interfaceProvisionDiscoverer = new PcmDiscoverer<>(
@@ -149,7 +147,7 @@ public class PcmDiscovererCreator {
                 interfaceRequirements, InterfaceRequirementRelation.class);
         PcmDiscoverer<ServiceEffectSpecificationRelation> seffProvisionDiscoverer = new PcmDiscoverer<>(
                 seffProvisions, ServiceEffectSpecificationRelation.class);
-        return List.of(componentDiscoverer, interfaceDiscoverer, signatureProvisionDiscoverer,
+        return List.of(componentDiscoverer, signatureProvisionDiscoverer,
                 interfaceProvisionDiscoverer, interfaceRequirementDiscoverer, seffProvisionDiscoverer);
     }
 
