@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
 import org.palladiosimulator.pcm.allocation.Allocation;
@@ -12,11 +13,13 @@ import org.palladiosimulator.pcm.allocation.AllocationContext;
 import org.palladiosimulator.pcm.core.composition.AssemblyConnector;
 import org.palladiosimulator.pcm.core.composition.AssemblyContext;
 import org.palladiosimulator.pcm.repository.BasicComponent;
+import org.palladiosimulator.pcm.repository.DataType;
 import org.palladiosimulator.pcm.repository.Interface;
 import org.palladiosimulator.pcm.repository.OperationInterface;
 import org.palladiosimulator.pcm.repository.OperationProvidedRole;
 import org.palladiosimulator.pcm.repository.OperationRequiredRole;
 import org.palladiosimulator.pcm.repository.OperationSignature;
+import org.palladiosimulator.pcm.repository.Parameter;
 import org.palladiosimulator.pcm.repository.ProvidedRole;
 import org.palladiosimulator.pcm.repository.Repository;
 import org.palladiosimulator.pcm.repository.RepositoryComponent;
@@ -47,6 +50,23 @@ public final class PcmEvaluationUtility {
         throw new IllegalStateException("Utility class cannot be instantiated.");
     }
 
+    public static boolean representSame(DataType type, DataType otherType) {
+        boolean equalType;
+        if (type instanceof Identifier && otherType instanceof Identifier) {
+            equalType = Objects.equals(((Identifier) type).getId(),
+                    ((Identifier) otherType).getId());
+        } else {
+            equalType = Objects.equals(type, otherType);
+        }
+        return equalType;
+    }
+
+    public static boolean representSame(Parameter parameter, Parameter otherParameter) {
+        boolean equalName = Objects.equals(parameter.getParameterName(), otherParameter.getParameterName());
+        boolean equalType = representSame(parameter.getDataType__Parameter(), otherParameter.getDataType__Parameter());
+        return equalName && equalType;
+    }
+
     public static boolean representSame(OperationSignature signature,
             org.palladiosimulator.pcm.repository.Signature otherSignature) {
         if (otherSignature instanceof OperationSignature) {
@@ -57,10 +77,10 @@ public final class PcmEvaluationUtility {
 
     public static boolean representSame(OperationSignature signature, OperationSignature otherSignature) {
         boolean equalName = Objects.equals(signature.getEntityName(), otherSignature.getEntityName());
-        boolean equalReturn = Objects.equals(signature.getReturnType__OperationSignature(),
+        boolean equalReturn = representSame(signature.getReturnType__OperationSignature(),
                 otherSignature.getReturnType__OperationSignature());
-        boolean equalParameters = areCollectionsEqualIgnoringOrder(signature.getParameters__OperationSignature(),
-                otherSignature.getParameters__OperationSignature());
+        boolean equalParameters = areCollectionsEqual(signature.getParameters__OperationSignature(),
+                otherSignature.getParameters__OperationSignature(), PcmEvaluationUtility::representSame);
         return equalName && equalReturn && equalParameters;
     }
 
@@ -319,6 +339,24 @@ public final class PcmEvaluationUtility {
             }
         }
         return false;
+    }
+
+    private static <T> boolean areCollectionsEqual(Collection<T> collection,
+            Collection<T> otherCollection, BiFunction<T, T, Boolean> comparisonFunction) {
+        if (collection.isEmpty() && otherCollection.isEmpty()) {
+            return true;
+        } else if (collection.size() != otherCollection.size()) {
+            return false;
+        }
+
+        List<T> list = new LinkedList<>(collection);
+        List<T> otherList = new LinkedList<>(otherCollection);
+        for (int i = 0; i < list.size(); i++) {
+            if (!comparisonFunction.apply(list.get(i), otherList.get(i))) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private static <T> boolean areCollectionsEqualIgnoringOrder(Collection<T> collection,
