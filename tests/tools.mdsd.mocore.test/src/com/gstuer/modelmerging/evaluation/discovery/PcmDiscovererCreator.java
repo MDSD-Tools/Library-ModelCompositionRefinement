@@ -4,7 +4,6 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -217,17 +216,19 @@ public class PcmDiscovererCreator {
 
         // Find all linking resources and create relation for each connected container pair
         for (LinkingResource linkingResource : this.resourceEnvironment.getLinkingResources__ResourceEnvironment()) {
-            for (ResourceContainer source : linkingResource.getConnectedResourceContainers_LinkingResource()) {
-                for (ResourceContainer destination : linkingResource.getConnectedResourceContainers_LinkingResource()) {
-                    if (!Objects.equals(source, destination)) {
-                        DeploymentDeploymentRelation deploymentRelation = new DeploymentDeploymentRelation(
-                                new Deployment(source, false), new Deployment(destination, false), false);
-                        LinkResourceSpecification linkSpecification = new LinkResourceSpecification(
-                                linkingResource.getCommunicationLinkResourceSpecifications_LinkingResource(), false);
-                        LinkResourceSpecificationRelation linkRelation = new LinkResourceSpecificationRelation(
-                                linkSpecification, deploymentRelation, false);
-                        linkRelations.add(linkRelation);
-                    }
+            List<ResourceContainer> connectedContainers = linkingResource
+                    .getConnectedResourceContainers_LinkingResource();
+            for (int i = 0; i < connectedContainers.size() - 1; i++) {
+                for (int j = i + 1; j < connectedContainers.size(); j++) {
+                    ResourceContainer source = connectedContainers.get(i);
+                    ResourceContainer destination = connectedContainers.get(j);
+                    DeploymentDeploymentRelation deploymentRelation = new DeploymentDeploymentRelation(
+                            new Deployment(source, false), new Deployment(destination, false), false);
+                    LinkResourceSpecification linkSpecification = new LinkResourceSpecification(
+                            linkingResource.getCommunicationLinkResourceSpecifications_LinkingResource(), false);
+                    LinkResourceSpecificationRelation linkRelation = new LinkResourceSpecificationRelation(
+                            linkSpecification, deploymentRelation, false);
+                    linkRelations.add(linkRelation);
                 }
             }
         }
