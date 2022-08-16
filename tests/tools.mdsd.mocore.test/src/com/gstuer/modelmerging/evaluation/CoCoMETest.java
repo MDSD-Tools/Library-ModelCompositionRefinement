@@ -2,6 +2,9 @@ package com.gstuer.modelmerging.evaluation;
 
 import java.io.File;
 
+import org.junit.jupiter.api.Disabled;
+
+@Disabled
 public class CoCoMETest extends CaseStudyTest {
     private static final String FILE_PATH_PREFIX = "./resources/evaluation/case-studies/cocome/PCM4.0/";
 
