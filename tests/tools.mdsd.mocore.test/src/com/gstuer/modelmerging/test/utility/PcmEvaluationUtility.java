@@ -40,6 +40,8 @@ import com.gstuer.modelmerging.instance.pcm.surrogate.relation.LinkResourceSpeci
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.ServiceEffectSpecificationRelation;
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.SignatureProvisionRelation;
 
+import de.uka.ipd.sdq.identifier.Identifier;
+
 public final class PcmEvaluationUtility {
     private PcmEvaluationUtility() {
         throw new IllegalStateException("Utility class cannot be instantiated.");
@@ -97,10 +99,11 @@ public final class PcmEvaluationUtility {
     public static boolean representSame(ResourceContainer container, ResourceContainer otherContainer) {
         boolean equalName = Objects.equals(container.getEntityName(), otherContainer.getEntityName());
         boolean equalActiveResourceSpecifications = areCollectionsEqualIgnoringOrder(
-                container.getActiveResourceSpecifications_ResourceContainer(),
-                otherContainer.getActiveResourceSpecifications_ResourceContainer());
+                mapToIdentifier(container.getActiveResourceSpecifications_ResourceContainer()),
+                mapToIdentifier(otherContainer.getActiveResourceSpecifications_ResourceContainer()));
         boolean equalHddResourceSpecifications = areCollectionsEqualIgnoringOrder(
-                container.getHddResourceSpecifications(), otherContainer.getHddResourceSpecifications());
+                mapToIdentifier(container.getHddResourceSpecifications()),
+                mapToIdentifier(otherContainer.getHddResourceSpecifications()));
         return equalName && equalActiveResourceSpecifications && equalHddResourceSpecifications;
     }
 
@@ -115,15 +118,18 @@ public final class PcmEvaluationUtility {
     public static boolean representSame(ResourceDemandingSEFF seff, ResourceDemandingSEFF otherSeff) {
         boolean equalIdentifier = Objects.equals(seff.getId(), otherSeff.getId());
         boolean equalTypeIdentifier = Objects.equals(seff.getSeffTypeID(), otherSeff.getSeffTypeID());
-        boolean equalSteps = areCollectionsEqualIgnoringOrder(seff.getSteps_Behaviour(),
-                otherSeff.getSteps_Behaviour());
+        boolean equalSteps = areCollectionsEqualIgnoringOrder(
+                mapToIdentifier(seff.getSteps_Behaviour()),
+                mapToIdentifier(otherSeff.getSteps_Behaviour()));
         boolean equalInternalBehaviors = areCollectionsEqualIgnoringOrder(
-                seff.getResourceDemandingInternalBehaviours(),
-                otherSeff.getResourceDemandingInternalBehaviours());
-        boolean equalLoopAction = Objects.equals(seff.getAbstractLoopAction_ResourceDemandingBehaviour(),
-                otherSeff.getAbstractLoopAction_ResourceDemandingBehaviour());
-        boolean equalBranchTransition = Objects.equals(seff.getAbstractBranchTransition_ResourceDemandingBehaviour(),
-                otherSeff.getAbstractBranchTransition_ResourceDemandingBehaviour());
+                mapToIdentifier(seff.getResourceDemandingInternalBehaviours()),
+                mapToIdentifier(otherSeff.getResourceDemandingInternalBehaviours()));
+        boolean equalLoopAction = Objects.equals(
+                mapToIdentifier(seff.getAbstractLoopAction_ResourceDemandingBehaviour()),
+                mapToIdentifier(otherSeff.getAbstractLoopAction_ResourceDemandingBehaviour()));
+        boolean equalBranchTransition = Objects.equals(
+                mapToIdentifier(seff.getAbstractBranchTransition_ResourceDemandingBehaviour()),
+                mapToIdentifier(otherSeff.getAbstractBranchTransition_ResourceDemandingBehaviour()));
         return equalIdentifier && equalTypeIdentifier && equalSteps && equalInternalBehaviors
                 && equalLoopAction && equalBranchTransition;
     }
@@ -253,7 +259,7 @@ public final class PcmEvaluationUtility {
             boolean containsDestinationContainer = linkedContainers
                     .removeIf(element -> representSame(relationDestination.getValue(), element));
             if (containsSourceContainer && containsDestinationContainer && linkedContainers.isEmpty()) {
-                if (relationSpecification.equals(linkSpecification)) {
+                if (relationSpecification.getId().equals(linkSpecification.getId())) {
                     return true;
                 }
             }
@@ -318,5 +324,16 @@ public final class PcmEvaluationUtility {
     private static <T> boolean areCollectionsEqualIgnoringOrder(Collection<T> collection,
             Collection<T> otherCollection) {
         return collection.containsAll(otherCollection) && otherCollection.containsAll(collection);
+    }
+
+    private static <T extends Identifier> String mapToIdentifier(T element) {
+        return element != null ? element.getId() : null;
+    }
+
+    private static List<String> mapToIdentifier(Collection<? extends Identifier> collection) {
+        return collection.stream()
+                .dropWhile(element -> element == null)
+                .map(Identifier::getId)
+                .toList();
     }
 }
