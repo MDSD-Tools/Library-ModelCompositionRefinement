@@ -93,11 +93,8 @@ public final class PcmEvaluationUtility {
 
     public static boolean representSame(OperationInterface interFace, OperationInterface otherInterFace) {
         boolean equalName = Objects.equals(interFace.getEntityName(), otherInterFace.getEntityName());
-        boolean equalProtocols = areCollectionsEqualIgnoringOrder(interFace.getProtocols__Interface(),
-                otherInterFace.getProtocols__Interface());
-        boolean equalCharacterisations = areCollectionsEqualIgnoringOrder(interFace.getRequiredCharacterisations(),
-                otherInterFace.getRequiredCharacterisations());
-        return equalName && equalProtocols && equalCharacterisations;
+        // TODO Check characterization & protocol => Is there a palladio equal check?
+        return equalName;
     }
 
     public static boolean representSame(BasicComponent component, RepositoryComponent otherComponent) {
@@ -110,10 +107,8 @@ public final class PcmEvaluationUtility {
     public static boolean representSame(BasicComponent component, BasicComponent otherComponent) {
         boolean equalName = Objects.equals(component.getEntityName(), otherComponent.getEntityName());
         boolean equalType = Objects.equals(component.getComponentType(), otherComponent.getComponentType());
-        boolean equalParameterUsages = areCollectionsEqualIgnoringOrder(
-                component.getComponentParameterUsage_ImplementationComponentType(),
-                otherComponent.getComponentParameterUsage_ImplementationComponentType());
-        return equalName && equalType && equalParameterUsages;
+        // TODO Check parameter usage => Is there a palladio equal check?
+        return equalName && equalType;
     }
 
     public static boolean representSame(ResourceContainer container, ResourceContainer otherContainer) {
