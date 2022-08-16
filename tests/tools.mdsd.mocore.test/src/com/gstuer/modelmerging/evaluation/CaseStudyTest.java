@@ -267,7 +267,7 @@ public abstract class CaseStudyTest {
     }
 
     protected Collection<Discoverer<?>> getDiscoverers() {
-        PcmDiscovererCreator discovererCreator = new PcmDiscovererCreator(loadRepository(), loadSystem(),
+        PcmDiscovererCreator discovererCreator = new PcmDiscovererCreator(loadSystem(),
                 loadAllocation(), loadResourceEnvironment());
         return discovererCreator.createDiscoverers();
     }
