@@ -3,9 +3,7 @@ package com.gstuer.modelmerging.instance.pcm.surrogate.element;
 import org.palladiosimulator.generator.fluent.repository.factory.FluentRepositoryFactory;
 import org.palladiosimulator.pcm.repository.OperationInterface;
 
-import com.gstuer.modelmerging.framework.surrogate.Element;
-
-public class Interface extends Element<OperationInterface> {
+public class Interface extends PcmElement<OperationInterface> {
     public Interface(OperationInterface value, boolean isPlaceholder) {
         super(value, isPlaceholder);
     }

@@ -3,9 +3,7 @@ package com.gstuer.modelmerging.instance.pcm.surrogate.element;
 import org.palladiosimulator.generator.fluent.repository.factory.FluentRepositoryFactory;
 import org.palladiosimulator.pcm.repository.BasicComponent;
 
-import com.gstuer.modelmerging.framework.surrogate.Element;
-
-public class Component extends Element<BasicComponent> {
+public class Component extends PcmElement<BasicComponent> {
     public Component(BasicComponent value, boolean isPlaceholder) {
         super(value, isPlaceholder);
     }

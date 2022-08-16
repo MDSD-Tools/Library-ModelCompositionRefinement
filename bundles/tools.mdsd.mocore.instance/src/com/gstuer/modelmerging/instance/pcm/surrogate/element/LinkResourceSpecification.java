@@ -3,9 +3,7 @@ package com.gstuer.modelmerging.instance.pcm.surrogate.element;
 import org.palladiosimulator.pcm.resourceenvironment.CommunicationLinkResourceSpecification;
 import org.palladiosimulator.pcm.resourceenvironment.ResourceenvironmentFactory;
 
-import com.gstuer.modelmerging.framework.surrogate.Element;
-
-public class LinkResourceSpecification extends Element<CommunicationLinkResourceSpecification> {
+public class LinkResourceSpecification extends PcmElement<CommunicationLinkResourceSpecification> {
     public LinkResourceSpecification(CommunicationLinkResourceSpecification value, boolean isPlaceholder) {
         super(value, isPlaceholder);
     }

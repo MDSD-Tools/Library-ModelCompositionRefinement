@@ -3,9 +3,7 @@ package com.gstuer.modelmerging.instance.pcm.surrogate.element;
 import org.palladiosimulator.pcm.repository.OperationSignature;
 import org.palladiosimulator.pcm.repository.RepositoryFactory;
 
-import com.gstuer.modelmerging.framework.surrogate.Element;
-
-public class Signature extends Element<OperationSignature> {
+public class Signature extends PcmElement<OperationSignature> {
     public Signature(OperationSignature value, boolean isPlaceholder) {
         super(value, isPlaceholder);
     }
