@@ -16,7 +16,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.palladiosimulator.generator.fluent.shared.util.ModelLoader;
-import org.palladiosimulator.generator.fluent.shared.util.ModelSaver;
 import org.palladiosimulator.pcm.allocation.Allocation;
 import org.palladiosimulator.pcm.allocation.AllocationContext;
 import org.palladiosimulator.pcm.core.composition.AssemblyConnector;
@@ -161,9 +160,6 @@ public abstract class CaseStudyTest {
                 }
             }
         }
-
-        // TODO Remove - Testing Purposes Only
-        ModelSaver.saveRepository(repository, "./tmp/repository", false);
     }
 
     @Test
@@ -205,9 +201,6 @@ public abstract class CaseStudyTest {
                 assertTrue(containsRepresentative(originalSystem, assemblyRelation));
             }
         }
-
-        // TODO Remove - Testing Purposes Only
-        ModelSaver.saveSystem(system, "./tmp/system", false);
     }
 
     @Test
@@ -232,9 +225,6 @@ public abstract class CaseStudyTest {
                     deployment, false);
             assertTrue(containsRepresentative(allocation, componentAllocation));
         }
-
-        // TODO Remove - Testing Purposes Only
-        ModelSaver.saveAllocation(allocation, "./tmp/allocation", false);
     }
 
     @Test
@@ -274,9 +264,6 @@ public abstract class CaseStudyTest {
                 }
             }
         });
-
-        // TODO Remove - Testing Purposes Only
-        ModelSaver.saveResourceEnvironment(environment, "./tmp/environment", false);
     }
 
     protected Collection<Discoverer<?>> getDiscoverers() {
