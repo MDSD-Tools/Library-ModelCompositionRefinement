@@ -1,6 +1,7 @@
 package com.gstuer.modelmerging.instance.pcm.merger.relation;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
@@ -152,6 +153,132 @@ public class DeploymentDeploymentRelationMergerTest extends RelationMergerTest<D
         assertTrue(model.contains(assembly));
         assertTrue(model.contains(providerAllocation));
         assertTrue(model.contains(consumerAllocation));
+    }
+
+    @Override
+    @Test
+    public void testProcessReplacesIndirectPlaceholder() {
+        // Test data
+        PcmSurrogate model = createEmptyModel();
+        DeploymentDeploymentRelationMerger merger = createMerger(model);
+        Deployment source = getUniqueNonPlaceholderSourceEntity();
+        Deployment destination = getUniqueNonPlaceholderDestinationEntity();
+        Deployment destinationPlaceholder = getPlaceholderOfDestinationEntity(destination);
+        DeploymentDeploymentRelation relation = createRelation(source, destination, true);
+        DeploymentDeploymentRelation placeholder = createRelation(source, destinationPlaceholder, true);
+
+        // Execution & Assertions to add placeholder
+        model.add(placeholder);
+        model.add(source);
+        model.add(destinationPlaceholder);
+        assertTrue(model.contains(placeholder));
+        assertTrue(model.contains(source));
+        assertTrue(model.contains(destinationPlaceholder));
+        assertFalse(model.contains(destination));
+        assertFalse(model.contains(relation));
+        assertTrue(merger.getImplications().isEmpty());
+
+        // Execution to replace placeholder
+        merger.process(relation);
+        Set<Replaceable> implications = merger.getImplications();
+
+        // Assertions - Model State
+        assertTrue(model.contains(placeholder));
+        assertTrue(model.contains(source));
+        assertTrue(model.contains(destinationPlaceholder));
+        assertFalse(model.contains(destination));
+        assertTrue(model.contains(relation));
+
+        // Assertions - Implications
+        assertFalse(implications.contains(placeholder));
+        assertTrue(implications.contains(source));
+        assertFalse(implications.contains(destinationPlaceholder));
+        assertTrue(implications.contains(destination));
+        assertFalse(implications.contains(relation));
+    }
+
+    @Override
+    @Test
+    public void testReplaceIndirectPlaceholdersSameSource() {
+        // Test data
+        PcmSurrogate model = createEmptyModel();
+        DeploymentDeploymentRelationMerger merger = createMerger(model);
+        Deployment source = getUniqueNonPlaceholderSourceEntity();
+        Deployment destination = getUniqueNonPlaceholderDestinationEntity();
+        Deployment destinationPlaceholder = getPlaceholderOfDestinationEntity(destination);
+        DeploymentDeploymentRelation relation = createRelation(source, destination, true);
+        DeploymentDeploymentRelation placeholder = createRelation(source, destinationPlaceholder, true);
+
+        // Execution & Assertions to add placeholder
+        model.add(placeholder);
+        model.add(source);
+        model.add(destinationPlaceholder);
+        assertTrue(model.contains(placeholder));
+        assertTrue(model.contains(source));
+        assertTrue(model.contains(destinationPlaceholder));
+        assertFalse(model.contains(destination));
+        assertFalse(model.contains(relation));
+        assertTrue(merger.getImplications().isEmpty());
+
+        // Execution to replace placeholder
+        merger.replaceIndirectPlaceholders(relation);
+        Set<Replaceable> implications = merger.getImplications();
+
+        // Assertions - Model State
+        assertTrue(model.contains(placeholder));
+        assertTrue(model.contains(source));
+        assertTrue(model.contains(destinationPlaceholder));
+        assertFalse(model.contains(destination));
+        assertFalse(model.contains(relation));
+
+        // Assertions - Implications
+        assertFalse(implications.contains(placeholder));
+        assertFalse(implications.contains(source));
+        assertFalse(implications.contains(destinationPlaceholder));
+        assertFalse(implications.contains(destination));
+        assertFalse(implications.contains(relation));
+    }
+
+    @Override
+    @Test
+    public void testReplaceIndirectPlaceholdersSameDestination() {
+        // Test data
+        PcmSurrogate model = createEmptyModel();
+        DeploymentDeploymentRelationMerger merger = createMerger(model);
+        Deployment source = getUniqueNonPlaceholderSourceEntity();
+        Deployment sourcePlaceholder = getPlaceholderOfSourceEntity(source);
+        Deployment destination = getUniqueNonPlaceholderDestinationEntity();
+        DeploymentDeploymentRelation relation = createRelation(source, destination, true);
+        DeploymentDeploymentRelation placeholder = createRelation(sourcePlaceholder, destination, true);
+
+        // Execution & Assertions to add placeholder
+        model.add(placeholder);
+        model.add(sourcePlaceholder);
+        model.add(destination);
+        assertTrue(model.contains(placeholder));
+        assertTrue(model.contains(sourcePlaceholder));
+        assertTrue(model.contains(destination));
+        assertFalse(model.contains(source));
+        assertFalse(model.contains(relation));
+        assertTrue(merger.getImplications().isEmpty());
+
+        // Execution to replace placeholder
+        merger.replaceIndirectPlaceholders(relation);
+        Set<Replaceable> implications = merger.getImplications();
+
+        // Assertions - Model State
+        assertTrue(model.contains(placeholder));
+        assertTrue(model.contains(sourcePlaceholder));
+        assertTrue(model.contains(destination));
+        assertFalse(model.contains(source));
+        assertFalse(model.contains(relation));
+
+        // Assertions - Implications
+        assertFalse(implications.contains(placeholder));
+        assertFalse(implications.contains(sourcePlaceholder));
+        assertFalse(implications.contains(destination));
+        assertFalse(implications.contains(source));
+        assertFalse(implications.contains(relation));
     }
 
     @Override
