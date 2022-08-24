@@ -7,6 +7,11 @@ public class MinimumProjectTest extends CaseStudyTest {
             + "Minimum_Project_Example/";
 
     @Override
+    protected String getCaseStudyName() {
+        return "Minimum Project";
+    }
+
+    @Override
     protected File getRepositoryFile() {
         return new File(FILE_PATH_PREFIX + "default.repository");
     }

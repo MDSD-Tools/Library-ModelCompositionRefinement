@@ -7,6 +7,11 @@ public class ScreencastMediaStoreEnqueueDownloadCacheTest extends CaseStudyTest 
             + "ScreencastMediaStore/";
 
     @Override
+    protected String getCaseStudyName() {
+        return "Screencast MediaStore Enqueue";
+    }
+
+    @Override
     protected File getRepositoryFile() {
         return new File(FILE_PATH_PREFIX + "MediaStore.repository");
     }

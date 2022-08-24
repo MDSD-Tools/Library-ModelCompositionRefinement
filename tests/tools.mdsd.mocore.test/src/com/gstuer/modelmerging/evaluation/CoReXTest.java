@@ -6,6 +6,11 @@ public class CoReXTest extends CaseStudyTest {
     private static final String FILE_PATH_PREFIX = "./resources/evaluation/case-studies/CoReX/";
 
     @Override
+    protected String getCaseStudyName() {
+        return "CoReX";
+    }
+
+    @Override
     protected File getRepositoryFile() {
         return new File(FILE_PATH_PREFIX + "minimalProject.repository");
     }

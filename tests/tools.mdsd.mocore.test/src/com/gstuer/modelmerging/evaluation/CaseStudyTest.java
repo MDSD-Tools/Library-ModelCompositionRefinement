@@ -10,6 +10,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 import org.junit.jupiter.api.AfterAll;
@@ -34,6 +35,7 @@ import org.palladiosimulator.pcm.system.System;
 import com.google.common.io.Files;
 import com.gstuer.modelmerging.evaluation.discovery.PcmDiscovererCreator;
 import com.gstuer.modelmerging.framework.discovery.Discoverer;
+import com.gstuer.modelmerging.framework.surrogate.Relation;
 import com.gstuer.modelmerging.instance.pcm.orchestration.PcmOrchestrator;
 import com.gstuer.modelmerging.instance.pcm.surrogate.PcmSurrogate;
 import com.gstuer.modelmerging.instance.pcm.surrogate.element.Component;
@@ -56,7 +58,59 @@ import com.gstuer.modelmerging.instance.pcm.transformation.SystemTransformer;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public abstract class CaseStudyTest {
+    private static final boolean PRINT_INFOS = false;
+
     @BeforeAll
+    public void setupTest() throws IOException {
+        copyFiles();
+        printInfos();
+    }
+
+    public void printInfos() {
+        if (!PRINT_INFOS) {
+            return;
+        }
+        Collection<Discoverer<?>> discoverers = getDiscoverers();
+        Set<?> discoveries = discoverers.stream()
+                .flatMap(disco -> disco.getDiscoveries().stream())
+                .collect(Collectors.toSet());
+        Set<?> containers = discoveries.stream().filter(element -> element instanceof Deployment)
+                .collect(Collectors.toSet());
+        Set<?> components = discoveries.stream().filter(element -> element instanceof Component)
+                .collect(Collectors.toSet());
+        Set<?> interfaces = discoveries.stream()
+                .filter(element -> element instanceof Relation<?, ?>)
+                .filter(element -> element instanceof InterfaceProvisionRelation
+                        || element instanceof InterfaceRequirementRelation)
+                .map(element -> ((Relation<?, ?>) element).getDestination())
+                .collect(Collectors.toSet());
+        Set<?> signatures = discoveries.stream()
+                .filter(element -> element instanceof SignatureProvisionRelation)
+                .map(element -> ((SignatureProvisionRelation) element).getSource())
+                .collect(Collectors.toSet());
+        Set<?> seffs = discoveries.stream()
+                .filter(element -> element instanceof ServiceEffectSpecificationRelation)
+                .map(element -> ((ServiceEffectSpecificationRelation) element).getDestination())
+                .collect(Collectors.toSet());
+
+        StringBuilder builder = new StringBuilder();
+        builder.append("//// Case Study Test ////");
+        builder.append(java.lang.System.lineSeparator());
+        builder.append("Name:" + getCaseStudyName());
+        builder.append(java.lang.System.lineSeparator());
+        builder.append("Containers: " + containers.size());
+        builder.append(java.lang.System.lineSeparator());
+        builder.append("Components: " + components.size());
+        builder.append(java.lang.System.lineSeparator());
+        builder.append("Interfaces: " + interfaces.size());
+        builder.append(java.lang.System.lineSeparator());
+        builder.append("Signatures: " + signatures.size());
+        builder.append(java.lang.System.lineSeparator());
+        builder.append("Seffs: " + seffs.size());
+        builder.append(java.lang.System.lineSeparator());
+        java.lang.System.out.println(builder.toString());
+    }
+
     public void copyFiles() throws IOException {
         File[] files = { getRepositoryFile(), getSystemFile(), getAllocationFile(), getResourceEnvironmentFile() };
         for (File file : files) {
@@ -262,6 +316,8 @@ public abstract class CaseStudyTest {
                 loadAllocation(), loadResourceEnvironment());
         return discovererCreator.createDiscoverers();
     }
+
+    protected abstract String getCaseStudyName();
 
     protected abstract File getRepositoryFile();
 
