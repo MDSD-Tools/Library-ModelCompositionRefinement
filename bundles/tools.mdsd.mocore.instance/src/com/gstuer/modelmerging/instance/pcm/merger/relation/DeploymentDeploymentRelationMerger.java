@@ -77,6 +77,14 @@ public class DeploymentDeploymentRelationMerger extends RelationMerger<PcmSurrog
                     assemblyInterface, true);
             ComponentAssemblyRelation assembly = new ComponentAssemblyRelation(provider, consumer, true);
             this.addImplication(assembly);
+
+            // Add allocations for placeholder components to implications
+            ComponentAllocationRelation providerAllocation = new ComponentAllocationRelation(providingComponent,
+                    discovery.getSource(), true);
+            ComponentAllocationRelation consumerAllocation = new ComponentAllocationRelation(requiringComponent,
+                    discovery.getDestination(), true);
+            this.addImplication(providerAllocation);
+            this.addImplication(consumerAllocation);
         }
     }
 
