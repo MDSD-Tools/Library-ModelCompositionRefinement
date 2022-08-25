@@ -58,6 +58,20 @@ public abstract class Merger<M extends Model, T extends Replaceable> {
         }
     }
 
+    protected void replaceImplications(Replaceable original, Replaceable replacement) {
+        Set<Replaceable> predecessors = new HashSet<>();
+        Set<Replaceable> successors = new HashSet<>();
+        for (Replaceable implication : this.implications) {
+            if (implication.canReplace(original)) {
+                Replaceable successor = implication.replace(original, replacement);
+                predecessors.add(implication);
+                successors.add(successor);
+            }
+        }
+        this.implications.removeAll(predecessors);
+        this.implications.addAll(successors);
+    }
+
     public Class<T> getProcessableType() {
         return processableType;
     }

@@ -36,8 +36,10 @@ public abstract class RelationMerger<M extends Model, T extends Relation<?, ?>> 
             // Replace placeholder & collect possible implications. May include discovery.
             if (relation.isPlaceholderOf(discovery)) {
                 implications.addAll(this.getModel().replace(relation, discovery));
+                this.replaceImplications(relation, discovery);
             } else if (discovery.isPlaceholderOf(relation)) {
                 implications.addAll(this.getModel().replace(discovery, relation));
+                this.replaceImplications(discovery, relation);
             }
         }
         // The discovery was already added to the model by the merge operation.
@@ -48,9 +50,11 @@ public abstract class RelationMerger<M extends Model, T extends Relation<?, ?>> 
     protected void replaceIndirectPlaceholders(T discovery) {
         // Get relations of same type with equal source or destination
         Set<T> relations = this.getModel().getByType(this.getProcessableType()).stream()
-                .filter(relation -> !Objects.equals(relation, discovery)
-                        && (discovery.getSource().equals(relation.getSource())
-                                || discovery.getDestination().equals(relation.getDestination())))
+                .filter(relation -> !Objects.equals(relation, discovery))
+                .filter(relation -> !relation.isPlaceholderOf(discovery))
+                .filter(relation -> !discovery.isPlaceholderOf(relation))
+                .filter(relation -> (discovery.getSource().equals(relation.getSource())
+                        || discovery.getDestination().equals(relation.getDestination())))
                 .collect(Collectors.toSet());
 
         Set<Replaceable> implications = new HashSet<>();
