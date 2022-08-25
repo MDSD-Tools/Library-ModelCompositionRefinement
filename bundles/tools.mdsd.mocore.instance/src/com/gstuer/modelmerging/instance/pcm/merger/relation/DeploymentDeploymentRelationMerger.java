@@ -23,8 +23,6 @@ public class DeploymentDeploymentRelationMerger extends RelationMerger<PcmSurrog
 
     @Override
     protected void refine(DeploymentDeploymentRelation discovery) {
-        super.refine(discovery);
-
         // Check whether a linking resource specification already exists for the link to be merged
         List<LinkResourceSpecificationRelation> specifications = this.getModel()
                 .getByType(LinkResourceSpecificationRelation.class);
@@ -86,6 +84,8 @@ public class DeploymentDeploymentRelationMerger extends RelationMerger<PcmSurrog
             this.addImplication(providerAllocation);
             this.addImplication(consumerAllocation);
         }
+
+        super.refine(discovery);
     }
 
     @Override

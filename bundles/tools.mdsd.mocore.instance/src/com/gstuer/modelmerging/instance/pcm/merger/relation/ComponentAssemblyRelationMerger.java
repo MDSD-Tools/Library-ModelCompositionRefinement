@@ -20,8 +20,6 @@ public class ComponentAssemblyRelationMerger extends RelationMerger<PcmSurrogate
 
     @Override
     protected void refine(ComponentAssemblyRelation discovery) {
-        super.refine(discovery);
-
         // Identify all allocations of the providing and consuming component in the assembly
         Component provider = discovery.getSource().getSource();
         Component consumer = discovery.getDestination().getSource();
@@ -46,6 +44,9 @@ public class ComponentAssemblyRelationMerger extends RelationMerger<PcmSurrogate
         assemblies.removeIf(assembly -> !assembly.getSource().isPlaceholder()
                 || !assembly.getDestination().isPlaceholder());
         for (ComponentAssemblyRelation placeholderAssembly : assemblies) {
+            if (discovery.equals(placeholderAssembly)) {
+                continue;
+            }
             Component source = placeholderAssembly.getSource().getSource();
             Component destination = placeholderAssembly.getDestination().getSource();
             Interface sourceDestinationInterface = placeholderAssembly.getSource().getDestination();
@@ -73,6 +74,8 @@ public class ComponentAssemblyRelationMerger extends RelationMerger<PcmSurrogate
                 }
             }
         }
+
+        super.refine(discovery);
     }
 
     private List<Deployment> getAllocatedContainers(Component component) {
