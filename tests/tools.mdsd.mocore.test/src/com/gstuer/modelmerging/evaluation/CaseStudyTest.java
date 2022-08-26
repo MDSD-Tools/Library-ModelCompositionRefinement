@@ -24,6 +24,8 @@ import org.palladiosimulator.pcm.allocation.AllocationContext;
 import org.palladiosimulator.pcm.core.composition.AssemblyConnector;
 import org.palladiosimulator.pcm.core.composition.AssemblyContext;
 import org.palladiosimulator.pcm.core.composition.Connector;
+import org.palladiosimulator.pcm.repository.BasicComponent;
+import org.palladiosimulator.pcm.repository.OperationInterface;
 import org.palladiosimulator.pcm.repository.OperationSignature;
 import org.palladiosimulator.pcm.repository.Repository;
 import org.palladiosimulator.pcm.repository.RepositoryComponent;
@@ -70,6 +72,7 @@ public abstract class CaseStudyTest {
         if (!PRINT_INFOS) {
             return;
         }
+        EcorePlugin.ExtensionProcessor.process(null);
         Collection<Discoverer<?>> discoverers = getDiscoverers();
         Set<?> discoveries = discoverers.stream()
                 .flatMap(disco -> disco.getDiscoveries().stream())
@@ -93,20 +96,37 @@ public abstract class CaseStudyTest {
                 .map(element -> ((ServiceEffectSpecificationRelation) element).getDestination())
                 .collect(Collectors.toSet());
 
+        PcmOrchestrator orchestrator = new PcmOrchestrator();
+        discoverers.forEach(orchestrator::processDiscoverer);
+        PcmSurrogate model = orchestrator.getModel();
+        Repository repository = new RepositoryTransformer().transform(model);
+        ResourceEnvironment resourceEnvironment = new ResourceEnvironmentTransformer().transform(model);
+
         StringBuilder builder = new StringBuilder();
         builder.append("//// Case Study Test ////");
         builder.append(java.lang.System.lineSeparator());
         builder.append("Name:" + getCaseStudyName());
         builder.append(java.lang.System.lineSeparator());
-        builder.append("Containers: " + containers.size());
+        builder.append("Containers: " + containers.size() + "->"
+                + resourceEnvironment.getResourceContainer_ResourceEnvironment().size());
         builder.append(java.lang.System.lineSeparator());
-        builder.append("Components: " + components.size());
+        builder.append("Components: " + components.size() + "->" + repository.getComponents__Repository().size());
         builder.append(java.lang.System.lineSeparator());
-        builder.append("Interfaces: " + interfaces.size());
+        builder.append("Interfaces: " + interfaces.size() + "->" + repository.getInterfaces__Repository().size());
         builder.append(java.lang.System.lineSeparator());
-        builder.append("Signatures: " + signatures.size());
+        builder.append("Signatures: " + signatures.size() + "->"
+                + repository.getInterfaces__Repository().stream()
+                        .filter(interFace -> interFace instanceof OperationInterface)
+                        .mapToInt(interFace -> ((OperationInterface) interFace).getSignatures__OperationInterface()
+                                .size())
+                        .sum());
         builder.append(java.lang.System.lineSeparator());
-        builder.append("Seffs: " + seffs.size());
+        builder.append("Seffs: " + seffs.size() + "->"
+                + repository.getComponents__Repository().stream()
+                        .filter(component -> component instanceof BasicComponent)
+                        .flatMap(component -> ((BasicComponent) component)
+                                .getServiceEffectSpecifications__BasicComponent().stream())
+                        .count());
         builder.append(java.lang.System.lineSeparator());
         java.lang.System.out.println(builder.toString());
     }
