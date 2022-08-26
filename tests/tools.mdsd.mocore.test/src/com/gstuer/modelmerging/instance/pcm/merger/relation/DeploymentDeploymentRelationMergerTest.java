@@ -3,11 +3,8 @@ package com.gstuer.modelmerging.instance.pcm.merger.relation;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Set;
 
 import org.junit.jupiter.api.Test;
@@ -45,39 +42,11 @@ public class DeploymentDeploymentRelationMergerTest extends RelationMergerTest<D
         // Assertions: Post-execution
         assertTrue(implications.remove(relation.getSource()));
         assertTrue(implications.remove(relation.getDestination()));
-        assertEquals(4, implications.size());
-
-        //// Implicit ComponentAssemblyRelation
-        Replaceable implication = implications.stream()
-                .filter(replacable -> replacable.getClass().equals(ComponentAssemblyRelation.class))
-                .findFirst().orElseThrow();
-        ComponentAssemblyRelation implicitAssembly = (ComponentAssemblyRelation) implication;
-        assertTrue(implicitAssembly.isPlaceholder());
-        assertTrue(implicitAssembly.getSource().isPlaceholder());
-        assertTrue(implicitAssembly.getDestination().isPlaceholder());
-        assertNotEquals(relation.getSource(), implicitAssembly.getSource().getSource());
-        assertNotEquals(relation.getSource(), implicitAssembly.getSource().getDestination());
-        assertNotEquals(relation.getDestination(), implicitAssembly.getSource().getSource());
-        assertNotEquals(relation.getDestination(), implicitAssembly.getSource().getDestination());
-        assertTrue(implications.remove(implication));
-
-        //// Implicit ComponentAllocations
-        List<ComponentAllocationRelation> allocations = new LinkedList<>(implications.stream()
-                .filter(replaceable -> replaceable.getClass().equals(ComponentAllocationRelation.class))
-                .map(replaceable -> (ComponentAllocationRelation) replaceable)
-                .toList());
-        assertEquals(2, allocations.size());
-        assertTrue(allocations.stream()
-                .anyMatch(allocation -> allocation.getDestination().equals(relation.getSource())
-                        && allocation.getSource().isPlaceholder()));
-        assertTrue(allocations.stream()
-                .anyMatch(allocation -> allocation.getDestination().equals(relation.getDestination())
-                        && allocation.getSource().isPlaceholder()));
-        implications.removeAll(allocations);
+        assertEquals(1, implications.size());
 
         //// Implicit LinkResourceSpecificationRelation
         assertEquals(1, implications.size());
-        implication = implications.stream().findFirst().orElseThrow();
+        Replaceable implication = implications.stream().findFirst().orElseThrow();
         assertEquals(LinkResourceSpecificationRelation.class, implication.getClass());
         LinkResourceSpecificationRelation implicitSpecification = (LinkResourceSpecificationRelation) implication;
         assertEquals(relation, implicitSpecification.getDestination());
