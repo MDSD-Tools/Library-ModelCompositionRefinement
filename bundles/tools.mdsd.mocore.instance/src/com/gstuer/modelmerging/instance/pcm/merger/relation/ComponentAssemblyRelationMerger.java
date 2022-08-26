@@ -28,6 +28,20 @@ public class ComponentAssemblyRelationMerger extends RelationMerger<PcmSurrogate
         List<Deployment> consumerAllocations = getAllocatedContainers(consumer);
 
         // Add link between allocation containers of assembled components if needed
+        if (providerAllocations.isEmpty()) {
+            Deployment placeholderDeployment = Deployment.getUniquePlaceholder();
+            ComponentAllocationRelation allocation = new ComponentAllocationRelation(provider,
+                    placeholderDeployment, true);
+            providerAllocations.add(placeholderDeployment);
+            this.addImplication(allocation);
+        }
+        if (consumerAllocations.isEmpty()) {
+            Deployment placeholderDeployment = Deployment.getUniquePlaceholder();
+            ComponentAllocationRelation allocation = new ComponentAllocationRelation(consumer,
+                    placeholderDeployment, true);
+            consumerAllocations.add(placeholderDeployment);
+            this.addImplication(allocation);
+        }
         for (Deployment providerContainer : providerAllocations) {
             for (Deployment consumerContainer : consumerAllocations) {
                 if (!providerContainer.equals(consumerContainer)) {
