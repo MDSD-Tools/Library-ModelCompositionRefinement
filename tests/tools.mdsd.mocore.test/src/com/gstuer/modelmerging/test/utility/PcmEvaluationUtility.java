@@ -38,6 +38,7 @@ import com.gstuer.modelmerging.instance.pcm.surrogate.element.ServiceEffectSpeci
 import com.gstuer.modelmerging.instance.pcm.surrogate.element.Signature;
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.ComponentAllocationRelation;
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.ComponentAssemblyRelation;
+import com.gstuer.modelmerging.instance.pcm.surrogate.relation.DeploymentDeploymentRelation;
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.InterfaceProvisionRelation;
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.InterfaceRequirementRelation;
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.ServiceEffectSpecificationRelation;
@@ -256,6 +257,24 @@ public final class PcmEvaluationUtility {
 
     public static boolean containsRepresentative(ResourceEnvironment resourceEnvironment, Deployment container) {
         return getRepresentative(resourceEnvironment, container).isPresent();
+    }
+
+    public static boolean containsRepresentative(ResourceEnvironment resourceEnvironment,
+            DeploymentDeploymentRelation link) {
+        List<LinkingResource> linkingResources = resourceEnvironment.getLinkingResources__ResourceEnvironment();
+        for (LinkingResource linkingResource : linkingResources) {
+            List<ResourceContainer> linkedContainers = new LinkedList<>(
+                    linkingResource.getConnectedResourceContainers_LinkingResource());
+            boolean containsContainers = true;
+            for (Deployment deployment : List.of(link.getSource(), link.getDestination())) {
+                containsContainers = containsContainers
+                        && linkedContainers.removeIf(element -> representSame(deployment.getValue(), element));
+            }
+            if (containsContainers) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public static boolean containsRepresentative(ResourceEnvironment resourceEnvironment,
