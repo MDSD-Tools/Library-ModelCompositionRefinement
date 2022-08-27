@@ -114,13 +114,9 @@ public final class PcmEvaluationUtility {
 
     public static boolean representSame(ResourceContainer container, ResourceContainer otherContainer) {
         boolean equalName = Objects.equals(container.getEntityName(), otherContainer.getEntityName());
-        boolean equalActiveResourceSpecifications = areCollectionsEqualIgnoringOrder(
-                mapToIdentifier(container.getActiveResourceSpecifications_ResourceContainer()),
-                mapToIdentifier(otherContainer.getActiveResourceSpecifications_ResourceContainer()));
-        boolean equalHddResourceSpecifications = areCollectionsEqualIgnoringOrder(
-                mapToIdentifier(container.getHddResourceSpecifications()),
-                mapToIdentifier(otherContainer.getHddResourceSpecifications()));
-        return equalName && equalActiveResourceSpecifications && equalHddResourceSpecifications;
+        // TODO ResourceSpecifications are removed from old container on copy. Consequently, comparing it is not
+        // possible.
+        return equalName;
     }
 
     public static boolean representSame(ResourceDemandingSEFF seff,
