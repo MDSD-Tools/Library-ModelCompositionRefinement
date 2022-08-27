@@ -12,21 +12,21 @@ public class CoReXTest extends CaseStudyTest {
 
     @Override
     protected File getRepositoryFile() {
-        return new File(FILE_PATH_PREFIX + "minimalProject.repository");
+        return new File(FILE_PATH_PREFIX + "corex.repository");
     }
 
     @Override
     protected File getSystemFile() {
-        return new File(FILE_PATH_PREFIX + "minimalProject.system");
+        return new File(FILE_PATH_PREFIX + "corex.system");
     }
 
     @Override
     protected File getAllocationFile() {
-        return new File(FILE_PATH_PREFIX + "minimalProject.allocation");
+        return new File(FILE_PATH_PREFIX + "corex.allocation");
     }
 
     @Override
     protected File getResourceEnvironmentFile() {
-        return new File(FILE_PATH_PREFIX + "minimalProject.resourceenvironment");
+        return new File(FILE_PATH_PREFIX + "corex.resourceenvironment");
     }
 }
