@@ -109,6 +109,10 @@ public abstract class CaseStudyTest {
                 .filter(element -> element instanceof ServiceEffectSpecificationRelation)
                 .map(element -> ((ServiceEffectSpecificationRelation) element).getDestination())
                 .collect(Collectors.toSet());
+        Set<?> linkResourceSpecifications = discoveries.stream()
+                .filter(discovery -> discovery instanceof LinkResourceSpecificationRelation)
+                .map(relation -> ((LinkResourceSpecificationRelation) relation).getSource())
+                .collect(Collectors.toSet());
 
         PcmOrchestrator orchestrator = new PcmOrchestrator();
         discoverers.forEach(orchestrator::processDiscoverer);
@@ -135,11 +139,17 @@ public abstract class CaseStudyTest {
                                 .size())
                         .sum());
         builder.append(java.lang.System.lineSeparator());
-        builder.append("Seffs: " + seffs.size() + "->"
+        builder.append("SEFF: " + seffs.size() + "->"
                 + repository.getComponents__Repository().stream()
                         .filter(component -> component instanceof BasicComponent)
                         .flatMap(component -> ((BasicComponent) component)
                                 .getServiceEffectSpecifications__BasicComponent().stream())
+                        .count());
+        builder.append(java.lang.System.lineSeparator());
+        builder.append("CLRS: " + linkResourceSpecifications.size() + "->"
+                + resourceEnvironment.getLinkingResources__ResourceEnvironment().stream()
+                        .map(link -> link.getCommunicationLinkResourceSpecifications_LinkingResource())
+                        .distinct()
                         .count());
         builder.append(java.lang.System.lineSeparator());
         java.lang.System.out.println(builder.toString());
