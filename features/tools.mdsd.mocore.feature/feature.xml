@@ -3,11 +3,14 @@
       id="tools.mdsd.mocore.feature"
       label="MoCoRe Feature"
       version="1.0.0.qualifier"
-      provider-name="mdsd.tools">
+      provider-name="mdsd.tools"
+      license-feature="tools.mdsd.license.epl2"
+      license-feature-version="1.0.0">
 
    <requires>
-      <import plugin="tools.mdsd.mocore.framework"/>
-      <import plugin="tools.mdsd.mocore.instance"/>
+      <import plugin="org.palladiosimulator.pcm"/>
+      <import plugin="org.palladiosimulator.pcm.resources"/>
+      <import plugin="org.palladiosimulator.generator.fluent"/>
    </requires>
 
    <plugin
@@ -21,5 +24,4 @@
          download-size="0"
          install-size="0"
          version="0.0.0"/>
-
 </feature>
