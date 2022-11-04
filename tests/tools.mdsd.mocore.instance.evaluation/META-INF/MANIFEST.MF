@@ -1,10 +1,10 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: tools.mdsd.mocore.instance.evaluation.test
-Bundle-SymbolicName: tools.mdsd.mocore.instance.evaluation.test
+Bundle-Name: tools.mdsd.mocore.instance.evaluation
+Bundle-SymbolicName: tools.mdsd.mocore.instance.evaluation
 Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: mdsd.tools
-Automatic-Module-Name: tools.mdsd.mocore.instance.evaluation.test
+Automatic-Module-Name: tools.mdsd.mocore.instance.evaluation
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Require-Bundle: org.junit,
  org.junit.jupiter.api,
