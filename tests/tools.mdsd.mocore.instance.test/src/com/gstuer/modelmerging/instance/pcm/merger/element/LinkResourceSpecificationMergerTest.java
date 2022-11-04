@@ -17,7 +17,7 @@ import com.gstuer.modelmerging.instance.pcm.surrogate.relation.LinkResourceSpeci
 public class LinkResourceSpecificationMergerTest
         extends MergerTest<LinkResourceSpecificationMerger, PcmSurrogate, LinkResourceSpecification> {
     @Test
-    @DisabledIf("testApiOnly")
+    @DisabledIf(TEST_API_ONLY_METHOD_NAME)
     public void testRefineWithValidElementAddsCorrectImplications() {
         // Test data
         PcmSurrogate model = createEmptyModel();

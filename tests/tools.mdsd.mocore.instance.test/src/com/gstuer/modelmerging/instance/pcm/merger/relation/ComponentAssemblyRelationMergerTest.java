@@ -27,7 +27,7 @@ public class ComponentAssemblyRelationMergerTest extends RelationMergerTest<Comp
     private static final Interface RELATION_DESTINATION = Interface.getUniquePlaceholder();
 
     @Test
-    @DisabledIf("testApiOnly")
+    @DisabledIf(TEST_API_ONLY_METHOD_NAME)
     public void testRefinementRemovesParallelAssemblyPlaceholder() {
         // Test data
         PcmSurrogate model = createEmptyModel();
@@ -102,7 +102,7 @@ public class ComponentAssemblyRelationMergerTest extends RelationMergerTest<Comp
     }
 
     @Test
-    @DisabledIf("testApiOnly")
+    @DisabledIf(TEST_API_ONLY_METHOD_NAME)
     public void testRefinementAddsImplicitDeploymentRelation() {
         // Test data
         PcmSurrogate model = createEmptyModel();

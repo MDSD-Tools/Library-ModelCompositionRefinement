@@ -44,7 +44,7 @@ public abstract class RelationMergerTest<RM extends RelationMerger<M, R>, M exte
     }
 
     @Test
-    @DisabledIf("testApiOnly")
+    @DisabledIf(TEST_API_ONLY_METHOD_NAME)
     public void testReplaceDirectPlaceholders() {
         // Test data
         M model = createEmptyModel();
@@ -72,7 +72,7 @@ public abstract class RelationMergerTest<RM extends RelationMerger<M, R>, M exte
     }
 
     @Test
-    @DisabledIf("testApiOnly")
+    @DisabledIf(TEST_API_ONLY_METHOD_NAME)
     public void testProcessReplacesDirectPlaceholder() {
         // Test data
         M model = createEmptyModel();
@@ -100,7 +100,7 @@ public abstract class RelationMergerTest<RM extends RelationMerger<M, R>, M exte
     }
 
     @Test
-    @DisabledIf("testApiOnly")
+    @DisabledIf(TEST_API_ONLY_METHOD_NAME)
     public void testReplaceIndirectPlaceholdersSameSource() {
         // Test data
         M model = createEmptyModel();
@@ -142,7 +142,7 @@ public abstract class RelationMergerTest<RM extends RelationMerger<M, R>, M exte
     }
 
     @Test
-    @DisabledIf("testApiOnly")
+    @DisabledIf(TEST_API_ONLY_METHOD_NAME)
     public void testReplaceIndirectPlaceholdersSameDestination() {
         // Test data
         M model = createEmptyModel();
@@ -184,7 +184,7 @@ public abstract class RelationMergerTest<RM extends RelationMerger<M, R>, M exte
     }
 
     @Test
-    @DisabledIf("testApiOnly")
+    @DisabledIf(TEST_API_ONLY_METHOD_NAME)
     public void testProcessReplacesIndirectPlaceholder() {
         // Test data
         M model = createEmptyModel();
@@ -226,7 +226,7 @@ public abstract class RelationMergerTest<RM extends RelationMerger<M, R>, M exte
     }
 
     @Test
-    @DisabledIf("testApiOnly")
+    @DisabledIf(TEST_API_ONLY_METHOD_NAME)
     public void testReplaceIndirectPlaceholdersNoReplaceSameSource() {
         // Test data
         M model = createEmptyModel();
@@ -261,7 +261,7 @@ public abstract class RelationMergerTest<RM extends RelationMerger<M, R>, M exte
     }
 
     @Test
-    @DisabledIf("testApiOnly")
+    @DisabledIf(TEST_API_ONLY_METHOD_NAME)
     public void testReplaceIndirectPlaceholdersNoReplaceSameDestination() {
         // Test data
         M model = createEmptyModel();

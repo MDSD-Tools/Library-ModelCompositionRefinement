@@ -16,7 +16,7 @@ import com.gstuer.modelmerging.instance.pcm.surrogate.relation.ComponentAllocati
 
 public class ComponentMergerTest extends MergerTest<ComponentMerger, PcmSurrogate, Component> {
     @Test
-    @DisabledIf("testApiOnly")
+    @DisabledIf(TEST_API_ONLY_METHOD_NAME)
     public void testRefineWithValidElementAddsCorrectImplications() {
         // Test data
         PcmSurrogate model = createEmptyModel();

@@ -27,7 +27,7 @@ import com.gstuer.modelmerging.instance.pcm.utility.ElementFactory;
 public class DeploymentDeploymentRelationMergerTest extends RelationMergerTest<DeploymentDeploymentRelationMerger,
         PcmSurrogate, DeploymentDeploymentRelation, Deployment, Deployment> {
     @Test
-    @DisabledIf("testApiOnly")
+    @DisabledIf(TEST_API_ONLY_METHOD_NAME)
     public void testRefineWithValidElementAddsCorrectImplications() {
         // Test data
         PcmSurrogate model = createEmptyModel();
@@ -57,7 +57,7 @@ public class DeploymentDeploymentRelationMergerTest extends RelationMergerTest<D
     }
 
     @Test
-    @DisabledIf("testApiOnly")
+    @DisabledIf(TEST_API_ONLY_METHOD_NAME)
     public void testRefineDoesNotAddAssemblyIfParallelExists() {
         // Test data
         PcmSurrogate model = createEmptyModel();
@@ -101,7 +101,7 @@ public class DeploymentDeploymentRelationMergerTest extends RelationMergerTest<D
     }
 
     @Test
-    @DisabledIf("testApiOnly")
+    @DisabledIf(TEST_API_ONLY_METHOD_NAME)
     public void testRefineDoesNotAddAssemblyIfInverseExists() {
         // Test data
         PcmSurrogate model = createEmptyModel();
@@ -188,7 +188,7 @@ public class DeploymentDeploymentRelationMergerTest extends RelationMergerTest<D
 
     @Override
     @Test
-    @DisabledIf("testApiOnly")
+    @DisabledIf(TEST_API_ONLY_METHOD_NAME)
     public void testReplaceIndirectPlaceholdersSameSource() {
         // Test data
         PcmSurrogate model = createEmptyModel();
@@ -231,7 +231,7 @@ public class DeploymentDeploymentRelationMergerTest extends RelationMergerTest<D
 
     @Override
     @Test
-    @DisabledIf("testApiOnly")
+    @DisabledIf(TEST_API_ONLY_METHOD_NAME)
     public void testReplaceIndirectPlaceholdersSameDestination() {
         // Test data
         PcmSurrogate model = createEmptyModel();

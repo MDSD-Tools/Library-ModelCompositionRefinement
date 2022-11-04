@@ -11,7 +11,7 @@ import com.gstuer.modelmerging.instance.pcm.surrogate.element.Deployment;
 
 public class DeploymentMergerTest extends MergerTest<DeploymentMerger, PcmSurrogate, Deployment> {
     @Test
-    @DisabledIf("testApiOnly")
+    @DisabledIf(TEST_API_ONLY_METHOD_NAME)
     public void testRefineWithValidElementAddsCorrectImplications() {
         // Test data
         PcmSurrogate model = createEmptyModel();

@@ -17,7 +17,7 @@ import com.gstuer.modelmerging.instance.pcm.surrogate.relation.SignatureProvisio
 
 public class SignatureMergerTest extends MergerTest<SignatureMerger, PcmSurrogate, Signature> {
     @Test
-    @DisabledIf("testApiOnly")
+    @DisabledIf(TEST_API_ONLY_METHOD_NAME)
     public void testRefineWithValidElementAddsCorrectImplications() {
         // Test data
         PcmSurrogate model = createEmptyModel();

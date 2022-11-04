@@ -16,7 +16,7 @@ import com.gstuer.modelmerging.instance.pcm.surrogate.element.ServiceEffectSpeci
 public class ServiceEffectSpecificationMergerTest
         extends MergerTest<ServiceEffectSpecificationMerger, PcmSurrogate, ServiceEffectSpecification> {
     @Test
-    @DisabledIf("testApiOnly")
+    @DisabledIf(TEST_API_ONLY_METHOD_NAME)
     public void testRefineWithValidElementAddsCorrectImplications() {
         // Test data
         PcmSurrogate model = createEmptyModel();

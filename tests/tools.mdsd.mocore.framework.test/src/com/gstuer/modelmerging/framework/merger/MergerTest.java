@@ -14,7 +14,8 @@ import com.gstuer.modelmerging.framework.surrogate.Model;
 import com.gstuer.modelmerging.framework.surrogate.Replaceable;
 
 public abstract class MergerTest<U extends Merger<M, T>, M extends Model, T extends Replaceable> {
-    private static final Boolean TEST_API_ONLY = true;
+    protected static final String TEST_API_ONLY_METHOD_NAME = "testApiOnly";
+    private static final boolean TEST_API_ONLY = true;
 
     @Test
     public void testGetModelAfterCreation() {
@@ -53,7 +54,7 @@ public abstract class MergerTest<U extends Merger<M, T>, M extends Model, T exte
     }
 
     @Test
-    @DisabledIf("testApiOnly")
+    @DisabledIf(TEST_API_ONLY_METHOD_NAME)
     public void testMergeAddsReplaceableToModel() {
         // Test data
         M model = createEmptyModel();
@@ -88,7 +89,7 @@ public abstract class MergerTest<U extends Merger<M, T>, M extends Model, T exte
     }
 
     @Test
-    @DisabledIf("testApiOnly")
+    @DisabledIf(TEST_API_ONLY_METHOD_NAME)
     public void testProcessClearsImplications() {
         // Test data
         M model = createEmptyModel();
