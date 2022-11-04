@@ -71,5 +71,9 @@
             <unit id="org.palladiosimulator.branding" version="0.0.0" />
             <repository location="https://updatesite.palladio-simulator.com/palladio-supporting-branding/releases/latest/" />
         </location>
-	</locations>
+        <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="false" type="InstallableUnit">
+            <repository location="https://updatesite.mdsd.tools/build-licensefeature/releases/latest/"/>
+            <unit id="tools.mdsd.license.epl2.feature.group" version="1.0.0"/>
+        </location>
+    </locations>
 </target>
