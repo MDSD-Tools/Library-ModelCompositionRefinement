@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.Set;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledIf;
 
 import com.gstuer.modelmerging.framework.surrogate.Model;
 import com.gstuer.modelmerging.framework.surrogate.Relation;
@@ -43,6 +44,7 @@ public abstract class RelationMergerTest<RM extends RelationMerger<M, R>, M exte
     }
 
     @Test
+    @DisabledIf("testApiOnly")
     public void testReplaceDirectPlaceholders() {
         // Test data
         M model = createEmptyModel();
@@ -70,6 +72,7 @@ public abstract class RelationMergerTest<RM extends RelationMerger<M, R>, M exte
     }
 
     @Test
+    @DisabledIf("testApiOnly")
     public void testProcessReplacesDirectPlaceholder() {
         // Test data
         M model = createEmptyModel();
@@ -97,6 +100,7 @@ public abstract class RelationMergerTest<RM extends RelationMerger<M, R>, M exte
     }
 
     @Test
+    @DisabledIf("testApiOnly")
     public void testReplaceIndirectPlaceholdersSameSource() {
         // Test data
         M model = createEmptyModel();
@@ -138,6 +142,7 @@ public abstract class RelationMergerTest<RM extends RelationMerger<M, R>, M exte
     }
 
     @Test
+    @DisabledIf("testApiOnly")
     public void testReplaceIndirectPlaceholdersSameDestination() {
         // Test data
         M model = createEmptyModel();
@@ -179,6 +184,7 @@ public abstract class RelationMergerTest<RM extends RelationMerger<M, R>, M exte
     }
 
     @Test
+    @DisabledIf("testApiOnly")
     public void testProcessReplacesIndirectPlaceholder() {
         // Test data
         M model = createEmptyModel();
@@ -220,6 +226,7 @@ public abstract class RelationMergerTest<RM extends RelationMerger<M, R>, M exte
     }
 
     @Test
+    @DisabledIf("testApiOnly")
     public void testReplaceIndirectPlaceholdersNoReplaceSameSource() {
         // Test data
         M model = createEmptyModel();
@@ -254,6 +261,7 @@ public abstract class RelationMergerTest<RM extends RelationMerger<M, R>, M exte
     }
 
     @Test
+    @DisabledIf("testApiOnly")
     public void testReplaceIndirectPlaceholdersNoReplaceSameDestination() {
         // Test data
         M model = createEmptyModel();
