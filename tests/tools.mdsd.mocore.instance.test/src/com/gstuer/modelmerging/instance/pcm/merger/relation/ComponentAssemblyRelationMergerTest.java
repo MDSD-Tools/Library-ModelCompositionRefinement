@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledIf;
 
 import com.gstuer.modelmerging.framework.merger.RelationMergerTest;
 import com.gstuer.modelmerging.framework.surrogate.Replaceable;
@@ -26,6 +27,7 @@ public class ComponentAssemblyRelationMergerTest extends RelationMergerTest<Comp
     private static final Interface RELATION_DESTINATION = Interface.getUniquePlaceholder();
 
     @Test
+    @DisabledIf("testApiOnly")
     public void testRefinementRemovesParallelAssemblyPlaceholder() {
         // Test data
         PcmSurrogate model = createEmptyModel();
@@ -100,6 +102,7 @@ public class ComponentAssemblyRelationMergerTest extends RelationMergerTest<Comp
     }
 
     @Test
+    @DisabledIf("testApiOnly")
     public void testRefinementAddsImplicitDeploymentRelation() {
         // Test data
         PcmSurrogate model = createEmptyModel();

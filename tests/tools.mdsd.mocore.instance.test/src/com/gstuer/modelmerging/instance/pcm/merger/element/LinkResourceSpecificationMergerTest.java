@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.Set;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledIf;
 
 import com.gstuer.modelmerging.framework.merger.MergerTest;
 import com.gstuer.modelmerging.framework.surrogate.Replaceable;
@@ -16,6 +17,7 @@ import com.gstuer.modelmerging.instance.pcm.surrogate.relation.LinkResourceSpeci
 public class LinkResourceSpecificationMergerTest
         extends MergerTest<LinkResourceSpecificationMerger, PcmSurrogate, LinkResourceSpecification> {
     @Test
+    @DisabledIf("testApiOnly")
     public void testRefineWithValidElementAddsCorrectImplications() {
         // Test data
         PcmSurrogate model = createEmptyModel();

@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledIf;
 
 import com.gstuer.modelmerging.framework.merger.MergerTest;
 import com.gstuer.modelmerging.framework.surrogate.Replaceable;
@@ -16,6 +17,7 @@ import com.gstuer.modelmerging.instance.pcm.surrogate.relation.SignatureProvisio
 
 public class SignatureMergerTest extends MergerTest<SignatureMerger, PcmSurrogate, Signature> {
     @Test
+    @DisabledIf("testApiOnly")
     public void testRefineWithValidElementAddsCorrectImplications() {
         // Test data
         PcmSurrogate model = createEmptyModel();

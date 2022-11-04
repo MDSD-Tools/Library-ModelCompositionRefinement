@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledIf;
 
 import com.gstuer.modelmerging.framework.merger.RelationMergerTest;
 import com.gstuer.modelmerging.framework.surrogate.Replaceable;
@@ -26,6 +27,7 @@ import com.gstuer.modelmerging.instance.pcm.utility.ElementFactory;
 public class DeploymentDeploymentRelationMergerTest extends RelationMergerTest<DeploymentDeploymentRelationMerger,
         PcmSurrogate, DeploymentDeploymentRelation, Deployment, Deployment> {
     @Test
+    @DisabledIf("testApiOnly")
     public void testRefineWithValidElementAddsCorrectImplications() {
         // Test data
         PcmSurrogate model = createEmptyModel();
@@ -55,6 +57,7 @@ public class DeploymentDeploymentRelationMergerTest extends RelationMergerTest<D
     }
 
     @Test
+    @DisabledIf("testApiOnly")
     public void testRefineDoesNotAddAssemblyIfParallelExists() {
         // Test data
         PcmSurrogate model = createEmptyModel();
@@ -98,6 +101,7 @@ public class DeploymentDeploymentRelationMergerTest extends RelationMergerTest<D
     }
 
     @Test
+    @DisabledIf("testApiOnly")
     public void testRefineDoesNotAddAssemblyIfInverseExists() {
         // Test data
         PcmSurrogate model = createEmptyModel();
@@ -184,6 +188,7 @@ public class DeploymentDeploymentRelationMergerTest extends RelationMergerTest<D
 
     @Override
     @Test
+    @DisabledIf("testApiOnly")
     public void testReplaceIndirectPlaceholdersSameSource() {
         // Test data
         PcmSurrogate model = createEmptyModel();
@@ -226,6 +231,7 @@ public class DeploymentDeploymentRelationMergerTest extends RelationMergerTest<D
 
     @Override
     @Test
+    @DisabledIf("testApiOnly")
     public void testReplaceIndirectPlaceholdersSameDestination() {
         // Test data
         PcmSurrogate model = createEmptyModel();
