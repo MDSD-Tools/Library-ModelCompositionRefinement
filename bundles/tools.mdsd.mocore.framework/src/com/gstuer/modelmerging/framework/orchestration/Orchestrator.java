@@ -6,7 +6,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 import com.gstuer.modelmerging.framework.discovery.Discoverer;
-import com.gstuer.modelmerging.framework.merger.Processor;
+import com.gstuer.modelmerging.framework.processor.Processor;
 import com.gstuer.modelmerging.framework.surrogate.Model;
 import com.gstuer.modelmerging.framework.surrogate.Replaceable;
 

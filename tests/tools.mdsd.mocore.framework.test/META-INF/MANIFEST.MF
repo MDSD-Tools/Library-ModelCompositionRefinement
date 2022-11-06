@@ -7,7 +7,7 @@ Bundle-Vendor: mdsd.tools
 Automatic-Module-Name: tools.mdsd.mocore.framework.test
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Bundle-ActivationPolicy: lazy
-Export-Package: com.gstuer.modelmerging.framework.merger,
+Export-Package: com.gstuer.modelmerging.framework.processor,
  com.gstuer.modelmerging.framework.surrogate,
  com.gstuer.modelmerging.framework.transformation,
  com.gstuer.modelmerging.utility
