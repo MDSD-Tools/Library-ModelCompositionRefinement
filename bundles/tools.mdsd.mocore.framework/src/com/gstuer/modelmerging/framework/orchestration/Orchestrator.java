@@ -9,7 +9,6 @@ import com.gstuer.modelmerging.framework.discovery.Discoverer;
 import com.gstuer.modelmerging.framework.merger.Merger;
 import com.gstuer.modelmerging.framework.surrogate.Model;
 import com.gstuer.modelmerging.framework.surrogate.Replaceable;
-import com.gstuer.modelmerging.framework.transformation.Transformer;
 
 public abstract class Orchestrator<M extends Model> {
     private final M model;
@@ -25,10 +24,6 @@ public abstract class Orchestrator<M extends Model> {
 
     public M getModel() {
         return model;
-    }
-
-    public <N> N getModel(Transformer<M, N> transformer) {
-        return transformer.transform(this.model);
     }
 
     public <T extends Replaceable> void processDiscoverer(Discoverer<T> discoverer) {
