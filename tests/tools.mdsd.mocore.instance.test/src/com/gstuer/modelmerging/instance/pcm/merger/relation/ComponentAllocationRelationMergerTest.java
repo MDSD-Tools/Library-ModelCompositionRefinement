@@ -1,13 +1,13 @@
 package com.gstuer.modelmerging.instance.pcm.merger.relation;
 
-import com.gstuer.modelmerging.framework.merger.RelationMergerTest;
+import com.gstuer.modelmerging.framework.merger.RelationProcessorTest;
 import com.gstuer.modelmerging.instance.pcm.surrogate.PcmSurrogate;
 import com.gstuer.modelmerging.instance.pcm.surrogate.element.Component;
 import com.gstuer.modelmerging.instance.pcm.surrogate.element.Deployment;
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.ComponentAllocationRelation;
 import com.gstuer.modelmerging.instance.pcm.utility.ElementFactory;
 
-public class ComponentAllocationRelationMergerTest extends RelationMergerTest<ComponentAllocationRelationMerger,
+public class ComponentAllocationRelationMergerTest extends RelationProcessorTest<ComponentAllocationRelationMerger,
         PcmSurrogate, ComponentAllocationRelation, Component, Deployment> {
     @Override
     protected ComponentAllocationRelation createRelation(Component source, Deployment destination,
@@ -36,7 +36,7 @@ public class ComponentAllocationRelationMergerTest extends RelationMergerTest<Co
     }
 
     @Override
-    protected ComponentAllocationRelationMerger createMerger(PcmSurrogate model) {
+    protected ComponentAllocationRelationMerger createProcessor(PcmSurrogate model) {
         return new ComponentAllocationRelationMerger(model);
     }
 

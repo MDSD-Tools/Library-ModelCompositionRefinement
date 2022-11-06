@@ -1,6 +1,6 @@
 package com.gstuer.modelmerging.instance.pcm.merger.relation;
 
-import com.gstuer.modelmerging.framework.merger.RelationMergerTest;
+import com.gstuer.modelmerging.framework.merger.RelationProcessorTest;
 import com.gstuer.modelmerging.instance.pcm.surrogate.PcmSurrogate;
 import com.gstuer.modelmerging.instance.pcm.surrogate.element.Deployment;
 import com.gstuer.modelmerging.instance.pcm.surrogate.element.LinkResourceSpecification;
@@ -9,7 +9,7 @@ import com.gstuer.modelmerging.instance.pcm.surrogate.relation.LinkResourceSpeci
 import com.gstuer.modelmerging.instance.pcm.utility.ElementFactory;
 
 public class LinkResourceSpecificationRelationMergerTest
-        extends RelationMergerTest<LinkResourceSpecificationRelationMerger, PcmSurrogate,
+        extends RelationProcessorTest<LinkResourceSpecificationRelationMerger, PcmSurrogate,
                 LinkResourceSpecificationRelation, LinkResourceSpecification, DeploymentDeploymentRelation> {
     @Override
     protected LinkResourceSpecificationRelation createRelation(LinkResourceSpecification source,
@@ -39,7 +39,7 @@ public class LinkResourceSpecificationRelationMergerTest
     }
 
     @Override
-    protected LinkResourceSpecificationRelationMerger createMerger(PcmSurrogate model) {
+    protected LinkResourceSpecificationRelationMerger createProcessor(PcmSurrogate model) {
         return new LinkResourceSpecificationRelationMerger(model);
     }
 

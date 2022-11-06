@@ -9,19 +9,19 @@ import java.util.Set;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.DisabledIf;
 
-import com.gstuer.modelmerging.framework.merger.MergerTest;
+import com.gstuer.modelmerging.framework.merger.ProcessorTest;
 import com.gstuer.modelmerging.framework.surrogate.Replaceable;
 import com.gstuer.modelmerging.instance.pcm.surrogate.PcmSurrogate;
 import com.gstuer.modelmerging.instance.pcm.surrogate.element.Signature;
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.SignatureProvisionRelation;
 
-public class SignatureMergerTest extends MergerTest<SignatureMerger, PcmSurrogate, Signature> {
+public class SignatureMergerTest extends ProcessorTest<SignatureMerger, PcmSurrogate, Signature> {
     @Test
     @DisabledIf(TEST_API_ONLY_METHOD_NAME)
     public void testRefineWithValidElementAddsCorrectImplications() {
         // Test data
         PcmSurrogate model = createEmptyModel();
-        SignatureMerger merger = createMerger(model);
+        SignatureMerger merger = createProcessor(model);
         Signature element = createUniqueReplaceable();
 
         // Assertions: Pre-execution
@@ -43,7 +43,7 @@ public class SignatureMergerTest extends MergerTest<SignatureMerger, PcmSurrogat
     }
 
     @Override
-    protected SignatureMerger createMerger(PcmSurrogate model) {
+    protected SignatureMerger createProcessor(PcmSurrogate model) {
         return new SignatureMerger(model);
     }
 

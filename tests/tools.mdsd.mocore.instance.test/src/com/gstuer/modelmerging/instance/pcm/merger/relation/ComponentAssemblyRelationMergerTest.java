@@ -10,7 +10,7 @@ import java.util.Set;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.DisabledIf;
 
-import com.gstuer.modelmerging.framework.merger.RelationMergerTest;
+import com.gstuer.modelmerging.framework.merger.RelationProcessorTest;
 import com.gstuer.modelmerging.framework.surrogate.Replaceable;
 import com.gstuer.modelmerging.instance.pcm.surrogate.PcmSurrogate;
 import com.gstuer.modelmerging.instance.pcm.surrogate.element.Component;
@@ -22,7 +22,7 @@ import com.gstuer.modelmerging.instance.pcm.surrogate.relation.DeploymentDeploym
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.InterfaceProvisionRelation;
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.InterfaceRequirementRelation;
 
-public class ComponentAssemblyRelationMergerTest extends RelationMergerTest<ComponentAssemblyRelationMerger,
+public class ComponentAssemblyRelationMergerTest extends RelationProcessorTest<ComponentAssemblyRelationMerger,
         PcmSurrogate, ComponentAssemblyRelation, InterfaceProvisionRelation, InterfaceRequirementRelation> {
     private static final Interface RELATION_DESTINATION = Interface.getUniquePlaceholder();
 
@@ -31,7 +31,7 @@ public class ComponentAssemblyRelationMergerTest extends RelationMergerTest<Comp
     public void testRefinementRemovesParallelAssemblyPlaceholder() {
         // Test data
         PcmSurrogate model = createEmptyModel();
-        ComponentAssemblyRelationMerger merger = createMerger(model);
+        ComponentAssemblyRelationMerger merger = createProcessor(model);
 
         InterfaceProvisionRelation interfaceProvision = getUniqueNonPlaceholderSourceEntity();
         InterfaceRequirementRelation interfaceRequirement = getUniqueNonPlaceholderDestinationEntity();
@@ -106,7 +106,7 @@ public class ComponentAssemblyRelationMergerTest extends RelationMergerTest<Comp
     public void testRefinementAddsImplicitDeploymentRelation() {
         // Test data
         PcmSurrogate model = createEmptyModel();
-        ComponentAssemblyRelationMerger merger = createMerger(model);
+        ComponentAssemblyRelationMerger merger = createProcessor(model);
 
         InterfaceProvisionRelation interfaceProvision = getUniqueNonPlaceholderSourceEntity();
         InterfaceRequirementRelation interfaceRequirement = getUniqueNonPlaceholderDestinationEntity();
@@ -174,7 +174,7 @@ public class ComponentAssemblyRelationMergerTest extends RelationMergerTest<Comp
     }
 
     @Override
-    protected ComponentAssemblyRelationMerger createMerger(PcmSurrogate model) {
+    protected ComponentAssemblyRelationMerger createProcessor(PcmSurrogate model) {
         return new ComponentAssemblyRelationMerger(model);
     }
 

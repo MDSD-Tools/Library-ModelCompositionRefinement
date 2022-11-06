@@ -8,19 +8,19 @@ import java.util.Set;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.DisabledIf;
 
-import com.gstuer.modelmerging.framework.merger.MergerTest;
+import com.gstuer.modelmerging.framework.merger.ProcessorTest;
 import com.gstuer.modelmerging.framework.surrogate.Replaceable;
 import com.gstuer.modelmerging.instance.pcm.surrogate.PcmSurrogate;
 import com.gstuer.modelmerging.instance.pcm.surrogate.element.Interface;
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.InterfaceProvisionRelation;
 
-public class InterfaceMergerTest extends MergerTest<InterfaceMerger, PcmSurrogate, Interface> {
+public class InterfaceMergerTest extends ProcessorTest<InterfaceMerger, PcmSurrogate, Interface> {
     @Test
     @DisabledIf(TEST_API_ONLY_METHOD_NAME)
     public void testRefineWithValidElementAddsCorrectImplications() {
         // Test data
         PcmSurrogate model = createEmptyModel();
-        InterfaceMerger merger = createMerger(model);
+        InterfaceMerger merger = createProcessor(model);
         Interface element = createUniqueReplaceable();
 
         // Assertions: Pre-execution
@@ -41,7 +41,7 @@ public class InterfaceMergerTest extends MergerTest<InterfaceMerger, PcmSurrogat
     }
 
     @Override
-    protected InterfaceMerger createMerger(PcmSurrogate model) {
+    protected InterfaceMerger createProcessor(PcmSurrogate model) {
         return new InterfaceMerger(model);
     }
 

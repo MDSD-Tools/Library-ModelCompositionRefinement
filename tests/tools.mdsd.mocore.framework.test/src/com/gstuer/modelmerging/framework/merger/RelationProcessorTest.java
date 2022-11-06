@@ -12,13 +12,14 @@ import com.gstuer.modelmerging.framework.surrogate.Model;
 import com.gstuer.modelmerging.framework.surrogate.Relation;
 import com.gstuer.modelmerging.framework.surrogate.Replaceable;
 
-public abstract class RelationMergerTest<RM extends RelationProcessor<M, R>, M extends Model, R extends Relation<T, S>,
-        T extends Replaceable, S extends Replaceable> extends MergerTest<RM, M, R> {
+public abstract class RelationProcessorTest<RP extends RelationProcessor<M, R>, M extends Model,
+        R extends Relation<T, S>,
+        T extends Replaceable, S extends Replaceable> extends ProcessorTest<RP, M, R> {
     @Test
     public void testProcessAddsSourceAndDestinationToImplications() {
         // Test data
         M model = createEmptyModel();
-        RM merger = createMerger(model);
+        RP processor = createProcessor(model);
         T source = getUniqueNonPlaceholderSourceEntity();
         S destination = getUniqueNonPlaceholderDestinationEntity();
         R relation = createRelation(source, destination, false);
@@ -27,20 +28,20 @@ public abstract class RelationMergerTest<RM extends RelationProcessor<M, R>, M e
         assertFalse(model.contains(source));
         assertFalse(model.contains(destination));
         assertFalse(model.contains(relation));
-        assertFalse(merger.getImplications().contains(source));
-        assertFalse(merger.getImplications().contains(destination));
-        assertFalse(merger.getImplications().contains(relation));
+        assertFalse(processor.getImplications().contains(source));
+        assertFalse(processor.getImplications().contains(destination));
+        assertFalse(processor.getImplications().contains(relation));
 
         // Execution
-        merger.process(relation);
+        processor.process(relation);
 
         // Assertions Post-Execution
         assertFalse(model.contains(source));
         assertFalse(model.contains(destination));
         assertTrue(model.contains(relation));
-        assertTrue(merger.getImplications().contains(source));
-        assertTrue(merger.getImplications().contains(destination));
-        assertFalse(merger.getImplications().contains(relation));
+        assertTrue(processor.getImplications().contains(source));
+        assertTrue(processor.getImplications().contains(destination));
+        assertFalse(processor.getImplications().contains(relation));
     }
 
     @Test
@@ -48,21 +49,21 @@ public abstract class RelationMergerTest<RM extends RelationProcessor<M, R>, M e
     public void testReplaceDirectPlaceholders() {
         // Test data
         M model = createEmptyModel();
-        RM merger = createMerger(model);
+        RP processor = createProcessor(model);
         T source = getUniqueNonPlaceholderSourceEntity();
         S destination = getUniqueNonPlaceholderDestinationEntity();
         R relation = createRelation(source, destination, false);
         R placeholder = createRelation(source, destination, true);
 
         // Execution & Assertions to add placeholder
-        merger.merge(placeholder);
+        processor.merge(placeholder);
         assertTrue(model.contains(placeholder));
         assertFalse(model.contains(relation));
-        assertTrue(merger.getImplications().isEmpty());
+        assertTrue(processor.getImplications().isEmpty());
 
         // Execution to replace placeholder
-        merger.replaceDirectPlaceholders(relation);
-        Set<Replaceable> implications = merger.getImplications();
+        processor.replaceDirectPlaceholders(relation);
+        Set<Replaceable> implications = processor.getImplications();
 
         // Assertions
         assertFalse(model.contains(placeholder));
@@ -76,21 +77,21 @@ public abstract class RelationMergerTest<RM extends RelationProcessor<M, R>, M e
     public void testProcessReplacesDirectPlaceholder() {
         // Test data
         M model = createEmptyModel();
-        RM merger = createMerger(model);
+        RP processor = createProcessor(model);
         T source = getUniqueNonPlaceholderSourceEntity();
         S destination = getUniqueNonPlaceholderDestinationEntity();
         R relation = createRelation(source, destination, false);
         R placeholder = createRelation(source, destination, true);
 
         // Execution & Assertions to add placeholder
-        merger.merge(placeholder);
+        processor.merge(placeholder);
         assertTrue(model.contains(placeholder));
         assertFalse(model.contains(relation));
-        assertTrue(merger.getImplications().isEmpty());
+        assertTrue(processor.getImplications().isEmpty());
 
         // Execution to replace placeholder
-        merger.process(relation);
-        Set<Replaceable> implications = merger.getImplications();
+        processor.process(relation);
+        Set<Replaceable> implications = processor.getImplications();
 
         // Assertions
         assertFalse(model.contains(placeholder));
@@ -104,7 +105,7 @@ public abstract class RelationMergerTest<RM extends RelationProcessor<M, R>, M e
     public void testReplaceIndirectPlaceholdersSameSource() {
         // Test data
         M model = createEmptyModel();
-        RM merger = createMerger(model);
+        RP processor = createProcessor(model);
         T source = getUniqueNonPlaceholderSourceEntity();
         S destination = getUniqueNonPlaceholderDestinationEntity();
         S destinationPlaceholder = getPlaceholderOfDestinationEntity(destination);
@@ -112,7 +113,7 @@ public abstract class RelationMergerTest<RM extends RelationProcessor<M, R>, M e
         R placeholder = createRelation(source, destinationPlaceholder, true);
 
         // Execution & Assertions to add placeholder
-        merger.merge(placeholder);
+        processor.merge(placeholder);
         model.add(source);
         model.add(destinationPlaceholder);
         assertTrue(model.contains(placeholder));
@@ -120,11 +121,11 @@ public abstract class RelationMergerTest<RM extends RelationProcessor<M, R>, M e
         assertTrue(model.contains(destinationPlaceholder));
         assertFalse(model.contains(destination));
         assertFalse(model.contains(relation));
-        assertTrue(merger.getImplications().isEmpty());
+        assertTrue(processor.getImplications().isEmpty());
 
         // Execution to replace placeholder
-        merger.replaceIndirectPlaceholders(relation);
-        Set<Replaceable> implications = merger.getImplications();
+        processor.replaceIndirectPlaceholders(relation);
+        Set<Replaceable> implications = processor.getImplications();
 
         // Assertions - Model State
         assertFalse(model.contains(placeholder));
@@ -146,7 +147,7 @@ public abstract class RelationMergerTest<RM extends RelationProcessor<M, R>, M e
     public void testReplaceIndirectPlaceholdersSameDestination() {
         // Test data
         M model = createEmptyModel();
-        RM merger = createMerger(model);
+        RP processor = createProcessor(model);
         T source = getUniqueNonPlaceholderSourceEntity();
         T sourcePlaceholder = getPlaceholderOfSourceEntity(source);
         S destination = getUniqueNonPlaceholderDestinationEntity();
@@ -154,7 +155,7 @@ public abstract class RelationMergerTest<RM extends RelationProcessor<M, R>, M e
         R placeholder = createRelation(sourcePlaceholder, destination, true);
 
         // Execution & Assertions to add placeholder
-        merger.merge(placeholder);
+        processor.merge(placeholder);
         model.add(sourcePlaceholder);
         model.add(destination);
         assertTrue(model.contains(placeholder));
@@ -162,11 +163,11 @@ public abstract class RelationMergerTest<RM extends RelationProcessor<M, R>, M e
         assertTrue(model.contains(destination));
         assertFalse(model.contains(source));
         assertFalse(model.contains(relation));
-        assertTrue(merger.getImplications().isEmpty());
+        assertTrue(processor.getImplications().isEmpty());
 
         // Execution to replace placeholder
-        merger.replaceIndirectPlaceholders(relation);
-        Set<Replaceable> implications = merger.getImplications();
+        processor.replaceIndirectPlaceholders(relation);
+        Set<Replaceable> implications = processor.getImplications();
 
         // Assertions - Model State
         assertFalse(model.contains(placeholder));
@@ -188,7 +189,7 @@ public abstract class RelationMergerTest<RM extends RelationProcessor<M, R>, M e
     public void testProcessReplacesIndirectPlaceholder() {
         // Test data
         M model = createEmptyModel();
-        RM merger = createMerger(model);
+        RP processor = createProcessor(model);
         T source = getUniqueNonPlaceholderSourceEntity();
         S destination = getUniqueNonPlaceholderDestinationEntity();
         S destinationPlaceholder = getPlaceholderOfDestinationEntity(destination);
@@ -196,7 +197,7 @@ public abstract class RelationMergerTest<RM extends RelationProcessor<M, R>, M e
         R placeholder = createRelation(source, destinationPlaceholder, true);
 
         // Execution & Assertions to add placeholder
-        merger.merge(placeholder);
+        processor.merge(placeholder);
         model.add(source);
         model.add(destinationPlaceholder);
         assertTrue(model.contains(placeholder));
@@ -204,11 +205,11 @@ public abstract class RelationMergerTest<RM extends RelationProcessor<M, R>, M e
         assertTrue(model.contains(destinationPlaceholder));
         assertFalse(model.contains(destination));
         assertFalse(model.contains(relation));
-        assertTrue(merger.getImplications().isEmpty());
+        assertTrue(processor.getImplications().isEmpty());
 
         // Execution to replace placeholder
-        merger.process(relation);
-        Set<Replaceable> implications = merger.getImplications();
+        processor.process(relation);
+        Set<Replaceable> implications = processor.getImplications();
 
         // Assertions - Model State
         assertFalse(model.contains(placeholder));
@@ -230,7 +231,7 @@ public abstract class RelationMergerTest<RM extends RelationProcessor<M, R>, M e
     public void testReplaceIndirectPlaceholdersNoReplaceSameSource() {
         // Test data
         M model = createEmptyModel();
-        RM merger = createMerger(model);
+        RP processor = createProcessor(model);
         T source = getUniqueNonPlaceholderSourceEntity();
         S destination = getUniqueNonPlaceholderDestinationEntity();
         S otherDestination = getUniqueNonPlaceholderDestinationEntity();
@@ -242,8 +243,8 @@ public abstract class RelationMergerTest<RM extends RelationProcessor<M, R>, M e
         model.add(destination);
         model.add(otherDestination);
         model.add(otherRelation);
-        merger.replaceIndirectPlaceholders(relation);
-        Set<Replaceable> implications = merger.getImplications();
+        processor.replaceIndirectPlaceholders(relation);
+        Set<Replaceable> implications = processor.getImplications();
 
         // Assertions - Model State
         assertTrue(model.contains(source));
@@ -265,7 +266,7 @@ public abstract class RelationMergerTest<RM extends RelationProcessor<M, R>, M e
     public void testReplaceIndirectPlaceholdersNoReplaceSameDestination() {
         // Test data
         M model = createEmptyModel();
-        RM merger = createMerger(model);
+        RP processor = createProcessor(model);
         T source = getUniqueNonPlaceholderSourceEntity();
         T otherSource = getUniqueNonPlaceholderSourceEntity();
         S destination = getUniqueNonPlaceholderDestinationEntity();
@@ -277,8 +278,8 @@ public abstract class RelationMergerTest<RM extends RelationProcessor<M, R>, M e
         model.add(destination);
         model.add(otherSource);
         model.add(otherRelation);
-        merger.replaceIndirectPlaceholders(relation);
-        Set<Replaceable> implications = merger.getImplications();
+        processor.replaceIndirectPlaceholders(relation);
+        Set<Replaceable> implications = processor.getImplications();
 
         // Assertions - Model State
         assertTrue(model.contains(source));

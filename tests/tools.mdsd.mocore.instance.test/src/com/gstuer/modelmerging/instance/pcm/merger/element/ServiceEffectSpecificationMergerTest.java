@@ -8,19 +8,19 @@ import java.util.Set;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.DisabledIf;
 
-import com.gstuer.modelmerging.framework.merger.MergerTest;
+import com.gstuer.modelmerging.framework.merger.ProcessorTest;
 import com.gstuer.modelmerging.framework.surrogate.Replaceable;
 import com.gstuer.modelmerging.instance.pcm.surrogate.PcmSurrogate;
 import com.gstuer.modelmerging.instance.pcm.surrogate.element.ServiceEffectSpecification;
 
 public class ServiceEffectSpecificationMergerTest
-        extends MergerTest<ServiceEffectSpecificationMerger, PcmSurrogate, ServiceEffectSpecification> {
+        extends ProcessorTest<ServiceEffectSpecificationMerger, PcmSurrogate, ServiceEffectSpecification> {
     @Test
     @DisabledIf(TEST_API_ONLY_METHOD_NAME)
     public void testRefineWithValidElementAddsCorrectImplications() {
         // Test data
         PcmSurrogate model = createEmptyModel();
-        ServiceEffectSpecificationMerger merger = createMerger(model);
+        ServiceEffectSpecificationMerger merger = createProcessor(model);
         ServiceEffectSpecification element = createUniqueReplaceable();
 
         // Assertions: Pre-execution
@@ -35,7 +35,7 @@ public class ServiceEffectSpecificationMergerTest
     }
 
     @Override
-    protected ServiceEffectSpecificationMerger createMerger(PcmSurrogate model) {
+    protected ServiceEffectSpecificationMerger createProcessor(PcmSurrogate model) {
         return new ServiceEffectSpecificationMerger(model);
     }
 

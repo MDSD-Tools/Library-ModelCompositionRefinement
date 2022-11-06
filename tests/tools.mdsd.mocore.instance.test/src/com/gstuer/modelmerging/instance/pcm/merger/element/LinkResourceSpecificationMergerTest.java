@@ -8,20 +8,20 @@ import java.util.Set;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.DisabledIf;
 
-import com.gstuer.modelmerging.framework.merger.MergerTest;
+import com.gstuer.modelmerging.framework.merger.ProcessorTest;
 import com.gstuer.modelmerging.framework.surrogate.Replaceable;
 import com.gstuer.modelmerging.instance.pcm.surrogate.PcmSurrogate;
 import com.gstuer.modelmerging.instance.pcm.surrogate.element.LinkResourceSpecification;
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.LinkResourceSpecificationRelation;
 
 public class LinkResourceSpecificationMergerTest
-        extends MergerTest<LinkResourceSpecificationMerger, PcmSurrogate, LinkResourceSpecification> {
+        extends ProcessorTest<LinkResourceSpecificationMerger, PcmSurrogate, LinkResourceSpecification> {
     @Test
     @DisabledIf(TEST_API_ONLY_METHOD_NAME)
     public void testRefineWithValidElementAddsCorrectImplications() {
         // Test data
         PcmSurrogate model = createEmptyModel();
-        LinkResourceSpecificationMerger merger = createMerger(model);
+        LinkResourceSpecificationMerger merger = createProcessor(model);
         LinkResourceSpecification element = createUniqueReplaceable();
 
         // Assertions: Pre-execution
@@ -44,7 +44,7 @@ public class LinkResourceSpecificationMergerTest
     }
 
     @Override
-    protected LinkResourceSpecificationMerger createMerger(PcmSurrogate model) {
+    protected LinkResourceSpecificationMerger createProcessor(PcmSurrogate model) {
         return new LinkResourceSpecificationMerger(model);
     }
 

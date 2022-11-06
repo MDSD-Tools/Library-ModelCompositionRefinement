@@ -13,7 +13,7 @@ import org.junit.jupiter.api.condition.DisabledIf;
 import com.gstuer.modelmerging.framework.surrogate.Model;
 import com.gstuer.modelmerging.framework.surrogate.Replaceable;
 
-public abstract class MergerTest<U extends Processor<M, T>, M extends Model, T extends Replaceable> {
+public abstract class ProcessorTest<U extends Processor<M, T>, M extends Model, T extends Replaceable> {
     protected static final String TEST_API_ONLY_METHOD_NAME = "testApiOnly";
     private static final boolean TEST_API_ONLY = false;
 
@@ -21,21 +21,21 @@ public abstract class MergerTest<U extends Processor<M, T>, M extends Model, T e
     public void testGetModelAfterCreation() {
         // Test data
         M model = createEmptyModel();
-        U merger = createMerger(model);
+        U processor = createProcessor(model);
 
         // Assertions
-        assertNotNull(merger.getModel());
-        assertEquals(model, merger.getModel());
+        assertNotNull(processor.getModel());
+        assertEquals(model, processor.getModel());
     }
 
     @Test
     public void testGetImplicationsAfterCreation() {
         // Test data
         M model = createEmptyModel();
-        U merger = createMerger(model);
+        U processor = createProcessor(model);
 
         // Execution
-        Set<Replaceable> implications = merger.getImplications();
+        Set<Replaceable> implications = processor.getImplications();
 
         // Assertions
         assertNotNull(implications);
@@ -46,11 +46,11 @@ public abstract class MergerTest<U extends Processor<M, T>, M extends Model, T e
     public void testGetProcessableType() {
         // Test data
         M model = createEmptyModel();
-        U merger = createMerger(model);
+        U processor = createProcessor(model);
         T replaceable = createUniqueReplaceable();
 
         // Assertions
-        assertEquals(replaceable.getClass(), merger.getProcessableType());
+        assertEquals(replaceable.getClass(), processor.getProcessableType());
     }
 
     @Test
@@ -58,14 +58,14 @@ public abstract class MergerTest<U extends Processor<M, T>, M extends Model, T e
     public void testMergeAddsReplaceableToModel() {
         // Test data
         M model = createEmptyModel();
-        U merger = createMerger(model);
+        U processor = createProcessor(model);
         T replaceable = createUniqueReplaceable();
 
         // Assertions Pre-Execution
         assertFalse(model.contains(replaceable));
 
         // Execution
-        merger.merge(replaceable);
+        processor.merge(replaceable);
 
         // Assertions Post-Execution
         assertTrue(model.contains(replaceable));
@@ -75,14 +75,14 @@ public abstract class MergerTest<U extends Processor<M, T>, M extends Model, T e
     public void testProcessExecutesMerge() {
         // Test data
         M model = createEmptyModel();
-        U merger = createMerger(model);
+        U processor = createProcessor(model);
         T replaceable = createUniqueReplaceable();
 
         // Assertions Pre-Execution
         assertFalse(model.contains(replaceable));
 
         // Execution
-        merger.process(replaceable);
+        processor.process(replaceable);
 
         // Assertions Post-Execution
         assertTrue(model.contains(replaceable));
@@ -93,23 +93,23 @@ public abstract class MergerTest<U extends Processor<M, T>, M extends Model, T e
     public void testProcessClearsImplications() {
         // Test data
         M model = createEmptyModel();
-        U merger = createMerger(model);
+        U processor = createProcessor(model);
         T replaceable = createUniqueReplaceable();
 
         // Assertions Pre-Execution
-        merger.addImplication(replaceable);
-        assertTrue(merger.getImplications().contains(replaceable));
-        assertFalse(merger.getImplications().isEmpty());
+        processor.addImplication(replaceable);
+        assertTrue(processor.getImplications().contains(replaceable));
+        assertFalse(processor.getImplications().isEmpty());
 
         // Execution
-        merger.process(replaceable);
-        Set<Replaceable> implications = merger.getImplications();
+        processor.process(replaceable);
+        Set<Replaceable> implications = processor.getImplications();
 
         // Assertions Post-Execution
         assertFalse(implications.contains(replaceable));
     }
 
-    protected abstract U createMerger(M model);
+    protected abstract U createProcessor(M model);
 
     protected abstract M createEmptyModel();
 

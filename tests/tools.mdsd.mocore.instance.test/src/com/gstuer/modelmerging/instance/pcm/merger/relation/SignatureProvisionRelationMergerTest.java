@@ -1,13 +1,13 @@
 package com.gstuer.modelmerging.instance.pcm.merger.relation;
 
-import com.gstuer.modelmerging.framework.merger.RelationMergerTest;
+import com.gstuer.modelmerging.framework.merger.RelationProcessorTest;
 import com.gstuer.modelmerging.instance.pcm.surrogate.PcmSurrogate;
 import com.gstuer.modelmerging.instance.pcm.surrogate.element.Interface;
 import com.gstuer.modelmerging.instance.pcm.surrogate.element.Signature;
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.SignatureProvisionRelation;
 import com.gstuer.modelmerging.instance.pcm.utility.ElementFactory;
 
-public class SignatureProvisionRelationMergerTest extends RelationMergerTest<SignatureProvisionRelationMerger,
+public class SignatureProvisionRelationMergerTest extends RelationProcessorTest<SignatureProvisionRelationMerger,
         PcmSurrogate, SignatureProvisionRelation, Signature, Interface> {
     @Override
     protected SignatureProvisionRelation createRelation(Signature source, Interface destination,
@@ -36,7 +36,7 @@ public class SignatureProvisionRelationMergerTest extends RelationMergerTest<Sig
     }
 
     @Override
-    protected SignatureProvisionRelationMerger createMerger(PcmSurrogate model) {
+    protected SignatureProvisionRelationMerger createProcessor(PcmSurrogate model) {
         return new SignatureProvisionRelationMerger(model);
     }
 

@@ -1,6 +1,6 @@
 package com.gstuer.modelmerging.instance.pcm.merger.relation;
 
-import com.gstuer.modelmerging.framework.merger.RelationMergerTest;
+import com.gstuer.modelmerging.framework.merger.RelationProcessorTest;
 import com.gstuer.modelmerging.instance.pcm.surrogate.PcmSurrogate;
 import com.gstuer.modelmerging.instance.pcm.surrogate.element.Component;
 import com.gstuer.modelmerging.instance.pcm.surrogate.element.Interface;
@@ -10,7 +10,7 @@ import com.gstuer.modelmerging.instance.pcm.surrogate.relation.InterfaceProvisio
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.SignatureProvisionRelation;
 
 public class ComponentSignatureProvisionRelationMergerTest
-        extends RelationMergerTest<ComponentSignatureProvisionRelationMerger, PcmSurrogate,
+        extends RelationProcessorTest<ComponentSignatureProvisionRelationMerger, PcmSurrogate,
                 ComponentSignatureProvisionRelation, InterfaceProvisionRelation, SignatureProvisionRelation> {
     private static final Interface RELATION_INTERFACE = Interface.getUniquePlaceholder();
 
@@ -43,7 +43,7 @@ public class ComponentSignatureProvisionRelationMergerTest
     }
 
     @Override
-    protected ComponentSignatureProvisionRelationMerger createMerger(PcmSurrogate model) {
+    protected ComponentSignatureProvisionRelationMerger createProcessor(PcmSurrogate model) {
         return new ComponentSignatureProvisionRelationMerger(model);
     }
 

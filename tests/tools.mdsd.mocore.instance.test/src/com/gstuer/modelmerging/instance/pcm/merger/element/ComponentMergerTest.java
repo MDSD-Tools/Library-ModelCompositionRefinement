@@ -8,19 +8,19 @@ import java.util.Set;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.DisabledIf;
 
-import com.gstuer.modelmerging.framework.merger.MergerTest;
+import com.gstuer.modelmerging.framework.merger.ProcessorTest;
 import com.gstuer.modelmerging.framework.surrogate.Replaceable;
 import com.gstuer.modelmerging.instance.pcm.surrogate.PcmSurrogate;
 import com.gstuer.modelmerging.instance.pcm.surrogate.element.Component;
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.ComponentAllocationRelation;
 
-public class ComponentMergerTest extends MergerTest<ComponentMerger, PcmSurrogate, Component> {
+public class ComponentMergerTest extends ProcessorTest<ComponentMerger, PcmSurrogate, Component> {
     @Test
     @DisabledIf(TEST_API_ONLY_METHOD_NAME)
     public void testRefineWithValidElementAddsCorrectImplications() {
         // Test data
         PcmSurrogate model = createEmptyModel();
-        ComponentMerger merger = createMerger(model);
+        ComponentMerger merger = createProcessor(model);
         Component element = createUniqueReplaceable();
 
         // Assertions: Pre-execution
@@ -41,7 +41,7 @@ public class ComponentMergerTest extends MergerTest<ComponentMerger, PcmSurrogat
     }
 
     @Override
-    protected ComponentMerger createMerger(PcmSurrogate model) {
+    protected ComponentMerger createProcessor(PcmSurrogate model) {
         return new ComponentMerger(model);
     }
 
