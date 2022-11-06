@@ -31,7 +31,7 @@ public class ComponentAssemblyRelationProcessorTest extends RelationProcessorTes
     public void testRefinementRemovesParallelAssemblyPlaceholder() {
         // Test data
         PcmSurrogate model = createEmptyModel();
-        ComponentAssemblyRelationProcessor merger = createProcessor(model);
+        ComponentAssemblyRelationProcessor processor = createProcessor(model);
 
         InterfaceProvisionRelation interfaceProvision = getUniqueNonPlaceholderSourceEntity();
         InterfaceRequirementRelation interfaceRequirement = getUniqueNonPlaceholderDestinationEntity();
@@ -71,7 +71,7 @@ public class ComponentAssemblyRelationProcessorTest extends RelationProcessorTes
         model.add(placeholderRelation);
 
         // Assertions: Pre-execution
-        assertTrue(merger.getImplications().isEmpty());
+        assertTrue(processor.getImplications().isEmpty());
         assertTrue(model.contains(placeholderProvision.getSource()));
         assertTrue(model.contains(placeholderProvision.getDestination()));
         assertTrue(model.contains(placeholderRequirement.getSource()));
@@ -82,8 +82,8 @@ public class ComponentAssemblyRelationProcessorTest extends RelationProcessorTes
         assertTrue(model.contains(placeholderRelation));
 
         // Execution
-        merger.refine(relation);
-        Set<Replaceable> implications = new HashSet<>(merger.getImplications());
+        processor.refine(relation);
+        Set<Replaceable> implications = new HashSet<>(processor.getImplications());
 
         // Assertions: Post-execution
         assertFalse(model.contains(placeholderProvision.getSource()));
@@ -106,7 +106,7 @@ public class ComponentAssemblyRelationProcessorTest extends RelationProcessorTes
     public void testRefinementAddsImplicitDeploymentRelation() {
         // Test data
         PcmSurrogate model = createEmptyModel();
-        ComponentAssemblyRelationProcessor merger = createProcessor(model);
+        ComponentAssemblyRelationProcessor processor = createProcessor(model);
 
         InterfaceProvisionRelation interfaceProvision = getUniqueNonPlaceholderSourceEntity();
         InterfaceRequirementRelation interfaceRequirement = getUniqueNonPlaceholderDestinationEntity();
@@ -126,11 +126,11 @@ public class ComponentAssemblyRelationProcessorTest extends RelationProcessorTes
         model.add(requiringAllocation);
 
         // Assertions: Pre-execution
-        assertTrue(merger.getImplications().isEmpty());
+        assertTrue(processor.getImplications().isEmpty());
 
         // Execution
-        merger.refine(relation);
-        Set<Replaceable> implications = new HashSet<>(merger.getImplications());
+        processor.refine(relation);
+        Set<Replaceable> implications = new HashSet<>(processor.getImplications());
 
         // Assertions: Post-execution
         assertTrue(implications.remove(relation.getSource()));

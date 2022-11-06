@@ -21,15 +21,15 @@ public class LinkResourceSpecificationProcessorTest
     public void testRefineWithValidElementAddsCorrectImplications() {
         // Test data
         PcmSurrogate model = createEmptyModel();
-        LinkResourceSpecificationProcessor merger = createProcessor(model);
+        LinkResourceSpecificationProcessor processor = createProcessor(model);
         LinkResourceSpecification element = createUniqueReplaceable();
 
         // Assertions: Pre-execution
-        assertTrue(merger.getImplications().isEmpty());
+        assertTrue(processor.getImplications().isEmpty());
 
         // Execution
-        merger.refine(element);
-        Set<Replaceable> implications = merger.getImplications();
+        processor.refine(element);
+        Set<Replaceable> implications = processor.getImplications();
 
         // Assertions: Post-execution
         assertEquals(1, implications.size());

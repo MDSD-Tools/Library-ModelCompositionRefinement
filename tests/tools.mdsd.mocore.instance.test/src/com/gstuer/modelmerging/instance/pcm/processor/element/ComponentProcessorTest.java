@@ -20,15 +20,15 @@ public class ComponentProcessorTest extends ProcessorTest<ComponentProcessor, Pc
     public void testRefineWithValidElementAddsCorrectImplications() {
         // Test data
         PcmSurrogate model = createEmptyModel();
-        ComponentProcessor merger = createProcessor(model);
+        ComponentProcessor processor = createProcessor(model);
         Component element = createUniqueReplaceable();
 
         // Assertions: Pre-execution
-        assertTrue(merger.getImplications().isEmpty());
+        assertTrue(processor.getImplications().isEmpty());
 
         // Execution
-        merger.refine(element);
-        Set<Replaceable> implications = merger.getImplications();
+        processor.refine(element);
+        Set<Replaceable> implications = processor.getImplications();
 
         // Assertions: Post-execution
         assertEquals(1, implications.size());

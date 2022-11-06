@@ -15,17 +15,17 @@ public class DeploymentProcessorTest extends ProcessorTest<DeploymentProcessor, 
     public void testRefineWithValidElementAddsCorrectImplications() {
         // Test data
         PcmSurrogate model = createEmptyModel();
-        DeploymentProcessor merger = createProcessor(model);
+        DeploymentProcessor processor = createProcessor(model);
         Deployment element = createUniqueReplaceable();
 
         // Assertions: Pre-execution
-        assertTrue(merger.getImplications().isEmpty());
+        assertTrue(processor.getImplications().isEmpty());
 
         // Execution
-        merger.refine(element);
+        processor.refine(element);
 
         // Assertions: Post-execution
-        assertTrue(merger.getImplications().isEmpty());
+        assertTrue(processor.getImplications().isEmpty());
     }
 
     @Override

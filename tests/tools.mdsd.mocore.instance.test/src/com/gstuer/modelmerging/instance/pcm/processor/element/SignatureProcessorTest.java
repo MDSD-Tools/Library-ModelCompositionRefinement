@@ -21,15 +21,15 @@ public class SignatureProcessorTest extends ProcessorTest<SignatureProcessor, Pc
     public void testRefineWithValidElementAddsCorrectImplications() {
         // Test data
         PcmSurrogate model = createEmptyModel();
-        SignatureProcessor merger = createProcessor(model);
+        SignatureProcessor processor = createProcessor(model);
         Signature element = createUniqueReplaceable();
 
         // Assertions: Pre-execution
-        assertTrue(merger.getImplications().isEmpty());
+        assertTrue(processor.getImplications().isEmpty());
 
         // Execution
-        merger.refine(element);
-        Set<Replaceable> implications = new HashSet<>(merger.getImplications());
+        processor.refine(element);
+        Set<Replaceable> implications = new HashSet<>(processor.getImplications());
 
         // Assertions: Post-execution
         //// Implicit providing interface

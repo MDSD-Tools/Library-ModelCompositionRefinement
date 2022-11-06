@@ -14,11 +14,11 @@ public abstract class Orchestrator<M extends Model> {
     private final M model;
     private final Map<Class<?>, Processor<M, ?>> processorMap;
 
-    protected Orchestrator(M model, Processor<M, ?>... mergers) {
+    protected Orchestrator(M model, Processor<M, ?>... processors) {
         this.model = Objects.requireNonNull(model);
         this.processorMap = new HashMap<>();
-        for (Processor<M, ?> merger : mergers) {
-            processorMap.put(merger.getProcessableType(), merger);
+        for (Processor<M, ?> processor : processors) {
+            processorMap.put(processor.getProcessableType(), processor);
         }
     }
 
@@ -33,14 +33,14 @@ public abstract class Orchestrator<M extends Model> {
     }
 
     public <T extends Replaceable> void processDiscovery(T discovery) {
-        // Get appropriate merger for discovery or throw exception if unavailable
-        Processor<M, T> merger = getProcessorForDiscovery(discovery)
-                .orElseThrow(() -> new UnavailableMergerException(discovery.getClass()));
+        // Get appropriate processor for discovery or throw exception if unavailable
+        Processor<M, T> processor = getProcessorForDiscovery(discovery)
+                .orElseThrow(() -> new UnavailableProcessorException(discovery.getClass()));
 
         // Check whether discovery already exists in model to avoid infinite recursion
         if (!this.model.contains(discovery)) {
-            merger.process(discovery);
-            for (Replaceable implicitDiscovery : merger.getImplications()) {
+            processor.process(discovery);
+            for (Replaceable implicitDiscovery : processor.getImplications()) {
                 processDiscovery(implicitDiscovery);
             }
         }

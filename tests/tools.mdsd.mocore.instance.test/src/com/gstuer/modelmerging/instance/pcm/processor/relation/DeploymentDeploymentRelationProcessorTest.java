@@ -32,15 +32,15 @@ public class DeploymentDeploymentRelationProcessorTest
     public void testRefineWithValidElementAddsCorrectImplications() {
         // Test data
         PcmSurrogate model = createEmptyModel();
-        DeploymentDeploymentRelationProcessor merger = createProcessor(model);
+        DeploymentDeploymentRelationProcessor processor = createProcessor(model);
         DeploymentDeploymentRelation relation = createUniqueReplaceable();
 
         // Assertions: Pre-execution
-        assertTrue(merger.getImplications().isEmpty());
+        assertTrue(processor.getImplications().isEmpty());
 
         // Execution
-        merger.refine(relation);
-        Set<Replaceable> implications = new HashSet<>(merger.getImplications());
+        processor.refine(relation);
+        Set<Replaceable> implications = new HashSet<>(processor.getImplications());
 
         // Assertions: Post-execution
         assertTrue(implications.remove(relation.getSource()));
@@ -62,7 +62,7 @@ public class DeploymentDeploymentRelationProcessorTest
     public void testRefineDoesNotAddAssemblyIfParallelExists() {
         // Test data
         PcmSurrogate model = createEmptyModel();
-        DeploymentDeploymentRelationProcessor merger = createProcessor(model);
+        DeploymentDeploymentRelationProcessor processor = createProcessor(model);
         DeploymentDeploymentRelation relation = createUniqueReplaceable();
 
         Component provider = Component.getUniquePlaceholder();
@@ -83,11 +83,11 @@ public class DeploymentDeploymentRelationProcessorTest
         model.add(consumerAllocation);
 
         // Assertions: Pre-execution
-        assertTrue(merger.getImplications().isEmpty());
+        assertTrue(processor.getImplications().isEmpty());
 
         // Execution
-        merger.refine(relation);
-        Set<Replaceable> implications = new HashSet<>(merger.getImplications());
+        processor.refine(relation);
+        Set<Replaceable> implications = new HashSet<>(processor.getImplications());
 
         // Assertions: Post-execution
         assertTrue(implications.remove(relation.getSource()));
@@ -106,7 +106,7 @@ public class DeploymentDeploymentRelationProcessorTest
     public void testRefineDoesNotAddAssemblyIfInverseExists() {
         // Test data
         PcmSurrogate model = createEmptyModel();
-        DeploymentDeploymentRelationProcessor merger = createProcessor(model);
+        DeploymentDeploymentRelationProcessor processor = createProcessor(model);
         DeploymentDeploymentRelation relation = createUniqueReplaceable();
 
         Component provider = Component.getUniquePlaceholder();
@@ -127,11 +127,11 @@ public class DeploymentDeploymentRelationProcessorTest
         model.add(consumerAllocation);
 
         // Assertions: Pre-execution
-        assertTrue(merger.getImplications().isEmpty());
+        assertTrue(processor.getImplications().isEmpty());
 
         // Execution
-        merger.refine(relation);
-        Set<Replaceable> implications = new HashSet<>(merger.getImplications());
+        processor.refine(relation);
+        Set<Replaceable> implications = new HashSet<>(processor.getImplications());
 
         // Assertions: Post-execution
         assertTrue(implications.remove(relation.getSource()));
@@ -150,7 +150,7 @@ public class DeploymentDeploymentRelationProcessorTest
     public void testProcessReplacesIndirectPlaceholder() {
         // Test data
         PcmSurrogate model = createEmptyModel();
-        DeploymentDeploymentRelationProcessor merger = createProcessor(model);
+        DeploymentDeploymentRelationProcessor processor = createProcessor(model);
         Deployment source = getUniqueNonPlaceholderSourceEntity();
         Deployment destination = getUniqueNonPlaceholderDestinationEntity();
         Deployment destinationPlaceholder = getPlaceholderOfDestinationEntity(destination);
@@ -166,11 +166,11 @@ public class DeploymentDeploymentRelationProcessorTest
         assertTrue(model.contains(destinationPlaceholder));
         assertFalse(model.contains(destination));
         assertFalse(model.contains(relation));
-        assertTrue(merger.getImplications().isEmpty());
+        assertTrue(processor.getImplications().isEmpty());
 
         // Execution to replace placeholder
-        merger.process(relation);
-        Set<Replaceable> implications = merger.getImplications();
+        processor.process(relation);
+        Set<Replaceable> implications = processor.getImplications();
 
         // Assertions - Model State
         assertTrue(model.contains(placeholder));
@@ -193,7 +193,7 @@ public class DeploymentDeploymentRelationProcessorTest
     public void testReplaceIndirectPlaceholdersSameSource() {
         // Test data
         PcmSurrogate model = createEmptyModel();
-        DeploymentDeploymentRelationProcessor merger = createProcessor(model);
+        DeploymentDeploymentRelationProcessor processor = createProcessor(model);
         Deployment source = getUniqueNonPlaceholderSourceEntity();
         Deployment destination = getUniqueNonPlaceholderDestinationEntity();
         Deployment destinationPlaceholder = getPlaceholderOfDestinationEntity(destination);
@@ -209,11 +209,11 @@ public class DeploymentDeploymentRelationProcessorTest
         assertTrue(model.contains(destinationPlaceholder));
         assertFalse(model.contains(destination));
         assertFalse(model.contains(relation));
-        assertTrue(merger.getImplications().isEmpty());
+        assertTrue(processor.getImplications().isEmpty());
 
         // Execution to replace placeholder
-        merger.replaceIndirectPlaceholders(relation);
-        Set<Replaceable> implications = merger.getImplications();
+        processor.replaceIndirectPlaceholders(relation);
+        Set<Replaceable> implications = processor.getImplications();
 
         // Assertions - Model State
         assertTrue(model.contains(placeholder));
@@ -236,7 +236,7 @@ public class DeploymentDeploymentRelationProcessorTest
     public void testReplaceIndirectPlaceholdersSameDestination() {
         // Test data
         PcmSurrogate model = createEmptyModel();
-        DeploymentDeploymentRelationProcessor merger = createProcessor(model);
+        DeploymentDeploymentRelationProcessor processor = createProcessor(model);
         Deployment source = getUniqueNonPlaceholderSourceEntity();
         Deployment sourcePlaceholder = getPlaceholderOfSourceEntity(source);
         Deployment destination = getUniqueNonPlaceholderDestinationEntity();
@@ -252,11 +252,11 @@ public class DeploymentDeploymentRelationProcessorTest
         assertTrue(model.contains(destination));
         assertFalse(model.contains(source));
         assertFalse(model.contains(relation));
-        assertTrue(merger.getImplications().isEmpty());
+        assertTrue(processor.getImplications().isEmpty());
 
         // Execution to replace placeholder
-        merger.replaceIndirectPlaceholders(relation);
-        Set<Replaceable> implications = merger.getImplications();
+        processor.replaceIndirectPlaceholders(relation);
+        Set<Replaceable> implications = processor.getImplications();
 
         // Assertions - Model State
         assertTrue(model.contains(placeholder));
