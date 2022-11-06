@@ -32,23 +32,23 @@ public abstract class ReplaceableTest<T extends Replaceable> {
     }
 
     @Test
-    public void testCanReplaceEqualReplaceable() {
+    public void testIncludesEqualReplaceable() {
         // Test data
         T nonPlaceholder = getUniqueNonPlaceholder();
         T placeholder = getPlaceholderOf(getUniqueNonPlaceholder());
 
         // Assertions
-        assertTrue(nonPlaceholder.canReplace(nonPlaceholder));
-        assertTrue(placeholder.canReplace(placeholder));
+        assertTrue(nonPlaceholder.includes(nonPlaceholder));
+        assertTrue(placeholder.includes(placeholder));
     }
 
     @Test
-    public void testCanReplaceNull() {
+    public void testIncludesNull() {
         // Test data
         T entity = getPlaceholderOf(getUniqueNonPlaceholder());
 
         // Assertions
-        assertFalse(entity.canReplace(null));
+        assertFalse(entity.includes(null));
     }
 
     @Test

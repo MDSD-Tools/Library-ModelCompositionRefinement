@@ -21,14 +21,14 @@ public abstract class Relation<T extends Replaceable, S extends Replaceable> ext
     }
 
     @Override
-    public boolean canReplace(Replaceable replaceable) {
-        return this.equals(replaceable) || this.source.canReplace(replaceable)
-                || this.destination.canReplace(replaceable);
+    public boolean includes(Replaceable replaceable) {
+        return this.equals(replaceable) || this.source.includes(replaceable)
+                || this.destination.includes(replaceable);
     }
 
     @SuppressWarnings("unchecked")
     protected <U extends Replaceable> T getSourceReplacement(U original, U replacement) {
-        if (this.source.canReplace(original)) {
+        if (this.source.includes(original)) {
             // Replace always returns an instance of the same type. See Replaceable.replace();
             return (T) this.source.replace(original, replacement);
         }
@@ -37,7 +37,7 @@ public abstract class Relation<T extends Replaceable, S extends Replaceable> ext
 
     @SuppressWarnings("unchecked")
     protected <U extends Replaceable> S getDestinationReplacement(U original, U replacement) {
-        if (this.destination.canReplace(original)) {
+        if (this.destination.includes(original)) {
             // Replace always returns an instance of the same type. See Replaceable.replace();
             return (S) this.destination.replace(original, replacement);
         }

@@ -14,7 +14,7 @@ public class ServiceEffectSpecificationRelation
 
     @Override
     public <U extends Replaceable> ServiceEffectSpecificationRelation replace(U original, U replacement) {
-        if (!this.canReplace(original)) {
+        if (!this.includes(original)) {
             // TODO Add message to exception
             throw new IllegalArgumentException();
         }

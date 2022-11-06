@@ -11,7 +11,7 @@ public class DeploymentDeploymentRelation extends Relation<Deployment, Deploymen
 
     @Override
     public <U extends Replaceable> DeploymentDeploymentRelation replace(U original, U replacement) {
-        if (!this.canReplace(original)) {
+        if (!this.includes(original)) {
             // TODO Add message to exception
             throw new IllegalArgumentException();
         }

@@ -7,16 +7,16 @@ import org.junit.jupiter.api.Test;
 
 public abstract class ElementTest<T extends Element<S>, S> extends ReplaceableTest<T> {
     @Test
-    public void testCanReplaceUnequalReplaceable() {
+    public void testIncludesUnequalReplaceable() {
         // Test data
         T nonPlaceholder = getUniqueNonPlaceholder();
         T placeholder = getPlaceholderOf(getUniqueNonPlaceholder());
 
         // Assertions
-        assertFalse(nonPlaceholder.canReplace(placeholder));
-        assertFalse(nonPlaceholder.canReplace(getUniqueNonPlaceholder()));
-        assertFalse(placeholder.canReplace(nonPlaceholder));
-        assertFalse(placeholder.canReplace(getPlaceholderOf(getUniqueNonPlaceholder())));
+        assertFalse(nonPlaceholder.includes(placeholder));
+        assertFalse(nonPlaceholder.includes(getUniqueNonPlaceholder()));
+        assertFalse(placeholder.includes(nonPlaceholder));
+        assertFalse(placeholder.includes(getPlaceholderOf(getUniqueNonPlaceholder())));
     }
 
     @Test

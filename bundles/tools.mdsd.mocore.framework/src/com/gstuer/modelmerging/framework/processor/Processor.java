@@ -62,7 +62,7 @@ public abstract class Processor<M extends Model, T extends Replaceable> {
         Set<Replaceable> predecessors = new HashSet<>();
         Set<Replaceable> successors = new HashSet<>();
         for (Replaceable implication : this.implications) {
-            if (implication.canReplace(original)) {
+            if (implication.includes(original)) {
                 Replaceable successor = implication.replace(original, replacement);
                 predecessors.add(implication);
                 successors.add(successor);

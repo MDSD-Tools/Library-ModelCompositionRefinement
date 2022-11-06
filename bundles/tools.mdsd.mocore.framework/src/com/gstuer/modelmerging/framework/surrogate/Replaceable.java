@@ -13,7 +13,7 @@ public abstract class Replaceable {
         return isPlaceholder;
     }
 
-    public abstract boolean canReplace(Replaceable replaceable);
+    public abstract boolean includes(Replaceable replaceable);
 
     public abstract <T extends Replaceable> Replaceable replace(T original, T replacement);
 

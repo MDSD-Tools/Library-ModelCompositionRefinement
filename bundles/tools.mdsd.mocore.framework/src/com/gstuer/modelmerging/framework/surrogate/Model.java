@@ -41,7 +41,7 @@ public class Model {
         }
         Set<Replaceable> implications = new HashSet<>();
         for (Replaceable predecessor : this.replaceables) {
-            if (predecessor.canReplace(original)) {
+            if (predecessor.includes(original)) {
                 /*
                  * If a predecessor needs replacement, create successor of obsolete replaceable. Then delete obsolete
                  * replaceable from model and return successor as implication for further merging. The model cannot add

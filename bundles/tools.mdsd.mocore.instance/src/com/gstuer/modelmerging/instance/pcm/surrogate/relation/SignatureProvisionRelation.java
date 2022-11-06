@@ -12,7 +12,7 @@ public class SignatureProvisionRelation extends Relation<Signature, Interface> {
 
     @Override
     public <U extends Replaceable> SignatureProvisionRelation replace(U original, U replacement) {
-        if (!this.canReplace(original)) {
+        if (!this.includes(original)) {
             // TODO Add message to exception
             throw new IllegalArgumentException();
         }

@@ -18,7 +18,7 @@ public class ComponentSignatureProvisionRelation extends Relation<InterfaceProvi
 
     @Override
     public <U extends Replaceable> ComponentSignatureProvisionRelation replace(U original, U replacement) {
-        if (!this.canReplace(original)) {
+        if (!this.includes(original)) {
             // TODO Add message to exception
             throw new IllegalArgumentException();
         }

@@ -16,13 +16,13 @@ public abstract class Element<T> extends Replaceable {
     }
 
     @Override
-    public boolean canReplace(Replaceable replaceable) {
+    public boolean includes(Replaceable replaceable) {
         return this.equals(replaceable);
     }
 
     @Override
     public <U extends Replaceable> U replace(U original, U replacement) {
-        if (!this.canReplace(original)) {
+        if (!this.includes(original)) {
             throw new IllegalArgumentException();
         }
         return replacement;

@@ -12,7 +12,7 @@ public class InterfaceProvisionRelation extends Relation<Component, Interface> {
 
     @Override
     public <U extends Replaceable> InterfaceProvisionRelation replace(U original, U replacement) {
-        if (!this.canReplace(original)) {
+        if (!this.includes(original)) {
             // TODO Add message to exception
             throw new IllegalArgumentException();
         }

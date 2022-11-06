@@ -10,7 +10,7 @@ public class SimpleRelation extends Relation<SimpleElement, SimpleElement> {
 
     @Override
     public <T extends Replaceable> SimpleRelation replace(T original, T replacement) {
-        if (!this.canReplace(original)) {
+        if (!this.includes(original)) {
             throw new IllegalArgumentException("Replace may not be called with the given original.");
         }
         if (this.equals(original)) {

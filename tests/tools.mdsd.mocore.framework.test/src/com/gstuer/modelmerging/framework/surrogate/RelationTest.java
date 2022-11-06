@@ -34,7 +34,7 @@ public abstract class RelationTest<R extends Relation<T, S>, T extends Replaceab
     }
 
     @Test
-    public void testCanReplaceEqualSource() {
+    public void testIncludesEqualSource() {
         // Test data
         T source = getUniqueSourceEntity();
         S destination = getUniqueDestinationEntity();
@@ -42,12 +42,12 @@ public abstract class RelationTest<R extends Relation<T, S>, T extends Replaceab
         R placeholder = this.createRelation(source, destination, true);
 
         // Assertions
-        assertTrue(nonPlaceholder.canReplace(source));
-        assertTrue(placeholder.canReplace(source));
+        assertTrue(nonPlaceholder.includes(source));
+        assertTrue(placeholder.includes(source));
     }
 
     @Test
-    public void testCanReplaceEqualDestination() {
+    public void testIncludesEqualDestination() {
         // Test data
         T source = getUniqueSourceEntity();
         S destination = getUniqueDestinationEntity();
@@ -55,8 +55,8 @@ public abstract class RelationTest<R extends Relation<T, S>, T extends Replaceab
         R placeholder = this.createRelation(source, destination, true);
 
         // Assertions
-        assertTrue(nonPlaceholder.canReplace(destination));
-        assertTrue(placeholder.canReplace(destination));
+        assertTrue(nonPlaceholder.includes(destination));
+        assertTrue(placeholder.includes(destination));
     }
 
     @SuppressWarnings("unchecked")
