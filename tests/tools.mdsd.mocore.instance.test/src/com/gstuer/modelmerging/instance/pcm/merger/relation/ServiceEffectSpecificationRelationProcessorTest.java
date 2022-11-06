@@ -12,7 +12,7 @@ import com.gstuer.modelmerging.instance.pcm.surrogate.relation.SignatureProvisio
 import com.gstuer.modelmerging.instance.pcm.utility.ElementFactory;
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.ServiceEffectSpecificationRelation;
 
-public class ServiceEffectSpecificationRelationMergerTest extends RelationProcessorTest<ServiceEffectSpecificationRelationMerger,
+public class ServiceEffectSpecificationRelationProcessorTest extends RelationProcessorTest<ServiceEffectSpecificationRelationProcessor,
         PcmSurrogate, ServiceEffectSpecificationRelation, ComponentSignatureProvisionRelation, ServiceEffectSpecification> {
     @Override
     protected ServiceEffectSpecificationRelation createRelation(ComponentSignatureProvisionRelation source,
@@ -51,8 +51,8 @@ public class ServiceEffectSpecificationRelationMergerTest extends RelationProces
     }
 
     @Override
-    protected ServiceEffectSpecificationRelationMerger createProcessor(PcmSurrogate model) {
-        return new ServiceEffectSpecificationRelationMerger(model);
+    protected ServiceEffectSpecificationRelationProcessor createProcessor(PcmSurrogate model) {
+        return new ServiceEffectSpecificationRelationProcessor(model);
     }
 
     @Override

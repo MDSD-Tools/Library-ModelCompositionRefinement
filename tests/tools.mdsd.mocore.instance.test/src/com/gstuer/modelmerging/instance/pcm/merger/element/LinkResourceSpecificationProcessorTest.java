@@ -11,17 +11,18 @@ import org.junit.jupiter.api.condition.DisabledIf;
 import com.gstuer.modelmerging.framework.merger.ProcessorTest;
 import com.gstuer.modelmerging.framework.surrogate.Replaceable;
 import com.gstuer.modelmerging.instance.pcm.surrogate.PcmSurrogate;
-import com.gstuer.modelmerging.instance.pcm.surrogate.element.Component;
-import com.gstuer.modelmerging.instance.pcm.surrogate.relation.ComponentAllocationRelation;
+import com.gstuer.modelmerging.instance.pcm.surrogate.element.LinkResourceSpecification;
+import com.gstuer.modelmerging.instance.pcm.surrogate.relation.LinkResourceSpecificationRelation;
 
-public class ComponentMergerTest extends ProcessorTest<ComponentMerger, PcmSurrogate, Component> {
+public class LinkResourceSpecificationProcessorTest
+        extends ProcessorTest<LinkResourceSpecificationProcessor, PcmSurrogate, LinkResourceSpecification> {
     @Test
     @DisabledIf(TEST_API_ONLY_METHOD_NAME)
     public void testRefineWithValidElementAddsCorrectImplications() {
         // Test data
         PcmSurrogate model = createEmptyModel();
-        ComponentMerger merger = createProcessor(model);
-        Component element = createUniqueReplaceable();
+        LinkResourceSpecificationProcessor merger = createProcessor(model);
+        LinkResourceSpecification element = createUniqueReplaceable();
 
         // Assertions: Pre-execution
         assertTrue(merger.getImplications().isEmpty());
@@ -33,16 +34,18 @@ public class ComponentMergerTest extends ProcessorTest<ComponentMerger, PcmSurro
         // Assertions: Post-execution
         assertEquals(1, implications.size());
         Replaceable implication = implications.stream().findFirst().orElseThrow();
-        assertEquals(ComponentAllocationRelation.class, implication.getClass());
-        ComponentAllocationRelation relation = (ComponentAllocationRelation) implication;
+        assertEquals(LinkResourceSpecificationRelation.class, implication.getClass());
+        LinkResourceSpecificationRelation relation = (LinkResourceSpecificationRelation) implication;
         assertEquals(element, relation.getSource());
         assertTrue(relation.isPlaceholder());
         assertTrue(relation.getDestination().isPlaceholder());
+        assertTrue(relation.getDestination().getSource().isPlaceholder());
+        assertTrue(relation.getDestination().getDestination().isPlaceholder());
     }
 
     @Override
-    protected ComponentMerger createProcessor(PcmSurrogate model) {
-        return new ComponentMerger(model);
+    protected LinkResourceSpecificationProcessor createProcessor(PcmSurrogate model) {
+        return new LinkResourceSpecificationProcessor(model);
     }
 
     @Override
@@ -51,7 +54,7 @@ public class ComponentMergerTest extends ProcessorTest<ComponentMerger, PcmSurro
     }
 
     @Override
-    protected Component createUniqueReplaceable() {
-        return Component.getUniquePlaceholder();
+    protected LinkResourceSpecification createUniqueReplaceable() {
+        return LinkResourceSpecification.getUniquePlaceholder();
     }
 }

@@ -22,7 +22,7 @@ import com.gstuer.modelmerging.instance.pcm.surrogate.relation.DeploymentDeploym
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.InterfaceProvisionRelation;
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.InterfaceRequirementRelation;
 
-public class ComponentAssemblyRelationMergerTest extends RelationProcessorTest<ComponentAssemblyRelationMerger,
+public class ComponentAssemblyRelationProcessorTest extends RelationProcessorTest<ComponentAssemblyRelationProcessor,
         PcmSurrogate, ComponentAssemblyRelation, InterfaceProvisionRelation, InterfaceRequirementRelation> {
     private static final Interface RELATION_DESTINATION = Interface.getUniquePlaceholder();
 
@@ -31,7 +31,7 @@ public class ComponentAssemblyRelationMergerTest extends RelationProcessorTest<C
     public void testRefinementRemovesParallelAssemblyPlaceholder() {
         // Test data
         PcmSurrogate model = createEmptyModel();
-        ComponentAssemblyRelationMerger merger = createProcessor(model);
+        ComponentAssemblyRelationProcessor merger = createProcessor(model);
 
         InterfaceProvisionRelation interfaceProvision = getUniqueNonPlaceholderSourceEntity();
         InterfaceRequirementRelation interfaceRequirement = getUniqueNonPlaceholderDestinationEntity();
@@ -106,7 +106,7 @@ public class ComponentAssemblyRelationMergerTest extends RelationProcessorTest<C
     public void testRefinementAddsImplicitDeploymentRelation() {
         // Test data
         PcmSurrogate model = createEmptyModel();
-        ComponentAssemblyRelationMerger merger = createProcessor(model);
+        ComponentAssemblyRelationProcessor merger = createProcessor(model);
 
         InterfaceProvisionRelation interfaceProvision = getUniqueNonPlaceholderSourceEntity();
         InterfaceRequirementRelation interfaceRequirement = getUniqueNonPlaceholderDestinationEntity();
@@ -174,8 +174,8 @@ public class ComponentAssemblyRelationMergerTest extends RelationProcessorTest<C
     }
 
     @Override
-    protected ComponentAssemblyRelationMerger createProcessor(PcmSurrogate model) {
-        return new ComponentAssemblyRelationMerger(model);
+    protected ComponentAssemblyRelationProcessor createProcessor(PcmSurrogate model) {
+        return new ComponentAssemblyRelationProcessor(model);
     }
 
     @Override

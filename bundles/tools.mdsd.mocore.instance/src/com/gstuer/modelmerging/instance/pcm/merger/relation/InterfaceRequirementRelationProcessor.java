@@ -4,8 +4,8 @@ import com.gstuer.modelmerging.framework.merger.RelationProcessor;
 import com.gstuer.modelmerging.instance.pcm.surrogate.PcmSurrogate;
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.InterfaceRequirementRelation;
 
-public class InterfaceRequirementRelationMerger extends RelationProcessor<PcmSurrogate, InterfaceRequirementRelation> {
-    public InterfaceRequirementRelationMerger(PcmSurrogate model) {
+public class InterfaceRequirementRelationProcessor extends RelationProcessor<PcmSurrogate, InterfaceRequirementRelation> {
+    public InterfaceRequirementRelationProcessor(PcmSurrogate model) {
         super(model, InterfaceRequirementRelation.class);
     }
 }

@@ -8,8 +8,8 @@ import com.gstuer.modelmerging.instance.pcm.surrogate.element.Component;
 import com.gstuer.modelmerging.instance.pcm.surrogate.element.Deployment;
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.ComponentAllocationRelation;
 
-public class ComponentMerger extends Processor<PcmSurrogate, Component> {
-    public ComponentMerger(PcmSurrogate model) {
+public class ComponentProcessor extends Processor<PcmSurrogate, Component> {
+    public ComponentProcessor(PcmSurrogate model) {
         super(model, Component.class);
     }
 

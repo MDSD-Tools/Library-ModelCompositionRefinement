@@ -9,8 +9,8 @@ import com.gstuer.modelmerging.instance.pcm.surrogate.element.LinkResourceSpecif
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.DeploymentDeploymentRelation;
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.LinkResourceSpecificationRelation;
 
-public class DeploymentDeploymentRelationMerger extends RelationProcessor<PcmSurrogate, DeploymentDeploymentRelation> {
-    public DeploymentDeploymentRelationMerger(PcmSurrogate model) {
+public class DeploymentDeploymentRelationProcessor extends RelationProcessor<PcmSurrogate, DeploymentDeploymentRelation> {
+    public DeploymentDeploymentRelationProcessor(PcmSurrogate model) {
         super(model, DeploymentDeploymentRelation.class);
     }
 

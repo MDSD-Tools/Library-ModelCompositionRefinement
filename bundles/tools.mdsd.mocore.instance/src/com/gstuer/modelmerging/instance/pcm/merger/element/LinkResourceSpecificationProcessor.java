@@ -10,8 +10,8 @@ import com.gstuer.modelmerging.instance.pcm.surrogate.element.LinkResourceSpecif
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.DeploymentDeploymentRelation;
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.LinkResourceSpecificationRelation;
 
-public class LinkResourceSpecificationMerger extends Processor<PcmSurrogate, LinkResourceSpecification> {
-    public LinkResourceSpecificationMerger(PcmSurrogate model) {
+public class LinkResourceSpecificationProcessor extends Processor<PcmSurrogate, LinkResourceSpecification> {
+    public LinkResourceSpecificationProcessor(PcmSurrogate model) {
         super(model, LinkResourceSpecification.class);
     }
 

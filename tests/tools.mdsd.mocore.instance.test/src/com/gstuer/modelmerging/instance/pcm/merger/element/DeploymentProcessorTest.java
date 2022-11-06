@@ -9,13 +9,13 @@ import com.gstuer.modelmerging.framework.merger.ProcessorTest;
 import com.gstuer.modelmerging.instance.pcm.surrogate.PcmSurrogate;
 import com.gstuer.modelmerging.instance.pcm.surrogate.element.Deployment;
 
-public class DeploymentMergerTest extends ProcessorTest<DeploymentMerger, PcmSurrogate, Deployment> {
+public class DeploymentProcessorTest extends ProcessorTest<DeploymentProcessor, PcmSurrogate, Deployment> {
     @Test
     @DisabledIf(TEST_API_ONLY_METHOD_NAME)
     public void testRefineWithValidElementAddsCorrectImplications() {
         // Test data
         PcmSurrogate model = createEmptyModel();
-        DeploymentMerger merger = createProcessor(model);
+        DeploymentProcessor merger = createProcessor(model);
         Deployment element = createUniqueReplaceable();
 
         // Assertions: Pre-execution
@@ -29,8 +29,8 @@ public class DeploymentMergerTest extends ProcessorTest<DeploymentMerger, PcmSur
     }
 
     @Override
-    protected DeploymentMerger createProcessor(PcmSurrogate model) {
-        return new DeploymentMerger(model);
+    protected DeploymentProcessor createProcessor(PcmSurrogate model) {
+        return new DeploymentProcessor(model);
     }
 
     @Override

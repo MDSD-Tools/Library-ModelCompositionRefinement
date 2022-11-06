@@ -8,8 +8,8 @@ import com.gstuer.modelmerging.instance.pcm.surrogate.element.Interface;
 import com.gstuer.modelmerging.instance.pcm.surrogate.element.Signature;
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.SignatureProvisionRelation;
 
-public class SignatureMerger extends Processor<PcmSurrogate, Signature> {
-    public SignatureMerger(PcmSurrogate model) {
+public class SignatureProcessor extends Processor<PcmSurrogate, Signature> {
+    public SignatureProcessor(PcmSurrogate model) {
         super(model, Signature.class);
     }
 

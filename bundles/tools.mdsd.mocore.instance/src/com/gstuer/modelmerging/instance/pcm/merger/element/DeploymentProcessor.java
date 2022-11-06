@@ -4,8 +4,8 @@ import com.gstuer.modelmerging.framework.merger.Processor;
 import com.gstuer.modelmerging.instance.pcm.surrogate.PcmSurrogate;
 import com.gstuer.modelmerging.instance.pcm.surrogate.element.Deployment;
 
-public class DeploymentMerger extends Processor<PcmSurrogate, Deployment> {
-    public DeploymentMerger(PcmSurrogate model) {
+public class DeploymentProcessor extends Processor<PcmSurrogate, Deployment> {
+    public DeploymentProcessor(PcmSurrogate model) {
         super(model, Deployment.class);
     }
 

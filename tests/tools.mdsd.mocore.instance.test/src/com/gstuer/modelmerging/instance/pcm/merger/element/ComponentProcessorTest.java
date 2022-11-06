@@ -3,7 +3,6 @@ package com.gstuer.modelmerging.instance.pcm.merger.element;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import org.junit.jupiter.api.Test;
@@ -12,39 +11,38 @@ import org.junit.jupiter.api.condition.DisabledIf;
 import com.gstuer.modelmerging.framework.merger.ProcessorTest;
 import com.gstuer.modelmerging.framework.surrogate.Replaceable;
 import com.gstuer.modelmerging.instance.pcm.surrogate.PcmSurrogate;
-import com.gstuer.modelmerging.instance.pcm.surrogate.element.Signature;
-import com.gstuer.modelmerging.instance.pcm.surrogate.relation.SignatureProvisionRelation;
+import com.gstuer.modelmerging.instance.pcm.surrogate.element.Component;
+import com.gstuer.modelmerging.instance.pcm.surrogate.relation.ComponentAllocationRelation;
 
-public class SignatureMergerTest extends ProcessorTest<SignatureMerger, PcmSurrogate, Signature> {
+public class ComponentProcessorTest extends ProcessorTest<ComponentProcessor, PcmSurrogate, Component> {
     @Test
     @DisabledIf(TEST_API_ONLY_METHOD_NAME)
     public void testRefineWithValidElementAddsCorrectImplications() {
         // Test data
         PcmSurrogate model = createEmptyModel();
-        SignatureMerger merger = createProcessor(model);
-        Signature element = createUniqueReplaceable();
+        ComponentProcessor merger = createProcessor(model);
+        Component element = createUniqueReplaceable();
 
         // Assertions: Pre-execution
         assertTrue(merger.getImplications().isEmpty());
 
         // Execution
         merger.refine(element);
-        Set<Replaceable> implications = new HashSet<>(merger.getImplications());
+        Set<Replaceable> implications = merger.getImplications();
 
         // Assertions: Post-execution
-        //// Implicit providing interface
         assertEquals(1, implications.size());
         Replaceable implication = implications.stream().findFirst().orElseThrow();
-        assertEquals(SignatureProvisionRelation.class, implication.getClass());
-        SignatureProvisionRelation relation = (SignatureProvisionRelation) implication;
+        assertEquals(ComponentAllocationRelation.class, implication.getClass());
+        ComponentAllocationRelation relation = (ComponentAllocationRelation) implication;
         assertEquals(element, relation.getSource());
         assertTrue(relation.isPlaceholder());
         assertTrue(relation.getDestination().isPlaceholder());
     }
 
     @Override
-    protected SignatureMerger createProcessor(PcmSurrogate model) {
-        return new SignatureMerger(model);
+    protected ComponentProcessor createProcessor(PcmSurrogate model) {
+        return new ComponentProcessor(model);
     }
 
     @Override
@@ -53,7 +51,7 @@ public class SignatureMergerTest extends ProcessorTest<SignatureMerger, PcmSurro
     }
 
     @Override
-    protected Signature createUniqueReplaceable() {
-        return Signature.getUniquePlaceholder();
+    protected Component createUniqueReplaceable() {
+        return Component.getUniquePlaceholder();
     }
 }

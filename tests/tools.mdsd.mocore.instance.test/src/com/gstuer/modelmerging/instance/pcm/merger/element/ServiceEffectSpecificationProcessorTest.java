@@ -11,17 +11,17 @@ import org.junit.jupiter.api.condition.DisabledIf;
 import com.gstuer.modelmerging.framework.merger.ProcessorTest;
 import com.gstuer.modelmerging.framework.surrogate.Replaceable;
 import com.gstuer.modelmerging.instance.pcm.surrogate.PcmSurrogate;
-import com.gstuer.modelmerging.instance.pcm.surrogate.element.Interface;
-import com.gstuer.modelmerging.instance.pcm.surrogate.relation.InterfaceProvisionRelation;
+import com.gstuer.modelmerging.instance.pcm.surrogate.element.ServiceEffectSpecification;
 
-public class InterfaceMergerTest extends ProcessorTest<InterfaceMerger, PcmSurrogate, Interface> {
+public class ServiceEffectSpecificationProcessorTest
+        extends ProcessorTest<ServiceEffectSpecificationProcessor, PcmSurrogate, ServiceEffectSpecification> {
     @Test
     @DisabledIf(TEST_API_ONLY_METHOD_NAME)
     public void testRefineWithValidElementAddsCorrectImplications() {
         // Test data
         PcmSurrogate model = createEmptyModel();
-        InterfaceMerger merger = createProcessor(model);
-        Interface element = createUniqueReplaceable();
+        ServiceEffectSpecificationProcessor merger = createProcessor(model);
+        ServiceEffectSpecification element = createUniqueReplaceable();
 
         // Assertions: Pre-execution
         assertTrue(merger.getImplications().isEmpty());
@@ -31,18 +31,12 @@ public class InterfaceMergerTest extends ProcessorTest<InterfaceMerger, PcmSurro
         Set<Replaceable> implications = merger.getImplications();
 
         // Assertions: Post-execution
-        assertEquals(1, implications.size());
-        Replaceable implication = implications.stream().findFirst().orElseThrow();
-        assertEquals(InterfaceProvisionRelation.class, implication.getClass());
-        InterfaceProvisionRelation relation = (InterfaceProvisionRelation) implication;
-        assertEquals(element, relation.getDestination());
-        assertTrue(relation.isPlaceholder());
-        assertTrue(relation.getSource().isPlaceholder());
+        assertEquals(0, implications.size());
     }
 
     @Override
-    protected InterfaceMerger createProcessor(PcmSurrogate model) {
-        return new InterfaceMerger(model);
+    protected ServiceEffectSpecificationProcessor createProcessor(PcmSurrogate model) {
+        return new ServiceEffectSpecificationProcessor(model);
     }
 
     @Override
@@ -51,7 +45,8 @@ public class InterfaceMergerTest extends ProcessorTest<InterfaceMerger, PcmSurro
     }
 
     @Override
-    protected Interface createUniqueReplaceable() {
-        return Interface.getUniquePlaceholder();
+    protected ServiceEffectSpecification createUniqueReplaceable() {
+        return ServiceEffectSpecification.getUniquePlaceholder();
     }
+
 }

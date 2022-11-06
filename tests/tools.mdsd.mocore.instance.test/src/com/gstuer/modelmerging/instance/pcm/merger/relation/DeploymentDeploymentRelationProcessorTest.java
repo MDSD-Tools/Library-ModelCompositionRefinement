@@ -24,14 +24,14 @@ import com.gstuer.modelmerging.instance.pcm.surrogate.relation.InterfaceRequirem
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.LinkResourceSpecificationRelation;
 import com.gstuer.modelmerging.instance.pcm.utility.ElementFactory;
 
-public class DeploymentDeploymentRelationMergerTest extends RelationProcessorTest<DeploymentDeploymentRelationMerger,
+public class DeploymentDeploymentRelationProcessorTest extends RelationProcessorTest<DeploymentDeploymentRelationProcessor,
         PcmSurrogate, DeploymentDeploymentRelation, Deployment, Deployment> {
     @Test
     @DisabledIf(TEST_API_ONLY_METHOD_NAME)
     public void testRefineWithValidElementAddsCorrectImplications() {
         // Test data
         PcmSurrogate model = createEmptyModel();
-        DeploymentDeploymentRelationMerger merger = createProcessor(model);
+        DeploymentDeploymentRelationProcessor merger = createProcessor(model);
         DeploymentDeploymentRelation relation = createUniqueReplaceable();
 
         // Assertions: Pre-execution
@@ -61,7 +61,7 @@ public class DeploymentDeploymentRelationMergerTest extends RelationProcessorTes
     public void testRefineDoesNotAddAssemblyIfParallelExists() {
         // Test data
         PcmSurrogate model = createEmptyModel();
-        DeploymentDeploymentRelationMerger merger = createProcessor(model);
+        DeploymentDeploymentRelationProcessor merger = createProcessor(model);
         DeploymentDeploymentRelation relation = createUniqueReplaceable();
 
         Component provider = Component.getUniquePlaceholder();
@@ -105,7 +105,7 @@ public class DeploymentDeploymentRelationMergerTest extends RelationProcessorTes
     public void testRefineDoesNotAddAssemblyIfInverseExists() {
         // Test data
         PcmSurrogate model = createEmptyModel();
-        DeploymentDeploymentRelationMerger merger = createProcessor(model);
+        DeploymentDeploymentRelationProcessor merger = createProcessor(model);
         DeploymentDeploymentRelation relation = createUniqueReplaceable();
 
         Component provider = Component.getUniquePlaceholder();
@@ -149,7 +149,7 @@ public class DeploymentDeploymentRelationMergerTest extends RelationProcessorTes
     public void testProcessReplacesIndirectPlaceholder() {
         // Test data
         PcmSurrogate model = createEmptyModel();
-        DeploymentDeploymentRelationMerger merger = createProcessor(model);
+        DeploymentDeploymentRelationProcessor merger = createProcessor(model);
         Deployment source = getUniqueNonPlaceholderSourceEntity();
         Deployment destination = getUniqueNonPlaceholderDestinationEntity();
         Deployment destinationPlaceholder = getPlaceholderOfDestinationEntity(destination);
@@ -192,7 +192,7 @@ public class DeploymentDeploymentRelationMergerTest extends RelationProcessorTes
     public void testReplaceIndirectPlaceholdersSameSource() {
         // Test data
         PcmSurrogate model = createEmptyModel();
-        DeploymentDeploymentRelationMerger merger = createProcessor(model);
+        DeploymentDeploymentRelationProcessor merger = createProcessor(model);
         Deployment source = getUniqueNonPlaceholderSourceEntity();
         Deployment destination = getUniqueNonPlaceholderDestinationEntity();
         Deployment destinationPlaceholder = getPlaceholderOfDestinationEntity(destination);
@@ -235,7 +235,7 @@ public class DeploymentDeploymentRelationMergerTest extends RelationProcessorTes
     public void testReplaceIndirectPlaceholdersSameDestination() {
         // Test data
         PcmSurrogate model = createEmptyModel();
-        DeploymentDeploymentRelationMerger merger = createProcessor(model);
+        DeploymentDeploymentRelationProcessor merger = createProcessor(model);
         Deployment source = getUniqueNonPlaceholderSourceEntity();
         Deployment sourcePlaceholder = getPlaceholderOfSourceEntity(source);
         Deployment destination = getUniqueNonPlaceholderDestinationEntity();
@@ -299,8 +299,8 @@ public class DeploymentDeploymentRelationMergerTest extends RelationProcessorTes
     }
 
     @Override
-    protected DeploymentDeploymentRelationMerger createProcessor(PcmSurrogate model) {
-        return new DeploymentDeploymentRelationMerger(model);
+    protected DeploymentDeploymentRelationProcessor createProcessor(PcmSurrogate model) {
+        return new DeploymentDeploymentRelationProcessor(model);
     }
 
     @Override

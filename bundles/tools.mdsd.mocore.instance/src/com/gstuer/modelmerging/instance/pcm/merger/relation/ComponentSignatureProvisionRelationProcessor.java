@@ -4,9 +4,9 @@ import com.gstuer.modelmerging.framework.merger.RelationProcessor;
 import com.gstuer.modelmerging.instance.pcm.surrogate.PcmSurrogate;
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.ComponentSignatureProvisionRelation;
 
-public class ComponentSignatureProvisionRelationMerger
+public class ComponentSignatureProvisionRelationProcessor
         extends RelationProcessor<PcmSurrogate, ComponentSignatureProvisionRelation> {
-    public ComponentSignatureProvisionRelationMerger(PcmSurrogate model) {
+    public ComponentSignatureProvisionRelationProcessor(PcmSurrogate model) {
         super(model, ComponentSignatureProvisionRelation.class);
     }
 }

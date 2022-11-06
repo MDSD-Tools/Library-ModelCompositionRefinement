@@ -7,7 +7,7 @@ import com.gstuer.modelmerging.instance.pcm.surrogate.element.Signature;
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.SignatureProvisionRelation;
 import com.gstuer.modelmerging.instance.pcm.utility.ElementFactory;
 
-public class SignatureProvisionRelationMergerTest extends RelationProcessorTest<SignatureProvisionRelationMerger,
+public class SignatureProvisionRelationProcessorTest extends RelationProcessorTest<SignatureProvisionRelationProcessor,
         PcmSurrogate, SignatureProvisionRelation, Signature, Interface> {
     @Override
     protected SignatureProvisionRelation createRelation(Signature source, Interface destination,
@@ -36,8 +36,8 @@ public class SignatureProvisionRelationMergerTest extends RelationProcessorTest<
     }
 
     @Override
-    protected SignatureProvisionRelationMerger createProcessor(PcmSurrogate model) {
-        return new SignatureProvisionRelationMerger(model);
+    protected SignatureProvisionRelationProcessor createProcessor(PcmSurrogate model) {
+        return new SignatureProvisionRelationProcessor(model);
     }
 
     @Override

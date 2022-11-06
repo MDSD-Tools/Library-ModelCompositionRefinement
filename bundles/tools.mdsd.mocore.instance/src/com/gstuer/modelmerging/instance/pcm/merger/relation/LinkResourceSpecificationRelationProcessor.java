@@ -4,9 +4,9 @@ import com.gstuer.modelmerging.framework.merger.RelationProcessor;
 import com.gstuer.modelmerging.instance.pcm.surrogate.PcmSurrogate;
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.LinkResourceSpecificationRelation;
 
-public class LinkResourceSpecificationRelationMerger
+public class LinkResourceSpecificationRelationProcessor
         extends RelationProcessor<PcmSurrogate, LinkResourceSpecificationRelation> {
-    public LinkResourceSpecificationRelationMerger(PcmSurrogate model) {
+    public LinkResourceSpecificationRelationProcessor(PcmSurrogate model) {
         super(model, LinkResourceSpecificationRelation.class);
     }
 }

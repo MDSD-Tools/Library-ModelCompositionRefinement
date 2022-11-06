@@ -13,8 +13,8 @@ import com.gstuer.modelmerging.instance.pcm.surrogate.relation.ComponentAllocati
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.ComponentAssemblyRelation;
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.DeploymentDeploymentRelation;
 
-public class ComponentAssemblyRelationMerger extends RelationProcessor<PcmSurrogate, ComponentAssemblyRelation> {
-    public ComponentAssemblyRelationMerger(PcmSurrogate model) {
+public class ComponentAssemblyRelationProcessor extends RelationProcessor<PcmSurrogate, ComponentAssemblyRelation> {
+    public ComponentAssemblyRelationProcessor(PcmSurrogate model) {
         super(model, ComponentAssemblyRelation.class);
     }
 

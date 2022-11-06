@@ -7,7 +7,7 @@ import com.gstuer.modelmerging.instance.pcm.surrogate.element.Interface;
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.InterfaceRequirementRelation;
 import com.gstuer.modelmerging.instance.pcm.utility.ElementFactory;
 
-public class InterfaceRequirementRelationMergerTest extends RelationProcessorTest<InterfaceRequirementRelationMerger,
+public class InterfaceRequirementRelationProcessorTest extends RelationProcessorTest<InterfaceRequirementRelationProcessor,
         PcmSurrogate, InterfaceRequirementRelation, Component, Interface> {
     @Override
     protected InterfaceRequirementRelation createRelation(Component source, Interface destination,
@@ -36,8 +36,8 @@ public class InterfaceRequirementRelationMergerTest extends RelationProcessorTes
     }
 
     @Override
-    protected InterfaceRequirementRelationMerger createProcessor(PcmSurrogate model) {
-        return new InterfaceRequirementRelationMerger(model);
+    protected InterfaceRequirementRelationProcessor createProcessor(PcmSurrogate model) {
+        return new InterfaceRequirementRelationProcessor(model);
     }
 
     @Override

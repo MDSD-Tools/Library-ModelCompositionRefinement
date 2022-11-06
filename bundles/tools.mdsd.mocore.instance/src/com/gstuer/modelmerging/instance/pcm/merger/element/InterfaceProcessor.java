@@ -8,8 +8,8 @@ import com.gstuer.modelmerging.instance.pcm.surrogate.element.Component;
 import com.gstuer.modelmerging.instance.pcm.surrogate.element.Interface;
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.InterfaceProvisionRelation;
 
-public class InterfaceMerger extends Processor<PcmSurrogate, Interface> {
-    public InterfaceMerger(PcmSurrogate model) {
+public class InterfaceProcessor extends Processor<PcmSurrogate, Interface> {
+    public InterfaceProcessor(PcmSurrogate model) {
         super(model, Interface.class);
     }
 

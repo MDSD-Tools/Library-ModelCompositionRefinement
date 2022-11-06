@@ -4,8 +4,8 @@ import com.gstuer.modelmerging.framework.merger.Processor;
 import com.gstuer.modelmerging.instance.pcm.surrogate.PcmSurrogate;
 import com.gstuer.modelmerging.instance.pcm.surrogate.element.ServiceEffectSpecification;
 
-public class ServiceEffectSpecificationMerger extends Processor<PcmSurrogate, ServiceEffectSpecification> {
-    public ServiceEffectSpecificationMerger(PcmSurrogate model) {
+public class ServiceEffectSpecificationProcessor extends Processor<PcmSurrogate, ServiceEffectSpecification> {
+    public ServiceEffectSpecificationProcessor(PcmSurrogate model) {
         super(model, ServiceEffectSpecification.class);
     }
 

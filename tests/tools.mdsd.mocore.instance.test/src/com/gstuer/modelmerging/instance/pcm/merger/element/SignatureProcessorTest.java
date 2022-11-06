@@ -3,6 +3,7 @@ package com.gstuer.modelmerging.instance.pcm.merger.element;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import org.junit.jupiter.api.Test;
@@ -11,41 +12,39 @@ import org.junit.jupiter.api.condition.DisabledIf;
 import com.gstuer.modelmerging.framework.merger.ProcessorTest;
 import com.gstuer.modelmerging.framework.surrogate.Replaceable;
 import com.gstuer.modelmerging.instance.pcm.surrogate.PcmSurrogate;
-import com.gstuer.modelmerging.instance.pcm.surrogate.element.LinkResourceSpecification;
-import com.gstuer.modelmerging.instance.pcm.surrogate.relation.LinkResourceSpecificationRelation;
+import com.gstuer.modelmerging.instance.pcm.surrogate.element.Signature;
+import com.gstuer.modelmerging.instance.pcm.surrogate.relation.SignatureProvisionRelation;
 
-public class LinkResourceSpecificationMergerTest
-        extends ProcessorTest<LinkResourceSpecificationMerger, PcmSurrogate, LinkResourceSpecification> {
+public class SignatureProcessorTest extends ProcessorTest<SignatureProcessor, PcmSurrogate, Signature> {
     @Test
     @DisabledIf(TEST_API_ONLY_METHOD_NAME)
     public void testRefineWithValidElementAddsCorrectImplications() {
         // Test data
         PcmSurrogate model = createEmptyModel();
-        LinkResourceSpecificationMerger merger = createProcessor(model);
-        LinkResourceSpecification element = createUniqueReplaceable();
+        SignatureProcessor merger = createProcessor(model);
+        Signature element = createUniqueReplaceable();
 
         // Assertions: Pre-execution
         assertTrue(merger.getImplications().isEmpty());
 
         // Execution
         merger.refine(element);
-        Set<Replaceable> implications = merger.getImplications();
+        Set<Replaceable> implications = new HashSet<>(merger.getImplications());
 
         // Assertions: Post-execution
+        //// Implicit providing interface
         assertEquals(1, implications.size());
         Replaceable implication = implications.stream().findFirst().orElseThrow();
-        assertEquals(LinkResourceSpecificationRelation.class, implication.getClass());
-        LinkResourceSpecificationRelation relation = (LinkResourceSpecificationRelation) implication;
+        assertEquals(SignatureProvisionRelation.class, implication.getClass());
+        SignatureProvisionRelation relation = (SignatureProvisionRelation) implication;
         assertEquals(element, relation.getSource());
         assertTrue(relation.isPlaceholder());
         assertTrue(relation.getDestination().isPlaceholder());
-        assertTrue(relation.getDestination().getSource().isPlaceholder());
-        assertTrue(relation.getDestination().getDestination().isPlaceholder());
     }
 
     @Override
-    protected LinkResourceSpecificationMerger createProcessor(PcmSurrogate model) {
-        return new LinkResourceSpecificationMerger(model);
+    protected SignatureProcessor createProcessor(PcmSurrogate model) {
+        return new SignatureProcessor(model);
     }
 
     @Override
@@ -54,7 +53,7 @@ public class LinkResourceSpecificationMergerTest
     }
 
     @Override
-    protected LinkResourceSpecification createUniqueReplaceable() {
-        return LinkResourceSpecification.getUniquePlaceholder();
+    protected Signature createUniqueReplaceable() {
+        return Signature.getUniquePlaceholder();
     }
 }
