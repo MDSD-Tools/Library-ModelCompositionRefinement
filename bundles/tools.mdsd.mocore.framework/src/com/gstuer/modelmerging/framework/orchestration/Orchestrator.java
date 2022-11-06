@@ -6,19 +6,19 @@ import java.util.Objects;
 import java.util.Optional;
 
 import com.gstuer.modelmerging.framework.discovery.Discoverer;
-import com.gstuer.modelmerging.framework.merger.Merger;
+import com.gstuer.modelmerging.framework.merger.Processor;
 import com.gstuer.modelmerging.framework.surrogate.Model;
 import com.gstuer.modelmerging.framework.surrogate.Replaceable;
 
 public abstract class Orchestrator<M extends Model> {
     private final M model;
-    private final Map<Class<?>, Merger<M, ?>> mergerMap;
+    private final Map<Class<?>, Processor<M, ?>> processorMap;
 
-    protected Orchestrator(M model, Merger<M, ?>... mergers) {
+    protected Orchestrator(M model, Processor<M, ?>... mergers) {
         this.model = Objects.requireNonNull(model);
-        this.mergerMap = new HashMap<>();
-        for (Merger<M, ?> merger : mergers) {
-            mergerMap.put(merger.getProcessableType(), merger);
+        this.processorMap = new HashMap<>();
+        for (Processor<M, ?> merger : mergers) {
+            processorMap.put(merger.getProcessableType(), merger);
         }
     }
 
@@ -34,7 +34,7 @@ public abstract class Orchestrator<M extends Model> {
 
     public <T extends Replaceable> void processDiscovery(T discovery) {
         // Get appropriate merger for discovery or throw exception if unavailable
-        Merger<M, T> merger = getMergerForDiscovery(discovery)
+        Processor<M, T> merger = getProcessorForDiscovery(discovery)
                 .orElseThrow(() -> new UnavailableMergerException(discovery.getClass()));
 
         // Check whether discovery already exists in model to avoid infinite recursion
@@ -46,7 +46,7 @@ public abstract class Orchestrator<M extends Model> {
         }
     }
 
-    protected <T extends Replaceable> Optional<Merger<M, T>> getMergerForDiscovery(T discovery) {
-        return Optional.ofNullable((Merger<M, T>) mergerMap.get(discovery.getClass()));
+    protected <T extends Replaceable> Optional<Processor<M, T>> getProcessorForDiscovery(T discovery) {
+        return Optional.ofNullable((Processor<M, T>) processorMap.get(discovery.getClass()));
     }
 }

@@ -7,12 +7,12 @@ import java.util.Set;
 import com.gstuer.modelmerging.framework.surrogate.Model;
 import com.gstuer.modelmerging.framework.surrogate.Replaceable;
 
-public abstract class Merger<M extends Model, T extends Replaceable> {
+public abstract class Processor<M extends Model, T extends Replaceable> {
     private final M model;
     private final Set<Replaceable> implications;
     private final Class<T> processableType;
 
-    protected Merger(M model, Class<T> processableType) {
+    protected Processor(M model, Class<T> processableType) {
         this.model = Objects.requireNonNull(model);
         this.implications = new HashSet<>();
         this.processableType = Objects.requireNonNull(processableType);

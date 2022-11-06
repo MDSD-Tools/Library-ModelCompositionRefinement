@@ -10,8 +10,8 @@ import com.gstuer.modelmerging.framework.surrogate.Model;
 import com.gstuer.modelmerging.framework.surrogate.Relation;
 import com.gstuer.modelmerging.framework.surrogate.Replaceable;
 
-public abstract class RelationMerger<M extends Model, T extends Relation<?, ?>> extends Merger<M, T> {
-    protected RelationMerger(M model, Class<T> processableType) {
+public abstract class RelationProcessor<M extends Model, T extends Relation<?, ?>> extends Processor<M, T> {
+    protected RelationProcessor(M model, Class<T> processableType) {
         super(model, processableType);
     }
 

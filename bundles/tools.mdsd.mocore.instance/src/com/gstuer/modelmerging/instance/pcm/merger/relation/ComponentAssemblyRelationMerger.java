@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import com.gstuer.modelmerging.framework.merger.RelationMerger;
+import com.gstuer.modelmerging.framework.merger.RelationProcessor;
 import com.gstuer.modelmerging.instance.pcm.surrogate.PcmSurrogate;
 import com.gstuer.modelmerging.instance.pcm.surrogate.element.Component;
 import com.gstuer.modelmerging.instance.pcm.surrogate.element.Deployment;
@@ -13,7 +13,7 @@ import com.gstuer.modelmerging.instance.pcm.surrogate.relation.ComponentAllocati
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.ComponentAssemblyRelation;
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.DeploymentDeploymentRelation;
 
-public class ComponentAssemblyRelationMerger extends RelationMerger<PcmSurrogate, ComponentAssemblyRelation> {
+public class ComponentAssemblyRelationMerger extends RelationProcessor<PcmSurrogate, ComponentAssemblyRelation> {
     public ComponentAssemblyRelationMerger(PcmSurrogate model) {
         super(model, ComponentAssemblyRelation.class);
     }

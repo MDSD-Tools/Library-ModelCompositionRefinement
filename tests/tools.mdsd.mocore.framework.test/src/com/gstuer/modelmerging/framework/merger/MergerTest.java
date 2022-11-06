@@ -13,9 +13,9 @@ import org.junit.jupiter.api.condition.DisabledIf;
 import com.gstuer.modelmerging.framework.surrogate.Model;
 import com.gstuer.modelmerging.framework.surrogate.Replaceable;
 
-public abstract class MergerTest<U extends Merger<M, T>, M extends Model, T extends Replaceable> {
+public abstract class MergerTest<U extends Processor<M, T>, M extends Model, T extends Replaceable> {
     protected static final String TEST_API_ONLY_METHOD_NAME = "testApiOnly";
-    private static final boolean TEST_API_ONLY = true;
+    private static final boolean TEST_API_ONLY = false;
 
     @Test
     public void testGetModelAfterCreation() {

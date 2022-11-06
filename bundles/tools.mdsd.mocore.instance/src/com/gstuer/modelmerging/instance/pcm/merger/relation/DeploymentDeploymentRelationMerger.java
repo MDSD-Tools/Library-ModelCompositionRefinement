@@ -3,13 +3,13 @@ package com.gstuer.modelmerging.instance.pcm.merger.relation;
 import java.util.List;
 import java.util.Objects;
 
-import com.gstuer.modelmerging.framework.merger.RelationMerger;
+import com.gstuer.modelmerging.framework.merger.RelationProcessor;
 import com.gstuer.modelmerging.instance.pcm.surrogate.PcmSurrogate;
 import com.gstuer.modelmerging.instance.pcm.surrogate.element.LinkResourceSpecification;
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.DeploymentDeploymentRelation;
 import com.gstuer.modelmerging.instance.pcm.surrogate.relation.LinkResourceSpecificationRelation;
 
-public class DeploymentDeploymentRelationMerger extends RelationMerger<PcmSurrogate, DeploymentDeploymentRelation> {
+public class DeploymentDeploymentRelationMerger extends RelationProcessor<PcmSurrogate, DeploymentDeploymentRelation> {
     public DeploymentDeploymentRelationMerger(PcmSurrogate model) {
         super(model, DeploymentDeploymentRelation.class);
     }

@@ -12,7 +12,7 @@ import com.gstuer.modelmerging.framework.surrogate.Model;
 import com.gstuer.modelmerging.framework.surrogate.Relation;
 import com.gstuer.modelmerging.framework.surrogate.Replaceable;
 
-public abstract class RelationMergerTest<RM extends RelationMerger<M, R>, M extends Model, R extends Relation<T, S>,
+public abstract class RelationMergerTest<RM extends RelationProcessor<M, R>, M extends Model, R extends Relation<T, S>,
         T extends Replaceable, S extends Replaceable> extends MergerTest<RM, M, R> {
     @Test
     public void testProcessAddsSourceAndDestinationToImplications() {
