@@ -18,9 +18,21 @@
          download-size="0"
          install-size="0"
          version="0.0.0"/>
+         
+   <plugin
+         id="tools.mdsd.mocore.framework.test"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
 
    <plugin
          id="tools.mdsd.mocore.instance"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
+         
+   <plugin
+         id="tools.mdsd.mocore.instance.test"
          download-size="0"
          install-size="0"
          version="0.0.0"/>
