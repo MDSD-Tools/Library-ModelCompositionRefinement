@@ -87,7 +87,39 @@ public class TypedDistinctMultiMapTest {
         map.put(entitySnd);
 
         // Execution
-        List<Object> elements = map.get(Object.class);
+        List<Integer> elements = map.get(Integer.class);
+
+        // Assertions: Post-Execution
+        assertEquals(0, elements.size());
+    }
+
+    @Test
+    public void testGetChildKeys() {
+        // Test data
+        TypedDistinctMultiMap<Object> map = new TypedDistinctMultiMap<>();
+        String entityFst = "Test";
+        String entitySnd = "Entity";
+        map.put(entityFst);
+        map.put(entitySnd);
+
+        // Execution
+        List<Object> elements = map.get(Object.class, false);
+
+        // Assertions: Post-Execution
+        assertEquals(2, elements.size());
+    }
+
+    @Test
+    public void testGetIgnoreChildKeys() {
+        // Test data
+        TypedDistinctMultiMap<Object> map = new TypedDistinctMultiMap<>();
+        String entityFst = "Test";
+        String entitySnd = "Entity";
+        map.put(entityFst);
+        map.put(entitySnd);
+
+        // Execution
+        List<Object> elements = map.get(Object.class, true);
 
         // Assertions: Post-Execution
         assertEquals(0, elements.size());
