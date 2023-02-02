@@ -10,6 +10,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class TypedDistinctMultiMap<S extends Object> implements Iterable<S> {
+    private static final boolean DEFAULT_IGNORE_INHERITANCE = false;
+
     private final Map<Class<?>, Set<S>> data;
 
     public TypedDistinctMultiMap() {
@@ -23,7 +25,27 @@ public class TypedDistinctMultiMap<S extends Object> implements Iterable<S> {
     }
 
     public <T extends S> List<T> get(Class<T> key) {
-        Set<S> objects = this.data.getOrDefault(key, new HashSet<>());
+        return get(key, DEFAULT_IGNORE_INHERITANCE);
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T extends S> List<T> get(Class<T> key, boolean ignoreInheritance) {
+        // Get all keys that are children of key
+        Set<Class<T>> keys = new HashSet<>();
+        keys.add(key);
+        if (!ignoreInheritance) {
+            for (Class<?> childKey : this.data.keySet()) {
+                if (key.isAssignableFrom(childKey)) {
+                    keys.add((Class<T>) childKey);
+                }
+            }
+        }
+
+        // Retrieve elements for all fitting keys
+        Set<S> objects = new HashSet<>();
+        for (Class<T> childKey : keys) {
+            objects.addAll(this.data.getOrDefault(childKey, new HashSet<>()));
+        }
         return objects.stream().map(key::cast).collect(Collectors.toList());
     }
 
