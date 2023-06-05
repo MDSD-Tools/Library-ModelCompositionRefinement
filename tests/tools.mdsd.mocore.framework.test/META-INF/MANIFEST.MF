@@ -5,7 +5,7 @@ Bundle-SymbolicName: tools.mdsd.mocore.framework.test;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: mdsd.tools
 Automatic-Module-Name: tools.mdsd.mocore.framework.test
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-ActivationPolicy: lazy
 Export-Package: tools.mdsd.mocore.framework.processor,
  tools.mdsd.mocore.framework.surrogate,
