@@ -4,21 +4,23 @@
       label="MoCoRe Feature"
       version="1.0.0.qualifier"
       provider-name="mdsd.tools"
-      license-feature="tools.mdsd.license.epl2"
+      license-feature="tools.mdsd.mocore.license"
       license-feature-version="1.0.0">
 
-   <requires>
-   </requires>
+   <includes
+         id="tools.mdsd.mocore.license"
+         version="0.0.0"/>
 
    <plugin
          id="tools.mdsd.mocore.framework"
          download-size="0"
          install-size="0"
          version="0.0.0"/>
-         
+
    <plugin
          id="tools.mdsd.mocore.framework.test"
          download-size="0"
          install-size="0"
          version="0.0.0"/>
+
 </feature>
