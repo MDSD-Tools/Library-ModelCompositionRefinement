@@ -4,10 +4,11 @@ on: [push, pull_request, workflow_dispatch]
 
 jobs:
   Library-ModelCompositionRefinement:
-    uses: PalladioSimulator/Palladio-Build-ActionsPipeline/.github/workflows/build.yml@v3.4
+    uses: PalladioSimulator/Palladio-Build-ActionsPipeline/.github/workflows/build.yml@FixTagCreationLogic
     with:
       use-display-output: true
       runner-label: ubuntu-latest
+      java-version: 21
       deploy-updatesite: 'releng/tools.mdsd.mocore.updatesite/target/repository'
     secrets:
       SERVER_SSH_KEY: ${{ secrets.DEPLOYMENT_SERVER_SSH_KEY }}
